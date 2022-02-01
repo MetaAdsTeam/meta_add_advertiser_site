@@ -1,0 +1,82 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '~@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+$custom-palette: (
+  50: #e8eaf6,
+  100: #c5cae9,
+  200: #9fa8da,
+  300: #7986cb,
+  400: #347CE8,
+  500: #3888ff,
+  600: #7986cb,
+  700: #7986cb,
+  800: #1011b3,
+  900: #9409fb,
+  contrast: (
+    50: white,
+    100: white,
+    200: white,
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white
+  )
+);
+
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$custom-primary: mat.define-palette($custom-palette, 500);
+$custom-accent: mat.define-palette($custom-palette, 400);
+
+// The warn palette is optional (defaults to red).
+$custom-warn: mat.define-palette($custom-palette, 900);
+
+// Custom typography
+$custom-typography: mat.define-typography-config(
+  $headline: mat.define-typography-level(80px, $font-family: "'Nexa-XBold', Nexa"),
+  $title: mat.define-typography-level(64px, $font-family: "'Nexa-XBold', Nexa"),
+  $subheading-2: mat.define-typography-level(40px, $font-family: "'Nexa-Book', Nexa"),
+  $subheading-1: mat.define-typography-level(30px, $font-family: "'Nexa-XBold', Nexa"),
+  $body-1: mat.define-typography-level(18px, $font-family: "'Nexa-Light', Nexa"),
+  $body-2: mat.define-typography-level(18px, $font-family: "'Nexa-Bold', Nexa"),
+  $caption: mat.define-typography-level(16px, $font-family: "'Nexa-Light', Nexa"),
+  $button: mat.define-typography-level(18px, $font-family: "'Nexa-Bold', Nexa"),
+  $input: mat.define-typography-level(0.6666666667em, $font-family: "'Nexa-Light', Nexa")
+);
+
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$custom-theme: mat.define-light-theme((
+  color: (
+    primary: $custom-primary,
+    accent: $custom-accent,
+    warn: $custom-warn,
+  ),
+  typography: $custom-typography
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+// @include mat.all-component-themes($custom-theme);
+
+@include mat.core($custom-typography);
+
+@include mat.core-theme($custom-theme);
+@include mat.button-theme($custom-theme);
+@include mat.toolbar-theme($custom-theme);
+

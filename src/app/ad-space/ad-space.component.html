@@ -1,0 +1,66 @@
+<div class="page-wrapper-2">
+  <div *ngIf="user" class="ad-profile-panel">
+    <div>
+      <div class="ad-user-info">
+        <app-avatar [initialsSize]="2" src="{{user?.avatar}}" name="{{user?.name }} {{user?.surname}}" size="56"></app-avatar>
+        <span class="mat-body-2">{{user?.name }} {{user?.surname}}</span>
+      </div>
+      <div class="ad-user-menu">
+        <div class="ad-user-menu-item">
+          <img src="assets/images/home.svg" alt="home">
+          <span class="mat-body-2">Home</span>
+        </div>
+        <div class="ad-user-menu-item">
+          <img src="assets/images/settings.svg" alt="home">
+          <span class="mat-body-2">Settings</span>
+        </div>
+        <div class="ad-user-menu-item">
+          <img src="assets/images/my-ad.svg" alt="home">
+          <span class="mat-body-2">My Ad Creatives</span>
+        </div>
+      </div>
+    </div>
+    <div class="ad-metaads-panel">
+      <img src="assets/images/logo.svg" alt="unavailable" style="height: 38px; padding-bottom: 16px">
+      <div class="ad-metaads-social">
+        <img src="assets/images/telegram.svg" alt="telegram">
+        <img src="assets/images/discord.svg" alt="discord">
+        <img src="assets/images/twitter.svg" alt="twitter">
+        <img src="assets/images/facebook.svg" alt="facebook">
+      </div>
+      <span class="mat-caption" style="padding-top: 40px">© 2022 «Metaadd»</span>
+    </div>
+  </div>
+  <div *ngIf="ad" class="ad-item-info">
+    <div style="padding-bottom: 40px">
+      <img src="assets/images/arrow-left.svg" alt="arrow-left">
+      <span class="mat-subheading-2 ad-item-name">Addreality: {{ad.name}}</span>
+    </div>
+    <div class="ad-item-content">
+      <img [src]="ad.url" alt="{{ad.name}}" style="height: 400px; padding-right: 27px">
+      <div class="ad-item-properties">
+        <span class="mat-body-1 ad-item-properties__title">Current Price:</span>
+        <div class="ad-item-properties__value">
+          <span class="mat-body-2 ad-item-properties__value">{{ad.price}}</span>
+          <span class="ad-item-properties__button">history</span>
+        </div>
+        <span class="mat-body-1 ad-item-properties__title">Likes:</span>
+        <span class="mat-body-2 ad-item-properties__value">{{ad.likes}}</span>
+        <span class="mat-body-1 ad-item-properties__title">Description:</span>
+        <div class="ad-item-properties__value">
+          <span class="mat-body-2">{{ad.desc}}</span>
+          <span class="ad-item-properties__button">show</span>
+        </div>
+        <span class="mat-body-1 ad-item-properties__title">Users per week:</span>
+        <span class="mat-body-2 ad-item-properties__value">{{ad.usersPerWeek}}</span>
+        <span class="mat-body-1 ad-item-properties__title">Total users:</span>
+        <span class="mat-body-2 ad-item-properties__value">{{ad.totalUsers}}</span>
+        <span class="mat-body-1 ad-item-properties__title">Owned by:</span>
+        <span class="mat-body-2 ad-item-properties__value">{{ad.owner}}</span>
+      </div>
+    </div>
+    <span class="mat-subheading-1" [class.ad-item-signed]="user">Place ad</span>
+    <span *ngIf="!user" class="mat-body-1 ad-item-unsigned">Only authorised users can add аdvertising </span>
+    <span *ngIf="!user" class="mat-body-2 ad-item-unsigned" style="color: #3888FF" (click)="signIn()">Connect wallet</span>
+  </div>
+</div>

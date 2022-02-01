@@ -1,1 +1,60 @@
-/* You can add global styles to this file, and also import other style files */
+@import "custom-theme";
+
+html {
+  overflow-y: scroll;
+  overflow-x: auto;
+  height: 100%;
+  -webkit-overflow-scrolling: auto;
+}
+
+body {
+  margin: 0;
+  background: #12111a;
+  font-family: 'Nexa', sans-serif;
+  // font-size: 16px;
+  // font-weight: 400;
+  color: white;
+}
+
+
+/* scrollbar redesign */
+* {
+  scrollbar-width: thin;
+  // scrollbar-color: map.get($color-config, 'primary') white;
+}
+
+/* Works on Chrome/Edge/Safari */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+*::-webkit-scrollbar-track {
+  // background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  // background-color: map.get($color-config, 'primary');;
+  border-radius: 20px;
+  border: 1px solid white;
+}
+
+.page-wrapper-1 {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-wrapper-2 {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+}
+
+.modal-backdrop {
+  background-color: rgba($color: #000000, $alpha: 0.8);
+}
+
+.cdk-overlay-container {
+  .custom-dialog-panel {
+    overflow: auto;
+    max-height: 100%;
+  }
+}

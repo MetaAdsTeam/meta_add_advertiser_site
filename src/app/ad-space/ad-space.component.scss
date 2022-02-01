@@ -1,0 +1,89 @@
+.ad-profile-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 182px;
+  background: #2A2931;
+  padding: 64px 40px
+}
+
+.ad-metaads-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ad-metaads-social {
+ img {
+   height: 32px;
+ }
+}
+
+.ad-user-info {
+  display: flex;
+  flex-direction: row;
+  span {
+    padding-left: 16px;
+    align-self: center;
+  }
+  padding-bottom: 40px;
+}
+
+.ad-user-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.ad-user-menu-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-bottom: 24px;
+  span {
+    padding-left: 10px;
+  }
+}
+
+.ad-item-info {
+  display: flex;
+  flex-direction: column;
+  padding: 80px 0 0 83px;
+}
+
+.ad-item-name {
+  padding-left: 24px;
+  text-transform: capitalize;
+}
+
+.ad-item-properties {
+  display: flex;
+  flex-direction: column;
+  &__title {
+    color: #636A77;
+    line-height: 30px;
+  }
+  &__value {
+    padding-bottom: 16px;
+  }
+  &__button {
+    color: #104697;
+    padding-left: 8px;
+    cursor: pointer;
+  }
+}
+
+.ad-item-content {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 56px;
+}
+
+.ad-item-signed {
+  color: #3888FF;
+  cursor: pointer;
+}
+
+.ad-item-unsigned {
+  cursor: pointer;
+  line-height: 30px;
+}
