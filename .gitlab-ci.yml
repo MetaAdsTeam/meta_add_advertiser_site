@@ -1,0 +1,58 @@
+image: node:lts-alpine
+
+stages:
+  - build
+  - deploy
+
+.build-common:
+  cache:
+    paths:
+      - node_modules
+  before_script:
+    - node --version
+    - npm --version
+    - npm install
+  script:
+    - npm run $PROFILE
+  artifacts:
+    paths:
+      - dist
+
+.deploy-common:
+  variables:
+    GIT_STRATEGY: none
+  before_script:
+    - apk update
+    - apk add rsync openssh
+    - eval $(ssh-agent -s)
+    - echo "$PRIVATE_KEY" | base64 -d | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -p $SERVER_PORT $SERVER_URL >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - rsync -e "ssh -o StrictHostKeyChecking=no -T -p $SERVER_PORT " -rv --delete dist $USER_NAME@$SERVER_URL:$BASE_DIR/
+
+build-prod:
+  stage: build
+  extends: .build-common
+  variables:
+    PROFILE: prod
+  only:
+    - master
+  tags:
+    - gitlab
+
+deploy-prod:
+  stage: deploy
+  extends: .deploy-common
+  variables:
+    PRIVATE_KEY: $PRODUCTION_PRIVATE_KEY
+    SERVER_URL: $PRODUCTION_SERVER_URL
+    SERVER_PORT: $PRODUCTION_SERVER_PORT
+    USER_NAME: $PRODUCTION_USER_NAME
+    BASE_DIR: $PRODUCTION_BASE_DIR
+  only:
+    - master
+  tags:
+    - gitlab
