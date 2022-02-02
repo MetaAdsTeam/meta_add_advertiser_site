@@ -3,8 +3,6 @@ import {Subscription} from 'rxjs/internal/Subscription';
 import {Ad} from '../model/ad.model';
 import {AppService} from '../app.service';
 import {Router} from '@angular/router';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {ConnectComponent} from '../connect/connect.component';
 
 @Component({
   selector: 'app-main-page',
@@ -15,43 +13,17 @@ export class MainPageComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
   ads: Ad[] = [];
   selectedAd: Ad | null = null;
-  signed: Boolean = false;
-  dialogRef: any = null;
+  signed: boolean = false;
+  selectedAdFilter = 'all';
 
   constructor(private appService: AppService,
-              private router: Router,
-              private dialog: MatDialog) { }
+              private router: Router) { }
 
   ngOnInit(): void {
-    this.subscriptions.add(
-      this.appService.getAds().subscribe(value => this.ads = value)
-    );
+    this.loadAds();
     this.subscriptions.add(
       this.appService.signed$.subscribe(value => this.signed = value)
-    )
-  }
-
-  login() {
-    this.dialogRef = this.dialog.open(ConnectComponent, {
-      width: '350px',
-      minHeight: 200,
-      maxHeight: '100%',
-      disableClose: true,
-      panelClass: 'custom-dialog-panel',
-      backdropClass: 'modal-backdrop'
-    });
-    this.subscriptions.add(this.dialogRef.afterClosed()
-      .subscribe(() => {
-        // if (result) {
-          this.appService.signIn();
-        //}
-      })
     );
-  }
-
-  logout() {
-    this.appService.signOut();
-    /* redirect action, maybe */
   }
 
   selectAd(ad: Ad) {
@@ -60,6 +32,15 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
   showMore(ad: Ad) {
     this.router.navigate([`/ad/${ad.id}`],)
+  }
+
+  loadAds(filter: string = 'all') {
+    this.subscriptions.add(
+      this.appService.getAds(filter).subscribe(value => {
+        this.ads = value;
+        this.selectedAdFilter = filter;
+      })
+    );
   }
 
   ngOnDestroy() {

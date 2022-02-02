@@ -21,7 +21,9 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MatNativeDateModule} from '@angular/material/core';
+import {MAT_DATE_FORMATS, MatNativeDateModule} from '@angular/material/core';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatLuxonDateModule} from '@angular/material-luxon-adapter';
 
 const modules = [
   // MatMenuModule,
@@ -31,8 +33,10 @@ const modules = [
   // MatCardModule,
   MatInputModule,
   MatDialogModule,
-  // MatDatepickerModule,
+  MatDatepickerModule,
   // MatNativeDateModule,
+  MatLuxonDateModule
+  // MatGridListModule,
   // MatTooltipModule,
   // MatDividerModule,
   // MatSelectModule,

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {AppService} from '../app.service';
+import {HttpErrorResponse} from '@angular/common/http';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-connect',
@@ -8,19 +10,32 @@ import {MatDialogRef} from '@angular/material/dialog';
   styleUrls: ['./connect.component.scss']
 })
 export class ConnectComponent implements OnInit {
-  name = new FormControl('');
+  subscriptions = new Subscription();
 
-  constructor(public dialogRef: MatDialogRef<ConnectComponent>) { }
+  constructor(public dialogRef: MatDialogRef<ConnectComponent>,
+              private appService: AppService) { }
 
   ngOnInit(): void {
   }
 
 
   connect() {
-    console.log('secret', this.name.value);
+    this.subscriptions.add(
+      this.appService.signIn('secret')
+        .subscribe(result => {
+          if (result) {
+            this.close(result)
+          } else {
+            /* show error */
+          }
+        },
+     (error: HttpErrorResponse) => {
+        console.log('error', error)
+        })
+    );
   }
 
-  close() {
-    this.dialogRef.close('connected')
+  close(result: boolean = false) {
+    this.dialogRef.close(result)
   }
 }

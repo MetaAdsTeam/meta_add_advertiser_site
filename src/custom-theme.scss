@@ -53,7 +53,7 @@ $custom-typography: mat.define-typography-config(
   $body-1: mat.define-typography-level(18px, $font-family: "'Nexa-Light', Nexa"),
   $body-2: mat.define-typography-level(18px, $font-family: "'Nexa-Bold', Nexa"),
   $caption: mat.define-typography-level(16px, $font-family: "'Nexa-Light', Nexa"),
-  $button: mat.define-typography-level(18px, $font-family: "'Nexa-Bold', Nexa"),
+  $button: mat.define-typography-level(15px, $font-weight: 800, $font-family: "'Nexa-Bold', Nexa"),
   $input: mat.define-typography-level(0.6666666667em, $font-family: "'Nexa-Light', Nexa")
 );
 
@@ -76,7 +76,5 @@ $custom-theme: mat.define-light-theme((
 
 @include mat.core($custom-typography);
 
-@include mat.core-theme($custom-theme);
-@include mat.button-theme($custom-theme);
-@include mat.toolbar-theme($custom-theme);
+@include mat.all-component-themes($custom-theme);
 

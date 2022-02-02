@@ -1,39 +1,9 @@
-<div class="page-wrapper-2">
-  <div *ngIf="user" class="ad-profile-panel">
-    <div>
-      <div class="ad-user-info">
-        <app-avatar [initialsSize]="2" src="{{user?.avatar}}" name="{{user?.name }} {{user?.surname}}" size="56"></app-avatar>
-        <span class="mat-body-2">{{user?.name }} {{user?.surname}}</span>
-      </div>
-      <div class="ad-user-menu">
-        <div class="ad-user-menu-item">
-          <img src="assets/images/home.svg" alt="home">
-          <span class="mat-body-2">Home</span>
-        </div>
-        <div class="ad-user-menu-item">
-          <img src="assets/images/settings.svg" alt="home">
-          <span class="mat-body-2">Settings</span>
-        </div>
-        <div class="ad-user-menu-item">
-          <img src="assets/images/my-ad.svg" alt="home">
-          <span class="mat-body-2">My Ad Creatives</span>
-        </div>
-      </div>
-    </div>
-    <div class="ad-metaads-panel">
-      <img src="assets/images/logo.svg" alt="unavailable" style="height: 38px; padding-bottom: 16px">
-      <div class="ad-metaads-social">
-        <img src="assets/images/telegram.svg" alt="telegram">
-        <img src="assets/images/discord.svg" alt="discord">
-        <img src="assets/images/twitter.svg" alt="twitter">
-        <img src="assets/images/facebook.svg" alt="facebook">
-      </div>
-      <span class="mat-caption" style="padding-top: 40px">© 2022 «Metaadd»</span>
-    </div>
-  </div>
+<div class="page-wrapper-1">
   <div *ngIf="ad" class="ad-item-info">
     <div style="padding-bottom: 40px">
-      <img src="assets/images/arrow-left.svg" alt="arrow-left">
+      <a routerLink="/">
+        <img src="assets/images/arrow-left.svg" alt="arrow-left">
+      </a>
       <span class="mat-subheading-2 ad-item-name">Addreality: {{ad.name}}</span>
     </div>
     <div class="ad-item-content">
@@ -42,14 +12,20 @@
         <span class="mat-body-1 ad-item-properties__title">Current Price:</span>
         <div class="ad-item-properties__value">
           <span class="mat-body-2 ad-item-properties__value">{{ad.price}}</span>
-          <span class="ad-item-properties__button">history</span>
+          <span class="ad-item-properties__button"
+                [class.ad-item-properties__button__selected]="selectedAddInfoType === 'history'"
+                (click)="selectAddInfoType('history')">history</span>
         </div>
         <span class="mat-body-1 ad-item-properties__title">Likes:</span>
         <span class="mat-body-2 ad-item-properties__value">{{ad.likes}}</span>
         <span class="mat-body-1 ad-item-properties__title">Description:</span>
         <div class="ad-item-properties__value">
           <span class="mat-body-2">{{ad.desc}}</span>
-          <span class="ad-item-properties__button">show</span>
+          <span class="ad-item-properties__button"
+                [class.ad-item-properties__button__selected]="selectedAddInfoType === 'desc'"
+                (click)="selectAddInfoType('desc')">
+            show
+          </span>
         </div>
         <span class="mat-body-1 ad-item-properties__title">Users per week:</span>
         <span class="mat-body-2 ad-item-properties__value">{{ad.usersPerWeek}}</span>
@@ -58,9 +34,30 @@
         <span class="mat-body-1 ad-item-properties__title">Owned by:</span>
         <span class="mat-body-2 ad-item-properties__value">{{ad.owner}}</span>
       </div>
+      <div class="ad-item-add">
+        <app-description *ngIf="selectedAddInfoType === 'desc'"
+                         [header]="'Test'"
+                         [body]="'Ownership gives NFTs their value. Anything online can be copied and reproduced, but an NFT is the original version of the digital item. This is why NFTs have taken the art world by storm because it has opened an entirely new lane for fine art collecting. An NFT can be sold at any price.'">
+        </app-description>
+        <app-history *ngIf="selectedAddInfoType === 'history'"></app-history>
+      </div>
     </div>
-    <span class="mat-subheading-1" [class.ad-item-signed]="user">Place ad</span>
+    <button mat-flat-button
+            [class.ad-item-place-ad__unsigned]="!user"
+            class="ad-item-place-ad" [class.mat-primary]="user"
+            (click)="placeAd()">
+      <span class="mat-subheading-1">Place Ad</span>
+    </button>
     <span *ngIf="!user" class="mat-body-1 ad-item-unsigned">Only authorised users can add аdvertising </span>
-    <span *ngIf="!user" class="mat-body-2 ad-item-unsigned" style="color: #3888FF" (click)="signIn()">Connect wallet</span>
+    <span *ngIf="!user" class="mat-body-2 ad-item-unsigned__button" (click)="signIn()">Connect wallet</span>
+  </div>
+  <div id="place-ad" *ngIf="place">
+
+    <div class="calendar-wrapper">
+      <mat-calendar #calendar [(selected)]="selectedDate"
+                    [headerComponent]="getCustomHeader()"
+                    (selectedChange)="selectDate($event)">
+      </mat-calendar>
+    </div>
   </div>
 </div>

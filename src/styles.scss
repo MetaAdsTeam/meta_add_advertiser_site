@@ -31,7 +31,7 @@ body {
   // background: transparent;
 }
 *::-webkit-scrollbar-thumb {
-  // background-color: map.get($color-config, 'primary');;
+  // background-color: #2A2931;
   border-radius: 20px;
   border: 1px solid white;
 }
@@ -53,8 +53,42 @@ body {
 }
 
 .cdk-overlay-container {
-  .custom-dialog-panel {
+  .connect-dialog-panel {
     overflow: auto;
     max-height: 100%;
+    background: #2A2931;
   }
+}
+
+.mat-dialog-container {
+  padding: 0 !important;
+  border-radius: 8px !important;
+  background: none !important;
+}
+
+/* customize material calendar */
+.mat-calendar-body {
+  font-family: 'Nexa', sans-serif;
+  font-size: 15px;
+}
+
+.mat-calendar-table-header {
+  font-family: 'Nexa', sans-serif;
+  color: #636A77;
+  th {
+    font-size: 15px;
+  }
+}
+
+.mat-calendar-body-cell-content {
+  border: none !important;
+  color: white;
+}
+
+.mat-calendar-body-label {
+  opacity: 0;
+}
+
+.mat-calendar-body-label[colspan="7"] {
+  display: none;
 }

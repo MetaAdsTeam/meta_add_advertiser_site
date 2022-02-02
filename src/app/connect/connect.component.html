@@ -1,8 +1,13 @@
-<div style="background: #2A2931" class="popup-container">
-  <mat-icon src="assets/images/close.svg" (click)="close()"></mat-icon>
-  <span>Connect Wallet</span>
+<div class="connect-container">
+  <!--mat-icon svgIcon="close" class="connect-container__icon"
+            (click)="close()"></mat-icon-->
+  <span class="mat-caption" style="margin-bottom: 32px; text-align: center">The key feature of this site is that users can buy NFTs using fiat currency.</span>
 
-  <input id="name" type="text" formControl="name">
+  <div class="connect-container__img">
+    <img src="assets/images/near.svg"/>
+  </div>
 
-  <button mat-flat-button (click)="connect()">Connect</button>
+  <button mat-flat-button
+          class="connect-container__button mat-primary"
+          (click)="connect()">Connect</button>
 </div>

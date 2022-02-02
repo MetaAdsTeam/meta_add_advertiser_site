@@ -1,1 +1,81 @@
+.app-profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 182px;
+  background: #2A2931;
+  padding: 64px 40px
+}
 
+.app-metaads-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app-user-info {
+  display: flex;
+  flex-direction: column;
+  span {
+    padding-top: 16px;
+    align-self: center;
+  }
+  padding-bottom: 40px;
+}
+
+.app-user-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-user-menu-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-bottom: 24px;
+  span {
+    padding-left: 10px;
+  }
+}
+
+.app-footer {
+  height: 32px;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0 46px;
+}
+
+.app-social {
+  img {
+    &:nth-child(even) {
+      padding-right: 8px;
+    }
+    &:nth-child(odd) {
+      padding-right: 8px;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+}
+
+.app-metaads-logout {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 26px 0 35px;
+  cursor: pointer;
+}
+
+.app-toolbar {
+  height: 52px;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 72px;
+
+  button {
+    width: 196px;
+  }
+}

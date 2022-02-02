@@ -1,20 +1,21 @@
-<div class="page-wrapper-1" style="padding: 0 160px">
-  <div class="main-toolbar">
-    <img src="assets/images/logo.svg">
-    <button *ngIf="!signed" mat-flat-button class="mat-primary" (click)="login()">Connect</button>
-    <button *ngIf="signed" mat-flat-button class="mat-primary" (click)="logout()">Disconnect</button>
-  </div>
+<div style="width: 100%; display: flex; flex-direction: column">
   <span class="mat-headline main-title">Ad space</span>
+  <div *ngIf="signed" class="ads-filter">
+    <span [class.selected]="selectedAdFilter === 'all'"
+          (click)="loadAds()">All</span>
+    <span [class.selected]="selectedAdFilter === 'my'"
+          (click)="loadAds('my')">My ad</span>
+  </div>
   <div class="ads-container">
     <div *ngFor="let ad of ads" class="ads-content">
       <img *ngIf="selectedAd !== ad"
            [src]="ad.url"
            alt="unavailable"
-           style="height: 200px"
            (click)="selectAd(ad)">
       <div *ngIf="selectedAd === ad" class="ads-content-selected-logout">
         <span class="mat-caption" style="padding: 0 24px 25px 24px">The key feature of this site is that users can buy NFTs using fiat currency.</span>
-        <span class="mat-body-2" (click)="showMore(ad)">show more</span>
+        <button mat-flat-button
+                (click)="showMore(ad)">Place Ad</button>
       </div>
       <span class="mat-body-2"
             [class.ads-content-selected-logout-color]="selectedAd === ad"

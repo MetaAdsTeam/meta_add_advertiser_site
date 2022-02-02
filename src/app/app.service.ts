@@ -4,16 +4,17 @@ import {of} from 'rxjs/internal/observable/of';
 import {Ad} from './model/ad.model';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {User} from './model/user.model';
+import {ConnectComponent} from './connect/connect.component';
+import {MatDialog} from '@angular/material/dialog';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
-  private signed = new BehaviorSubject<Boolean>(false);
+  private signed = new BehaviorSubject<boolean>(false);
   signed$ = this.signed.asObservable();
   private user = new BehaviorSubject<User | null>(null);
   user$ = this.user.asObservable();
-  private connected = new BehaviorSubject<Boolean>(false);
-  connected$ = this.connected.asObservable();
 
+  constructor(private dialog: MatDialog) {}
 
   /* test data */
   private ads: Ad[] = [
@@ -23,16 +24,31 @@ export class AppService {
     ];
 
   private testUser: User = {
-    username: 'test',
-    avatar: '/no',
-    name: 'John',
-    surname: 'Worthington'
+    username: 'f740375728......9d5c25529'
   };
 
   /* end test data */
-  signIn() {
-    this.signed.next(true);
-    this.user.next(this.testUser);
+
+  login(): Observable<boolean> {
+    const dialogRef = this.dialog.open(ConnectComponent, {
+      width: '592px',
+      height: '418px',
+      maxHeight: '100%',
+      // disableClose: true,
+      // panelClass: 'connect-dialog-panel',
+      backdropClass: 'modal-backdrop'
+    });
+    return dialogRef.afterClosed()
+  }
+
+  signIn(secret: string): Observable<boolean> {
+    /* test code */
+    const signed = secret === 'secret';
+    /* end */
+    this.signed.next(signed);
+    this.user.next(signed ? this.testUser : null);
+
+    return of(signed);
   }
 
   signOut() {
@@ -40,7 +56,7 @@ export class AppService {
     this.user.next(null);
   }
 
-  getAds(): Observable<Ad[]> {
+  getAds(filter: string = 'all'): Observable<Ad[]> {
     return of(this.ads)
   }
 

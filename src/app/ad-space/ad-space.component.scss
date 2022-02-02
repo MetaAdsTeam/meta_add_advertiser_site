@@ -47,7 +47,7 @@
 .ad-item-info {
   display: flex;
   flex-direction: column;
-  padding: 80px 0 0 83px;
+  padding: 80px 0 0 0;
 }
 
 .ad-item-name {
@@ -69,13 +69,17 @@
     color: #104697;
     padding-left: 8px;
     cursor: pointer;
+
+    &__selected {
+      color: #3888FF;
+    }
   }
 }
 
 .ad-item-content {
   display: flex;
   flex-direction: row;
-  padding-bottom: 56px;
+  padding-bottom: 48px;
 }
 
 .ad-item-signed {
@@ -84,6 +88,43 @@
 }
 
 .ad-item-unsigned {
-  cursor: pointer;
   line-height: 30px;
+
+  &__button {
+    cursor: pointer;
+    color: #3888FF;
+    margin-top: 8px;
+  }
+}
+
+.ad-item-add {
+  min-width: 737px;
+  max-width: 737px;
+  margin-left: 100px;
+  height: 400px;
+  background: #2A2931;
+  border-radius: 5px;
+}
+
+.ad-item-place-ad {
+  height: 65px;
+  width: 231px;
+  margin-bottom: 24px;
+
+  &__unsigned {
+    background: #686868;
+    color: #353535;
+  }
+}
+
+.place-ad-calendar {
+  background: #2A2931;
+  width: 357px;
+  margin: 50px 0;
+}
+
+.calendar-wrapper {
+  width: 359px;
+  margin-bottom: 50px;
+  background: #2A2931;
 }
