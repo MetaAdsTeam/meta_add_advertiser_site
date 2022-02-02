@@ -37,7 +37,7 @@ build-prod:
   stage: build
   extends: .build-common
   variables:
-    PROFILE: prod
+    PROFILE: build
   only:
     - master
   tags:
