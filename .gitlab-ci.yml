@@ -29,7 +29,7 @@ stages:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
 #    - ssh-keyscan -p $SERVER_PORT $SERVER_URL >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
+#    - chmod 644 ~/.ssh/known_hosts
   script:
     - rsync -e "ssh -o StrictHostKeyChecking=no -T -p $SERVER_PORT " -rv --delete dist $USER_NAME@$SERVER_URL:$BASE_DIR/
 
