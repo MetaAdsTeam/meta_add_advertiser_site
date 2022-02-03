@@ -117,14 +117,21 @@
   }
 }
 
-.place-ad-calendar {
+.ad-place-datetimes {
+  min-width: 357px;
+  max-width: 357px;
+  min-height: 359px;
+  max-height: 359px;
   background: #2A2931;
-  width: 357px;
-  margin: 50px 0;
+  // overflow: auto;
 }
 
-.calendar-wrapper {
-  width: 359px;
+.ad-place {
+  display: flex;
+  flex-direction: row;
   margin-bottom: 50px;
-  background: #2A2931;
+
+  &__title {
+    padding-bottom: 16px;
+  }
 }

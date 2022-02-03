@@ -4,23 +4,23 @@
       <a routerLink="/">
         <img src="assets/images/arrow-left.svg" alt="arrow-left">
       </a>
-      <span class="mat-subheading-2 ad-item-name">Addreality: {{ad.name}}</span>
+      <span class="mat-subheading-2 ad-item-name">Addreality: {{ad?.name}}</span>
     </div>
     <div class="ad-item-content">
-      <img [src]="ad.url" alt="{{ad.name}}" style="height: 400px; padding-right: 27px">
+      <img [src]="ad?.url" alt="{{ad?.name}}" style="height: 400px; padding-right: 27px">
       <div class="ad-item-properties">
         <span class="mat-body-1 ad-item-properties__title">Current Price:</span>
         <div class="ad-item-properties__value">
-          <span class="mat-body-2 ad-item-properties__value">{{ad.price}}</span>
+          <span class="mat-body-2 ad-item-properties__value">{{ad?.price}}</span>
           <span class="ad-item-properties__button"
                 [class.ad-item-properties__button__selected]="selectedAddInfoType === 'history'"
                 (click)="selectAddInfoType('history')">history</span>
         </div>
         <span class="mat-body-1 ad-item-properties__title">Likes:</span>
-        <span class="mat-body-2 ad-item-properties__value">{{ad.likes}}</span>
+        <span class="mat-body-2 ad-item-properties__value">{{ad?.likes}}</span>
         <span class="mat-body-1 ad-item-properties__title">Description:</span>
         <div class="ad-item-properties__value">
-          <span class="mat-body-2">{{ad.desc}}</span>
+          <span class="mat-body-2">{{ad?.desc}}</span>
           <span class="ad-item-properties__button"
                 [class.ad-item-properties__button__selected]="selectedAddInfoType === 'desc'"
                 (click)="selectAddInfoType('desc')">
@@ -28,11 +28,11 @@
           </span>
         </div>
         <span class="mat-body-1 ad-item-properties__title">Users per week:</span>
-        <span class="mat-body-2 ad-item-properties__value">{{ad.usersPerWeek}}</span>
+        <span class="mat-body-2 ad-item-properties__value">{{ad?.usersPerWeek}}</span>
         <span class="mat-body-1 ad-item-properties__title">Total users:</span>
-        <span class="mat-body-2 ad-item-properties__value">{{ad.totalUsers}}</span>
+        <span class="mat-body-2 ad-item-properties__value">{{ad?.totalUsers}}</span>
         <span class="mat-body-1 ad-item-properties__title">Owned by:</span>
-        <span class="mat-body-2 ad-item-properties__value">{{ad.owner}}</span>
+        <span class="mat-body-2 ad-item-properties__value">{{ad?.owner}}</span>
       </div>
       <div class="ad-item-add">
         <app-description *ngIf="selectedAddInfoType === 'desc'"
@@ -51,13 +51,37 @@
     <span *ngIf="!user" class="mat-body-1 ad-item-unsigned">Only authorised users can add аdvertising </span>
     <span *ngIf="!user" class="mat-body-2 ad-item-unsigned__button" (click)="signIn()">Connect wallet</span>
   </div>
-  <div id="place-ad" *ngIf="place">
-
-    <div class="calendar-wrapper">
-      <mat-calendar #calendar [(selected)]="selectedDate"
-                    [headerComponent]="getCustomHeader()"
-                    (selectedChange)="selectDate($event)">
-      </mat-calendar>
+  <div id="place-ad" *ngIf="place" class="ad-place">
+    <div id="calendar" style="margin-right: 24px">
+      <span class="mat-body-2 ad-place__title">Date</span>
+      <div class="ad-place-datetimes">
+        <mat-calendar #calendar [(selected)]="selectedDate"
+                      style="padding: 32px 30px"
+                      [headerComponent]="getCustomHeader()"
+                      (selectedChange)="selectDate($event)">
+        </mat-calendar>
+      </div>
     </div>
+    <div id="timeslots">
+      <span class="mat-body-2 ad-place__title">Available slots</span>
+      <div class="ad-place-datetimes">
+        <div style="padding: 40px 38px">
+          <span>{{selectedDate | formatDate}}</span>
+          <div id="am">
+            <span>a.m.</span>
+            <!--ng-container *ngFor="let ts of timeslots[0]">
+              <span>{{ts.from}}</span>
+            </ng-container-->
+          </div>
+          <div id="pm">
+            <span>p.m.</span>
+            <!--ng-container *ngFor="let ts of timeslots[1]">
+              <span>{{ts.from}}</span>
+            </ng-container-->
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

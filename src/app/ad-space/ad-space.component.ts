@@ -7,11 +7,29 @@ import {ActivatedRoute} from '@angular/router';
 import {CustomHeader} from './custom-header/calendar-custom-header';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {LuxonDateAdapter, MAT_LUXON_DATE_FORMATS} from '@angular/material-luxon-adapter';
+import {DateTime} from 'luxon';
+import {Timeslot} from '../model/timeslot.model';
 
 type SelectedAddInfoType = 'desc' | 'history';
 
 export interface ComponentType<T = any> {
   new (...args: any[]): T;
+}
+
+interface FormattedTimeslot {
+  id: number,
+  from: string,
+  locked: boolean
+  type: string
+}
+
+interface TimeslotsByType {
+  [type: number]: FormattedTimeslot
+}
+
+export enum TimeslotType {
+  AM = 'AM',
+  PM = 'PM'
 }
 
 @Component({
@@ -28,8 +46,9 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   user: User| null = null;
   ad: Ad | undefined;
   selectedAddInfoType: SelectedAddInfoType = 'desc';
-  selectedDate: Date = new Date();
+  selectedDate: DateTime = DateTime.now();
   place = false;
+  timeslots: TimeslotsByType[] = [];
 
   constructor(private appService: AppService,
               private activatedRoute: ActivatedRoute) { }
@@ -41,7 +60,6 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
         if (!this.user) {
           this.place = false;
         }
-        console.log('user', value);
       })
     );
     this.subscriptions.add(
@@ -58,7 +76,23 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   }
 
   selectDate(event: any) {
-    console.log('event', event, this.selectedDate);
+    if (this.ad) {
+      this.subscriptions.add(
+        this.appService.getAvailableSlots(this.ad.id)
+          .subscribe(value => {
+            const ft: FormattedTimeslot[] = value.map(v => {
+              const date = DateTime.fromISO(v.from_time).toLocaleString(DateTime.TIME_SIMPLE).split(' ')[0];
+              return {
+                ...v,
+                from: date.replace(':', '.'),
+                type: +date.split(':')[0] >= 12 ? TimeslotType.PM : TimeslotType.AM}
+            });
+            this.timeslots[0] = ft.filter(t => t.type === TimeslotType.AM);
+            this.timeslots[1] = ft.filter(t => t.type === TimeslotType.PM);
+            console.log(this.timeslots);
+          })
+      );
+    }
   }
 
   signIn() {

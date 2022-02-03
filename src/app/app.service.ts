@@ -6,6 +6,7 @@ import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {User} from './model/user.model';
 import {ConnectComponent} from './connect/connect.component';
 import {MatDialog} from '@angular/material/dialog';
+import {Timeslot} from './model/timeslot.model';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
@@ -26,6 +27,16 @@ export class AppService {
   private testUser: User = {
     username: 'f740375728......9d5c25529'
   };
+
+  private timeslots: Timeslot[] = [
+    {id: 1, from_time: '2020-02-03T09:24:15', to_time: '2020-02-03T09:30:15', locked: false},
+    {id: 2, from_time: '2020-02-03T09:35:15', to_time: '2020-02-03T09:40:15', locked: false},
+    {id: 3, from_time: '2020-02-03T12:50:15', to_time: '2020-02-03T12:55:15', locked: false},
+    {id: 4, from_time: '2020-02-03T14:04:15', to_time: '2020-02-03T14:24:15', locked: false}
+  ]
+/* t 1643835600000
+
+ */
 
   /* end test data */
 
@@ -62,6 +73,10 @@ export class AppService {
 
   getAdById(id: string): Observable<Ad | undefined> {
     return of(this.ads.find(a => a.id === id))
+  }
+
+  getAvailableSlots(adId: string): Observable<Timeslot[]> {
+    return of(this.timeslots);
   }
 
 }

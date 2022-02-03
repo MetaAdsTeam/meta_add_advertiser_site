@@ -15,6 +15,7 @@ import {DescriptionComponent} from './ad-space/description.component';
 import {HistoryComponent} from './ad-space/history.component';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {CustomHeader} from './ad-space/custom-header/calendar-custom-header';
+import {DateFormatPipe} from './shared/date-format.pipe';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import {CustomHeader} from './ad-space/custom-header/calendar-custom-header';
     ConnectComponent,
     DescriptionComponent,
     HistoryComponent,
-    CustomHeader
+    CustomHeader,
+    DateFormatPipe
   ],
   imports: [
     BrowserModule,

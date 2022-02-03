@@ -4,6 +4,7 @@ import {AppService} from '../app.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Subscription} from 'rxjs';
 
+
 @Component({
   selector: 'app-connect',
   templateUrl: './connect.component.html',
@@ -20,6 +21,15 @@ export class ConnectComponent implements OnInit {
 
 
   connect() {
+    /*
+    * // create new WalletConnection instance
+const wallet = new WalletConnection(near, 'my-app');
+
+// If not signed in redirect to the NEAR wallet to sign in
+// keys will be stored in the BrowserLocalStorageKeyStore
+if(!wallet.isSingnedIn()) return wallet.requestSignIn()
+    * */
+
     this.subscriptions.add(
       this.appService.signIn('secret')
         .subscribe(result => {
@@ -38,4 +48,108 @@ export class ConnectComponent implements OnInit {
   close(result: boolean = false) {
     this.dialogRef.close(result)
   }
+
+  /****
+
+   import * as nearAPI from "near-api-js";
+
+
+   window.nearConfig =  {
+        networkId: 'testnet',
+        nodeUrl: 'https://rpc.testnet.near.org',
+        contractName: 'trenger.testnet',
+        walletUrl: 'https://wallet.testnet.near.org',
+        helperUrl: 'https://helper.testnet.near.org'
+      }
+
+   // Connects to NEAR and provides `near`, `walletAccount` and `contract` objects in `window` scope
+   async function connect() {
+  // Initializing connection to the NEAR node.
+  window.near = await nearAPI.connect(Object.assign(nearConfig, { deps: { keyStore: new nearAPI.keyStores.BrowserLocalStorageKeyStore() }}));
+
+  // Needed to access wallet login
+  window.walletAccount = new nearAPI.WalletConnection(window.near);
+
+  // Initializing our contract APIs by contract name and configuration.
+  window.contract = await near.loadContract(nearConfig.contractName, {
+    viewMethods: ['getCounter'],
+    changeMethods: ['incrementCounter', 'decrementCounter', 'resetCounter'],
+    sender: window.walletAccount.getAccountId()
+  });
+}
+
+   function updateUI() {
+  if (!window.walletAccount.getAccountId()) {
+    Array.from(document.querySelectorAll('.sign-in')).map(it => it.style = 'display: block;');
+  } else {
+    Array.from(document.querySelectorAll('.after-sign-in')).map(it => it.style = 'display: block;');
+    contract.getCounter().then(count => {
+      document.querySelector('#show').classList.replace('loader','number');
+      document.querySelector('#show').innerText = count == undefined ? 'calculating...' : count;
+      document.querySelector('#left').classList.toggle('eye');
+      document.querySelectorAll('button').forEach(button => button.disabled = false);
+      if (count >= 0) {
+        document.querySelector('.mouth').classList.replace('cry','smile');
+      }else {
+        document.querySelector('.mouth').classList.replace('smile','cry');
+      }
+      if (count > 20 || count < -20) {
+        document.querySelector('.tongue').style.display = 'block';
+      }else {
+        document.querySelector('.tongue').style.display = 'none';
+      }
+    });
+  }
+}
+
+   // counter method
+   let value = 1;
+
+   document.querySelector('#plus').addEventListener('click', ()=>{
+  document.querySelectorAll('button').forEach(button => button.disabled = true);
+  document.querySelector('#show').classList.replace('number','loader');
+  document.querySelector('#show').innerText = '';
+  contract.incrementCounter({value}).then(updateUI);
+});
+   document.querySelector('#minus').addEventListener('click', ()=>{
+  document.querySelectorAll('button').forEach(button => button.disabled = true);
+  document.querySelector('#show').classList.replace('number','loader');
+  document.querySelector('#show').innerText = '';
+  contract.decrementCounter({value}).then(updateUI);
+});
+   document.querySelector('#a').addEventListener('click', ()=>{
+  document.querySelectorAll('button').forEach(button => button.disabled = true);
+  document.querySelector('#show').classList.replace('number','loader');
+  document.querySelector('#show').innerText = '';
+  contract.resetCounter().then(updateUI);
+});
+   document.querySelector('#c').addEventListener('click', ()=>{
+  document.querySelector('#left').classList.toggle('eye');
+});
+   document.querySelector('#b').addEventListener('click', ()=>{
+  document.querySelector('#right').classList.toggle('eye');
+});
+   document.querySelector('#d').addEventListener('click', ()=>{
+  document.querySelector('.dot').classList.toggle('on');
+  if (document.querySelector('.dot').classList.contains('on')) {
+    value = 10;
+  }else {
+    value = 1;
+  }
+});
+   // Log in user using NEAR Wallet on "Sign In" button click
+   document.querySelector('.sign-in .btn').addEventListener('click', () => {
+  walletAccount.requestSignIn(nearConfig.contractName, 'NEAR Counter Example');
+});
+
+   document.querySelector('.sign-out .btn').addEventListener('click', () => {
+  walletAccount.signOut();
+  // TODO: Move redirect to .signOut() ^^^
+  window.location.replace(window.location.origin + window.location.pathname);
+});
+
+   window.nearInitPromise = connect()
+   .then(updateUI)
+   .catch(console.error);
+   */
 }
