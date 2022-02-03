@@ -3,7 +3,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {AppService} from '../app.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Subscription} from 'rxjs';
-
+import {NearService} from '../near.service';
 
 @Component({
   selector: 'app-connect',
@@ -14,69 +14,70 @@ export class ConnectComponent implements OnInit {
   subscriptions = new Subscription();
 
   constructor(public dialogRef: MatDialogRef<ConnectComponent>,
-              private appService: AppService) { }
+              private nearService: NearService,
+              private appService: AppService) {
+  }
 
   ngOnInit(): void {
   }
 
 
   connect() {
-    /*
-    * // create new WalletConnection instance
-const wallet = new WalletConnection(near, 'my-app');
-
-// If not signed in redirect to the NEAR wallet to sign in
-// keys will be stored in the BrowserLocalStorageKeyStore
-if(!wallet.isSingnedIn()) return wallet.requestSignIn()
-    * */
-
     this.subscriptions.add(
-      this.appService.signIn('secret')
-        .subscribe(result => {
-          if (result) {
-            this.close(result)
-          } else {
-            /* show error */
-          }
+      this.appService.signIn()
+        .subscribe((result) => {
+          this.close(result)
         },
-     (error: HttpErrorResponse) => {
-        console.log('error', error)
-        })
-    );
+          (error: HttpErrorResponse) => {
+              console.log('error', error)
+          }
+      ));
   }
+
+
 
   close(result: boolean = false) {
     this.dialogRef.close(result)
   }
-
+}
   /****
 
    import * as nearAPI from "near-api-js";
 
 
-   window.nearConfig =  {
-        networkId: 'testnet',
-        nodeUrl: 'https://rpc.testnet.near.org',
-        contractName: 'trenger.testnet',
-        walletUrl: 'https://wallet.testnet.near.org',
-        helperUrl: 'https://helper.testnet.near.org'
-      }
 
-   // Connects to NEAR and provides `near`, `walletAccount` and `contract` objects in `window` scope
-   async function connect() {
-  // Initializing connection to the NEAR node.
-  window.near = await nearAPI.connect(Object.assign(nearConfig, { deps: { keyStore: new nearAPI.keyStores.BrowserLocalStorageKeyStore() }}));
-
-  // Needed to access wallet login
-  window.walletAccount = new nearAPI.WalletConnection(window.near);
-
-  // Initializing our contract APIs by contract name and configuration.
-  window.contract = await near.loadContract(nearConfig.contractName, {
-    viewMethods: ['getCounter'],
-    changeMethods: ['incrementCounter', 'decrementCounter', 'resetCounter'],
-    sender: window.walletAccount.getAccountId()
-  });
 }
+
+
+
+   /**
+   let near = await nearApi.connect({
+      nodeUrl: "https://rpc.testnet.near.org",
+      walletUrl: "https://wallet.testnet.near.org",
+      // helperUrl: "https://helper.testnet.near.org",
+      // explorerUrl: "https://explorer.testnet.near.org",
+      networkId: 'testnet',
+      keyStore: new nearApi.BrowserLocalStorageKeyStore(window.localStorage, 'meta-add'),
+      headers: {}
+    });
+   /**
+   // Connect to user's wallet
+   const walletConnection = new nearApi.WalletConnection(near, 'meta-add');
+   let account;
+   if (walletConnection.isSignedIn()) {
+      // Logged in account, can write as user signed up through wallet
+      account = walletConnection.account();
+      // connect to a NEAR smart contract
+      const contract = new nearApi.Contract(account, 'near.test.contract', {
+        viewMethods: [],
+        changeMethods: []
+      });
+    } else {
+      // Contract account, normally only gonna work in read only mode
+      account = new nearApi.Account(near.connection, 'near.test.contract');
+    }
+   console.log('near account', account);
+
 
    function updateUI() {
   if (!window.walletAccount.getAccountId()) {
@@ -152,4 +153,4 @@ if(!wallet.isSingnedIn()) return wallet.requestSignIn()
    .then(updateUI)
    .catch(console.error);
    */
-}
+

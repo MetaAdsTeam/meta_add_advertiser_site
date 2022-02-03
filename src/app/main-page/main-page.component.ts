@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs/internal/Subscription';
+import {Subscription} from 'rxjs';
 import {Ad} from '../model/ad.model';
 import {AppService} from '../app.service';
 import {Router} from '@angular/router';

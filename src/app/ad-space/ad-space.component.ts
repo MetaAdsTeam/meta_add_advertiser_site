@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Subscription} from 'rxjs/internal/Subscription';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Subscription} from 'rxjs';
 import {AppService} from '../app.service';
 import {User} from '../model/user.model';
 import {Ad} from '../model/ad.model';

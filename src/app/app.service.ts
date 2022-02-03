@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/internal/Observable';
-import {of} from 'rxjs/internal/observable/of';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Ad} from './model/ad.model';
-import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {User} from './model/user.model';
 import {ConnectComponent} from './connect/connect.component';
 import {MatDialog} from '@angular/material/dialog';
 import {Timeslot} from './model/timeslot.model';
+import {NearService} from './near.service';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
@@ -15,7 +14,8 @@ export class AppService {
   private user = new BehaviorSubject<User | null>(null);
   user$ = this.user.asObservable();
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog,
+              private nearService: NearService) {}
 
   /* test data */
   private ads: Ad[] = [
@@ -25,7 +25,8 @@ export class AppService {
     ];
 
   private testUser: User = {
-    username: 'f740375728......9d5c25529'
+    username: '',
+    accountId: 'f740375728......9d5c25529'
   };
 
   private timeslots: Timeslot[] = [
@@ -33,10 +34,7 @@ export class AppService {
     {id: 2, from_time: '2020-02-03T09:35:15', to_time: '2020-02-03T09:40:15', locked: false},
     {id: 3, from_time: '2020-02-03T12:50:15', to_time: '2020-02-03T12:55:15', locked: false},
     {id: 4, from_time: '2020-02-03T14:04:15', to_time: '2020-02-03T14:24:15', locked: false}
-  ]
-/* t 1643835600000
-
- */
+  ];
 
   /* end test data */
 
@@ -52,17 +50,32 @@ export class AppService {
     return dialogRef.afterClosed()
   }
 
-  signIn(secret: string): Observable<boolean> {
-    /* test code */
-    const signed = secret === 'secret';
-    /* end */
+  signIn(): Observable<boolean> {
+    const accountId = this.nearService.getAccountId();
+    let signed = false;
+    if (!accountId) {
+      this.nearService.nearSignIn();
+      signed = false;
+    } else {
+      signed = true
+    }
+
     this.signed.next(signed);
-    this.user.next(signed ? this.testUser : null);
+    this.user.next(signed ? accountId : null);
 
     return of(signed);
   }
 
+  setSignIn() {
+    const accountId = this.nearService.getAccountId();
+    const signed = accountId;
+
+    this.signed.next(signed);
+    this.user.next(signed ? {accountId} : null);
+  }
+
   signOut() {
+    this.nearService.nearSignOut();
     this.signed.next(false);
     this.user.next(null);
   }
