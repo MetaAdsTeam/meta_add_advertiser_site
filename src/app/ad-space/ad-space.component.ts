@@ -43,7 +43,8 @@ export enum TimeslotType {
 })
 export class AdSpaceComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
-  user: User| null = null;
+  // user: User| null = null;
+  signed = false;
   ad: Ad | undefined;
   selectedAddInfoType: SelectedAddInfoType = 'desc';
   selectedDate: DateTime = DateTime.now();
@@ -55,11 +56,17 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.add(
+      /*
       this.appService.user$.subscribe(value => {
         this.user = value;
         if (!this.user) {
           this.place = false;
         }
+      })
+      */
+      this.appService.signed$.subscribe(value => {
+        this.signed = value;
+        this.place = value;
       })
     );
     this.subscriptions.add(
@@ -96,7 +103,7 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   }
 
   signIn() {
-    if (!this.user) {
+    if (!this.signed) {
       this.subscriptions.add(
         this.appService.login().subscribe(result => console.log('login', result))
       );
@@ -108,9 +115,8 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   }
 
   placeAd() {
-    if (this.user) {
-      this.place = true;
-    }
+    console.log('place', this.signed);
+    this.place = this.signed;
   }
 
   ngOnDestroy() {

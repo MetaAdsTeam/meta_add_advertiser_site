@@ -61,17 +61,17 @@ export class AppService {
     }
 
     this.signed.next(signed);
-    this.user.next(signed ? accountId : null);
+    this.user.next({accountId: accountId});
 
     return of(signed);
   }
 
   setSignIn() {
     const accountId = this.nearService.getAccountId();
-    const signed = accountId;
+    const signed = !(!accountId);
 
     this.signed.next(signed);
-    this.user.next(signed ? {accountId} : null);
+    this.user.next({accountId: accountId});
   }
 
   signOut() {
