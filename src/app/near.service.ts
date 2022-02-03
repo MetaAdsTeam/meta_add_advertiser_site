@@ -32,7 +32,7 @@ export class NearService {
     this.wallet.requestSignIn(
       'trenger.testnet',
       'MetaAdd',
-      'https://localhost:4200');
+      window.location.href);
   }
 
   isSignedIn(): boolean {
