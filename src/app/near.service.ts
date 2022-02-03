@@ -30,7 +30,7 @@ export class NearService {
 
   nearSignIn() {
     this.wallet.requestSignIn(
-      'dev-1638464780305-36276259815103', // 'trenger.testnet',
+      'trenger.testnet',
       'MetaAdd',
       'https://localhost:4200');
   }
