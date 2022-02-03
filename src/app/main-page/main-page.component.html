@@ -1,29 +1,29 @@
 <div style="width: 100%; display: flex; flex-direction: column">
   <span class="mat-headline main-title">Ad space</span>
-  <div *ngIf="signed" class="ads-filter">
+  <div *ngIf="signed" class="space-ad-filter">
     <span [class.selected]="selectedAdFilter === 'all'"
           (click)="loadAds()">All</span>
     <span [class.selected]="selectedAdFilter === 'my'"
           (click)="loadAds('my')">My ad</span>
   </div>
-  <div class="ads-container">
-    <div *ngFor="let ad of ads" class="ads-content">
+  <div class="space-ad-container">
+    <div *ngFor="let ad of ads" class="space-ad-content">
       <img *ngIf="selectedAd !== ad"
            [src]="ad.url"
            alt="unavailable"
            (click)="selectAd(ad)">
-      <div *ngIf="selectedAd === ad" class="ads-content-selected-logout">
+      <div *ngIf="selectedAd === ad" class="space-ad-content-selected-logout">
         <span class="mat-caption" style="padding: 0 24px 25px 24px">The key feature of this site is that users can buy NFTs using fiat currency.</span>
         <button mat-flat-button
                 (click)="showMore(ad)">Place Ad</button>
       </div>
       <span class="mat-body-2"
-            [class.ads-content-selected-logout-color]="selectedAd === ad"
+            [class.space-ad-content-selected-logout-color]="selectedAd === ad"
             style="padding-top: 23px; padding-bottom: 8px"
             (click)="selectAd(ad)">Addreality</span>
       <span class="mat-subheading-1"
             style="text-transform: capitalize"
-            [class.ads-content-selected-logout-color]="selectedAd === ad"
+            [class.space-ad-content-selected-logout-color]="selectedAd === ad"
             (click)="selectAd(ad)">{{ad.name}}</span>
     </div>
   </div>

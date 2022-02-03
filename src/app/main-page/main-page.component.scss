@@ -5,7 +5,7 @@
   margin: 0;
 }
 
-.ads-container {
+.space-ad-container {
   display: grid;
   grid-gap: 0;
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
@@ -13,7 +13,7 @@
   justify-items: center;
 }
 
-.ads-content {
+.space-ad-content {
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -26,11 +26,11 @@
   }
 }
 
-.ads-content-selected-logout-color {
+.space-ad-content-selected-logout-color {
   color: #347CE8;
 }
 
-.ads-content-selected-logout {
+.space-ad-content-selected-logout {
   min-height: 323px;
   min-width: 387px;
   max-width: 387px;
@@ -52,7 +52,7 @@
   color: #3888FF;
 }
 
-.ads-filter {
+.space-ad-filter {
   display: flex;
   flex-direction: row;
   justify-content: center;
