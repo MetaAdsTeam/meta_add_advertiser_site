@@ -7,15 +7,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {AdSpaceComponent} from './ad-space/ad-space.component';
 import {ConnectComponent} from './connect/connect.component';
 import {MainPageComponent} from './main-page/main-page.component';
-import {AuthGuard} from './auth.guard';
 import {MatIconRegistry} from '@angular/material/icon';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ReactiveFormsModule} from '@angular/forms';
-import {DescriptionComponent} from './ad-space/description.component';
-import {HistoryComponent} from './ad-space/history.component';
+import {DescriptionComponent, HistoryComponent} from './ad-space/components';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {CustomHeader} from './ad-space/custom-header/calendar-custom-header';
 import {DateFormatPipe} from './shared/date-format.pipe';
+import {AuthorizationInterceptor} from './interceptors';
 
 @NgModule({
   declarations: [
@@ -40,7 +39,11 @@ import {DateFormatPipe} from './shared/date-format.pipe';
     })
   ],
   providers: [
-    AuthGuard
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthorizationInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

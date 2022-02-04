@@ -1,9 +1,16 @@
-const apiUrl = 'https://main-api-dev.wecandevelopit.com/api';
+const apiUrl = 'https://metaads.team/tornado';
 
 export const environment = {
   production: false,
-  apis: {
-    profile_api: `${apiUrl}/profile`
+  tornado_api: `${apiUrl}`,
+  near: {
+    networkId: 'testnet',
+    nodeUrl: "https://rpc.testnet.near.org",
+    walletUrl: "https://wallet.testnet.near.org",
+    helperUrl: "https://helper.testnet.near.org",
+    explorerUrl: "https://explorer.testnet.near.org",
+    contractId: 'trenger.testnet',
+    app: 'MetaAdd'
   },
   devmode: true
-}
+};

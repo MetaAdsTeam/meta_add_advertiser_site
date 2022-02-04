@@ -1,14 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {AppService} from '../app.service';
-import {User} from '../model/user.model';
-import {Ad} from '../model/ad.model';
+import {AppService} from '../services';
+import {Adspot} from '../model/adspot.model';
 import {ActivatedRoute} from '@angular/router';
 import {CustomHeader} from './custom-header/calendar-custom-header';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {LuxonDateAdapter, MAT_LUXON_DATE_FORMATS} from '@angular/material-luxon-adapter';
 import {DateTime} from 'luxon';
-import {Timeslot} from '../model/timeslot.model';
 
 type SelectedAddInfoType = 'desc' | 'history';
 
@@ -45,7 +43,7 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
   // user: User| null = null;
   signed = false;
-  ad: Ad | undefined;
+  ad: Adspot | undefined;
   selectedAddInfoType: SelectedAddInfoType = 'desc';
   selectedDate: DateTime = DateTime.now();
   place = false;
@@ -105,7 +103,7 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   signIn() {
     if (!this.signed) {
       this.subscriptions.add(
-        this.appService.login().subscribe(result => console.log('login', result))
+        this.appService.nearLogin().subscribe(result => console.log('nearLogin', result))
       );
     }
   }

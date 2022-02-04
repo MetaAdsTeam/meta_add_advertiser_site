@@ -1,8 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {Ad} from '../model/ad.model';
-import {AppService} from '../app.service';
+import {Adspot} from '../model/adspot.model';
 import {Router} from '@angular/router';
+import {finalize, map} from 'rxjs/operators';
+import {HttpErrorResponse} from '@angular/common/http';
+import {AppService, AuthService} from '../services';
 
 @Component({
   selector: 'app-main-page',
@@ -11,35 +13,55 @@ import {Router} from '@angular/router';
 })
 export class MainPageComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
-  ads: Ad[] = [];
-  selectedAd: Ad | null = null;
+  ads: Adspot[] = [];
+  selectedAd: Adspot | null = null;
   signed: boolean = false;
   selectedAdFilter = 'all';
+  loading = false; // not used
 
   constructor(private appService: AppService,
+              private authService: AuthService,
               private router: Router) { }
 
   ngOnInit(): void {
-    this.loadAds();
     this.subscriptions.add(
       this.appService.signed$.subscribe(value => this.signed = value)
     );
+    this.subscriptions.add(
+      this.authService.authorization$.subscribe(
+        () => this.loadAds(),
+        (error: HttpErrorResponse) => {
+          console.log(error);
+          alert('not authorized')
+        }
+      )
+    );
   }
 
-  selectAd(ad: Ad) {
+  selectAd(ad: Adspot) {
     this.selectedAd = ad;
   }
 
-  showMore(ad: Ad) {
+  showMore(ad: Adspot) {
     this.router.navigate([`/ad/${ad.id}`],)
   }
 
   loadAds(filter: string = 'all') {
+    this.loading = true;
     this.subscriptions.add(
-      this.appService.getAds(filter).subscribe(value => {
-        this.ads = value;
-        this.selectedAdFilter = filter;
-      })
+      this.appService.getAds(filter)
+        .pipe(
+          map(spot => {
+            return {...spot, url: 'assets/images/test/add0.png'}
+          }),
+          finalize(() => {
+            this.loading = false;
+          })
+        )
+        .subscribe(value => {
+          this.ads = value;
+          this.selectedAdFilter = filter;
+        })
     );
   }
 

@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as nearApi from 'near-api-js';
 import {ConnectedWalletAccount} from 'near-api-js/lib/wallet-account';
+import {environment} from '../../environments/environment';
 
 const { connect, keyStores, WalletConnection } = nearApi;
 
@@ -9,12 +10,12 @@ export class NearService {
   private keyStore = new keyStores.BrowserLocalStorageKeyStore();
 
   private config = {
-    networkId: "testnet",
+    networkId: environment.near.networkId,
     keyStore: this.keyStore,
-    nodeUrl: "https://rpc.testnet.near.org",
-    walletUrl: "https://wallet.testnet.near.org",
-    helperUrl: "https://helper.testnet.near.org",
-    explorerUrl: "https://explorer.testnet.near.org",
+    nodeUrl: environment.near.nodeUrl,
+    walletUrl: environment.near.walletUrl,
+    helperUrl: environment.near.helperUrl,
+    explorerUrl: environment.near.explorerUrl,
     headers: {}
   };
   nearConnection: any;
@@ -23,15 +24,15 @@ export class NearService {
 
   async nearConnect() {
     this.nearConnection = await connect(this.config);
-    this.wallet = new WalletConnection(this.nearConnection, 'MetaAdd');
+    this.wallet = new WalletConnection(this.nearConnection, environment.near.app);
     this.accountObj = this.wallet.account();
     console.log('accObj', this.accountObj);
   }
 
   nearSignIn() {
     this.wallet.requestSignIn(
-      'trenger.testnet',
-      'MetaAdd',
+      environment.near.contractId,
+      environment.near.app,
       window.location.href);
   }
 
@@ -52,5 +53,7 @@ export class NearService {
   getAccountId(): any {
     return this.wallet.getAccountId()
   }
+
+  // todo: getBalance, getTransactions
 
 }

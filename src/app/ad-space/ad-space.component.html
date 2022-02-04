@@ -20,7 +20,7 @@
         <span class="mat-body-2 ad-item-properties__value">{{ad?.likes}}</span>
         <span class="mat-body-1 ad-item-properties__title">Description:</span>
         <div class="ad-item-properties__value">
-          <span class="mat-body-2">{{ad?.desc}}</span>
+          <span class="mat-body-2">{{ad?.description}}</span>
           <span class="ad-item-properties__button"
                 [class.ad-item-properties__button__selected]="selectedAddInfoType === 'desc'"
                 (click)="selectAddInfoType('desc')">
@@ -32,7 +32,7 @@
         <span class="mat-body-1 ad-item-properties__title">Total users:</span>
         <span class="mat-body-2 ad-item-properties__value">{{ad?.totalUsers}}</span>
         <span class="mat-body-1 ad-item-properties__title">Owned by:</span>
-        <span class="mat-body-2 ad-item-properties__value">{{ad?.owner}}</span>
+        <span class="mat-body-2 ad-item-properties__value">{{ad?.publisher}}</span>
       </div>
       <div class="ad-item-add">
         <app-description *ngIf="selectedAddInfoType === 'desc'"
