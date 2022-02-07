@@ -3,9 +3,18 @@ import {DateTime} from 'luxon';
 
 @Pipe({name: 'formatDate'})
 export class DateFormatPipe implements PipeTransform {
-  transform(date: DateTime): string {
+  transform(date: DateTime, type: string = 'DDMMMM'): string {
     if (date) {
-      return date.toLocaleString({ day: 'numeric', month: 'long' });
+      if (type === 'DDMMMM') {
+        return date.toLocaleString({day: 'numeric', month: 'long'});
+      } else if (type === 'HH12MM') {
+        return date
+          .toLocaleString({hour: 'numeric', hour12: true, minute: '2-digit'})
+          .split(' ')[0]
+          .replace(':', '.')
+      } else {
+        return ''
+      }
     }
     return '';
   }

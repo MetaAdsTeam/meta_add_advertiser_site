@@ -16,6 +16,7 @@ import {CustomHeader} from './ad-space/custom-header/calendar-custom-header';
 import {DateFormatPipe} from './pipes';
 import {AuthorizationInterceptor, NotAuthorizedInterceptor} from './interceptors';
 import {AuthService} from './services';
+import {MAT_DATE_LOCALE} from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,10 @@ import {AuthService} from './services';
       provide: HTTP_INTERCEPTORS,
       useClass: NotAuthorizedInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: MAT_DATE_LOCALE, useValue: 'en-GB'
+    },
   ],
   bootstrap: [AppComponent]
 })

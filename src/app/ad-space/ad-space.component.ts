@@ -17,20 +17,9 @@ export interface ComponentType<T = any> {
   new (...args: any[]): T;
 }
 
-interface FormattedTimeslot {
-  id: number,
-  from: string,
-  locked: boolean
-  type: string
-}
-
 interface TimeslotsByType {
-  [type: number]: FormattedTimeslot
-}
-
-export enum TimeslotType {
-  AM = 'AM',
-  PM = 'PM'
+  am: Timeslot[],
+  pm: Timeslot[]
 }
 
 @Component({
@@ -47,12 +36,14 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   signed = false;
   ad: Adspot | undefined;
   selectedAddInfoType: SelectedAddInfoType = 'desc';
-  selectedDate: DateTime = DateTime.now();
+  // showHistory = false;
+  selectedDate: DateTime = DateTime.now().setLocale('en');
   isVisiblePlaceAd = false;
-//  timeslots: TimeslotsByType[] = [];
   private id: number;
-  timeslots: Timeslot[] = [];
   loading: boolean = false;
+
+  timeslots: TimeslotsByType = {am: [], pm: []};
+  selectedTimeslot: Timeslot;
 
   constructor(private appService: AppService,
               private activatedRoute: ActivatedRoute,
@@ -69,24 +60,20 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
       this.activatedRoute.params.subscribe(params => {
         this.id = params['id'];
         this.subscriptions.add(
-          this.loadAdspot()
+          this.authService.authorization$.subscribe(
+            value => {
+              if (value) {
+                this.loadAdspot()
+              }
+            },
+            (error: HttpErrorResponse) => {
+              console.log(error);
+            }
+          )
         )
       })
     );
-
-    /* todo: can duplicate api call - to fix */
-    this.subscriptions.add(
-      this.authService.authorization$.subscribe(
-        value => {
-          if (value) {
-            // this.loadAdspot()
-          }
-        },
-        (error: HttpErrorResponse) => {
-          console.log(error);
-        }
-      )
-    );
+   // console.log(DateTime.fromSeconds(1644005655), DateTime.fromSeconds(1644005655).toFormat('yyyy-MM-dd'))
   }
 
   loadAdspot() {
@@ -108,22 +95,18 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   }
 
   selectDate(event: any) {
+    this.loadTimespots();
+  }
+
+  loadTimespots() {
     if (this.ad) {
       this.subscriptions.add(
-        this.appService.getTimeslots(this.ad.id)
+        this.appService.getTimeslots(this.ad.id, this.selectedDate.toFormat('yyyy-MM-dd'))
           .subscribe(value => {
-            /*
-            const ft: FormattedTimeslot[] = value.map(v => {
-              const date = DateTime.fromISO(v.from_time).toLocaleString(DateTime.TIME_SIMPLE).split(' ')[0];
-              return {
-                ...v,
-                from: date.replace(':', '.'),
-                type: +date.split(':')[0] >= 12 ? TimeslotType.PM : TimeslotType.AM}
-            });
-            this.timeslots[0] = ft.filter(t => t.type === TimeslotType.AM);
-            this.timeslots[1] = ft.filter(t => t.type === TimeslotType.PM);
-            */
-            console.log(value);
+
+            this.timeslots.am = value.filter(v => v.from_time.hour < 12);
+            this.timeslots.pm = value.filter(v => v.from_time.hour >= 12);
+            console.log('am', this.timeslots.am, 'pm', this.timeslots.pm);
           })
       );
     }
@@ -143,6 +126,7 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
 
   showPlaceAd() {
     this.isVisiblePlaceAd = this.signed;
+    this.loadTimespots();
   }
 
   ngOnDestroy() {

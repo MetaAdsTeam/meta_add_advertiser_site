@@ -3,6 +3,8 @@ import {appVersion} from '../environments/app-version';
 import {Subscription} from 'rxjs';
 import {AppService, AuthService, NearService} from './services';
 
+type CurrentState = 'full' | 'minimized';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -12,6 +14,7 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'Meta-Add';
   version = appVersion;
   user: string = '';
+  currentState: CurrentState = 'full';
 
   private subscriptions = new Subscription();
 
@@ -45,6 +48,16 @@ export class AppComponent implements OnInit, OnDestroy {
     this.appService.signOut();
     /* redirect action, maybe */
 
+  }
+
+  resizeProfilePanel() {
+    if (this.currentState === 'full') {
+      /* minimize */
+      this.currentState = 'minimized';
+    } else {
+      /* full */
+      this.currentState = 'full'
+    }
   }
 
   ngOnDestroy() {

@@ -3,11 +3,12 @@ import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Adspot, AdspotList} from '../model/adspot.model';
 import {ConnectComponent} from '../connect/connect.component';
 import {MatDialog} from '@angular/material/dialog';
-import {Timeslot, TimeslotList} from '../model/timeslot.model';
+import {Timeslot, TimeslotBE, TimeslotList} from '../model/timeslot.model';
 import {NearService} from './near.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
+import {DateTime} from 'luxon';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
@@ -74,9 +75,20 @@ export class AppService {
     return this.httpClient.get<Adspot>(`${this.api}/adspot/id/${id}`)
   }
 
-  getTimeslots(adId: number): Observable<Timeslot[]> {
-    return this.httpClient.get<TimeslotList>(`${this.api}//timeslots_by_adspot/id/${adId}`)
-      .pipe(map(l => {return l?.data}))
+  getTimeslots(adId: number, date: string): Observable<Timeslot[]> {
+    return this.httpClient.get<TimeslotList>(`${this.api}/timeslots_by_adspot/id/${adId}/date/${date}`)
+      .pipe(
+        map(l => {
+          if (l) {
+            return l.data.map(a => {
+              return {...a, from_time: DateTime.fromSeconds(a.from_time), to_time: DateTime.fromSeconds(a.to_time)}
+            });
+          } else {
+            return []
+          }
+        })
+      )
+
   }
 
 }

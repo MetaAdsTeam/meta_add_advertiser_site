@@ -1,5 +1,8 @@
 <div class="page-wrapper-2">
-  <div *ngIf="user" class="app-profile">
+  <div *ngIf="user"
+       class="app-profile"
+       [class.app-profile__minimize]="currentState !== 'full'"
+       [class.app-profile__full]="currentState === 'full'">
     <div>
       <div class="app-user-info">
         <img src="assets/images/profile.svg" alt="profile" height="56"/>
@@ -8,33 +11,57 @@
       <div class="app-user-menu">
         <div class="app-user-menu-item">
           <img src="assets/images/home.svg" alt="home">
-          <span class="app-user-menu-item__link">Home</span>
+          <span *ngIf="currentState === 'full'"
+                class="app-user-menu-item__link">Home</span>
         </div>
         <div class="app-user-menu-item">
           <img src="assets/images/my-ad.svg" alt="my-ad">
-          <span class="app-user-menu-item__link">My Ad Creatives</span>
+          <span *ngIf="currentState === 'full'"
+                class="app-user-menu-item__link">My Ad Creatives</span>
+        </div>
+        <div *ngIf="currentState === 'full'"
+             class="app-user-menu-item"
+             (click)="resizeProfilePanel()"
+             style="cursor: pointer">
+          <img src="assets/images/arrow2-left-grey.svg" alt="minimize">
+          <span class="app-user-menu-item__link2">Minimize</span>
+        </div>
+        <div *ngIf="currentState !== 'full'"
+             class="app-user-menu-item"
+             (click)="resizeProfilePanel()"
+             style="cursor: pointer">
+          <img src="assets/images/arrow2-right-grey.svg" alt="minimize">
         </div>
       </div>
     </div>
     <div class="app-metaads-panel">
-      <div class="app-social">
+      <div class="app-metaads-logout" (click)="nearLogout()">
+        <mat-icon svgIcon="logout"></mat-icon>
+        <span *ngIf="currentState === 'full'">Logout</span>
+      </div>
+      <div [class.app-social__full]="currentState === 'full'"
+           [class.app-social__minimize]="currentState !== 'full'">
         <img src="assets/images/telegram.svg" alt="telegram">
         <img src="assets/images/discord.svg" alt="discord">
         <img src="assets/images/twitter.svg" alt="twitter">
         <img src="assets/images/facebook.svg" alt="facebook">
       </div>
-      <div class="app-metaads-logout" (click)="nearLogout()">
-        <mat-icon svgIcon="logout"></mat-icon>
-        <span>Logout</span>
-      </div>
-      <img src="assets/images/logo.svg" alt="unavailable" style="height: 38px; cursor: pointer; padding-bottom: 16px" routerLink="/">
-      <span class="mat-caption">© 2022 «Metaadd»</span>
+      <img *ngIf="currentState === 'full'"
+           src="assets/images/logo-full.svg"
+           alt="unavailable"
+           class="app-metaads-logo"
+           routerLink="/">
+      <img *ngIf="currentState !== 'full'"
+           src="assets/images/logo-min.svg"
+           alt="unavailable"
+           class="app-metaads-logo__minimize"
+           routerLink="/">
     </div>
   </div>
 
   <div class="page-wrapper-1">
     <div *ngIf="!user" class="app-toolbar">
-      <img src="assets/images/logo.svg">
+      <img src="assets/images/logo-full.svg">
       <button mat-flat-button class="mat-primary" (click)="nearLogin()">Connect</button>
     </div>
 
@@ -43,7 +70,7 @@
     </div>
 
     <div *ngIf="!user" class="app-footer">
-      <div class="app-social">
+      <div class="app-social__full">
         <img src="assets/images/telegram-blue.svg" alt="telegram-blue"/>
         <img src="assets/images/discord-blue.svg" alt="discord-blue"/>
         <img src="assets/images/twitter-blue.svg" alt="twitter-blue"/>

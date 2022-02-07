@@ -233,3 +233,18 @@
   /* txt / white */
   color: #FFFFFF;
 }
+
+.timeslot {
+  width: 64px;
+  height: 36px;
+  border-radius: 4px;
+  background: #636A77;
+
+  &__selected {
+    background: #3888ff;
+  }
+
+  &__loccked {
+    background: #2A2931;
+  }
+}

@@ -25,7 +25,7 @@
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99883 12.903C10.5375 12.903 12.8595 11.0777 14.1668 8.03499C12.8595 4.99233 10.5375 3.16699 7.99883 3.16699H8.0015C5.46283 3.16699 3.14083 4.99233 1.8335 8.03499C3.14083 11.0777 5.46283 12.903 8.0015 12.903H7.99883Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg-->
 
-                </span>
+            </span>
           </div>
           </li>
           <li>
@@ -94,17 +94,21 @@
         <div class="ad-place-datetimes">
           <div style="padding: 40px 38px">
             <span>{{selectedDate | formatDate}}</span>
-            <div id="am">
+            <div id="am" style="display: grid">
               <span>a.m.</span>
-              <!--ng-container *ngFor="let ts of timeslots[0]">
-                <span>{{ts.from}}</span>
-              </ng-container-->
+              <div *ngFor="let ts of timeslots.am">
+                <span class="timeslot"
+                      [class.timeslot__selected]="selectedTimeslot"
+                      [class.timeslot__locked]="ts.locked">{{ts.from_time | formatDate : 'HH12MM'}}</span>
+                <!--span>{{ts.locked}}</span -->
+              </div>
             </div>
             <div id="pm">
               <span>p.m.</span>
-              <!--ng-container *ngFor="let ts of timeslots[1]">
-                <span>{{ts.from}}</span>
-              </ng-container-->
+              <ng-container *ngFor="let ts of timeslots.pm">
+                <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
+                <span>{{ts.locked}}</span>
+              </ng-container>
             </div>
           </div>
         </div>
