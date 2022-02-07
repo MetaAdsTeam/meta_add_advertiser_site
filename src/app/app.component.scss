@@ -1,8 +1,3 @@
-*,
-*:after,
-*:before {
-  box-sizing: border-box;
-}
 .app-profile {
   display: flex;
   flex-direction: column;
@@ -42,6 +37,9 @@
   span {
     padding-left: 10px;
   }
+  &__link {
+    color: #fff;
+  }
 }
 
 .app-footer {
@@ -49,7 +47,9 @@
   flex-wrap: wrap;
   display: flex;
   justify-content: space-between;
-  margin: 100px 0 46px;
+  margin: 100px auto 46px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .app-social {
@@ -80,11 +80,14 @@
   display: flex;
   justify-content: space-between;
   padding-top: 72px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 
   button {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 64px;
+    padding: 16px 64px;
   }
 }

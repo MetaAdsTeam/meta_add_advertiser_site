@@ -1,39 +1,62 @@
-<div class="page-wrapper-1">
+<div class="page-wrapper-1" style="p0">
   <div *ngIf="ad" class="ad-item-info">
     <div style="padding-bottom: 40px">
       <a routerLink="/">
         <img src="assets/images/arrow-left.svg" alt="arrow-left">
       </a>
-      <span class="mat-subheading-2 ad-item-name">{{ad?.spot_type}}: {{ad?.name}}</span>
+      <span class="mat-subheading-2 ad-item-name">Addreality: {{ad?.name}}</span>
     </div>
+<!-- start content -->
     <div class="ad-item-content">
-      <img [src]="ad?.preview_url" alt="{{ad?.name}}" style="height: 400px; padding-right: 27px">
-      <div class="ad-item-properties">
-        <span class="mat-body-1 ad-item-properties__title">Current Price:</span>
-        <div class="ad-item-properties__value">
-          <span class="mat-body-2 ad-item-properties__value">{{ad?.price}}</span>
-          <span class="ad-item-properties__button"
-                [class.ad-item-properties__button__selected]="selectedAddInfoType === 'history'"
-                (click)="selectAddInfoType('history')">history</span>
-        </div>
-        <span class="mat-body-1 ad-item-properties__title">Likes:</span>
-        <span class="mat-body-2 ad-item-properties__value">{{ad?.likes}}</span>
-        <span class="mat-body-1 ad-item-properties__title">Description:</span>
-        <div class="ad-item-properties__value">
-          <span class="mat-body-2">{{ad?.description}}</span>
-          <span class="ad-item-properties__button"
-                [class.ad-item-properties__button__selected]="selectedAddInfoType === 'desc'"
-                (click)="selectAddInfoType('desc')">
-            show
-          </span>
-        </div>
-        <span class="mat-body-1 ad-item-properties__title">Users per week:</span>
-        <span class="mat-body-2 ad-item-properties__value">{{ad?.usersPerWeek}}</span>
-        <span class="mat-body-1 ad-item-properties__title">Total users:</span>
-        <span class="mat-body-2 ad-item-properties__value">{{ad?.totalUsers}}</span>
-        <span class="mat-body-1 ad-item-properties__title">Owned by:</span>
-        <span class="mat-body-2 ad-item-properties__value">{{ad?.publisher_name}}</span>
+      <!-- left-side -->
+      <div class="left-item">
+        <img [src]="ad?.url" alt="{{ad?.name}}" >
+        <ul class="ad-item-properties">
+          <li>
+          <div class="ad-item-properties__title">Current Price:</div>
+          <div class="ad-item-properties__value-wrapp">
+            <span class="ad-item-properties__value">{{ad?.price}}</span>
+            <span class="ad-item-properties__btn-budge"
+                  [class.ad-item-properties__button__selected]="selectedAddInfoType === 'history'"
+                  (click)="selectAddInfoType('history')">history
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left: 6px;">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.1074 8.03476C10.1074 9.19876 9.16342 10.1421 7.99942 10.1421C6.83542 10.1421 5.89209 9.19876 5.89209 8.03476C5.89209 6.87009 6.83542 5.92676 7.99942 5.92676C9.16342 5.92676 10.1074 6.87009 10.1074 8.03476Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99883 12.903C10.5375 12.903 12.8595 11.0777 14.1668 8.03499C12.8595 4.99233 10.5375 3.16699 7.99883 3.16699H8.0015C5.46283 3.16699 3.14083 4.99233 1.8335 8.03499C3.14083 11.0777 5.46283 12.903 8.0015 12.903H7.99883Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+
+                </span>
+          </div>
+          </li>
+          <li>
+            <div class="ad-item-properties__title">Likes:</div>
+            <div class="ad-item-properties__value">{{ad?.likes}}</div>
+          </li>
+          <li>
+            <div class="ad-item-properties__title">Description:</div>
+            <div class="ad-item-properties__value">
+              <span class="ad-item-properties__value">{{ad?.desc}}</span>
+              <span class="ad-item-properties__btn-budge"
+                    [class.ad-item-properties__button__selected]="selectedAddInfoType === 'desc'"
+                    (click)="selectAddInfoType('desc')">
+                show
+              </span>
+            </div>
+          </li>
+          <li>
+            <div class="mat-body-1 ad-item-properties__title">Users per week:</div>
+            <div class="mat-body-2 ad-item-properties__value">{{ad?.usersPerWeek}}</div>
+          </li>
+          <li>
+            <div class="mat-body-1 ad-item-properties__title">Total users:</div>
+            <div class="mat-body-2 ad-item-properties__value">{{ad?.totalUsers}}</div>
+          </li>
+          <li>
+            <div class="mat-body-1 ad-item-properties__title">Owned by:</div>
+            <div class="mat-body-2 ad-item-properties__value">{{ad?.owner}}</div>
+          </li>
+        </ul>
       </div>
+      <!-- end left-side -->
       <div class="ad-item-add">
         <app-description *ngIf="selectedAddInfoType === 'desc'"
                          [header]="'Test'"
@@ -42,11 +65,13 @@
         <app-history *ngIf="selectedAddInfoType === 'history'"></app-history>
       </div>
     </div>
+    <!-- end content -->
+
     <button mat-flat-button
             [class.ad-item-place-ad__unsigned]="!signed"
             class="ad-item-place-ad" [class.mat-primary]="signed"
             (click)="placeAd()">
-      <span class="mat-subheading-1">Place Ad</span>
+      <span class="btn-pa">Place Ad</span>
     </button>
     <span *ngIf="!signed" class="mat-body-1 ad-item-unsigned">Only authorised users can add аdvertising </span>
     <span *ngIf="!signed" class="mat-body-2 ad-item-unsigned__button" (click)="signIn()">Connect wallet</span>
