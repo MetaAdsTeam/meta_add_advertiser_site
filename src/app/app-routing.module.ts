@@ -15,8 +15,7 @@ const routes: Routes = [
   },
   {
     path: 'ad/:id',
-    component: AdSpaceComponent,
-    // canActivate: [AuthGuard]
+    component: AdSpaceComponent
   }
 ];
 

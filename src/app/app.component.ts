@@ -28,14 +28,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.appService.user$.subscribe(result => {
         this.user = result;
-        console.log('user', this.user)
       })
     );
     /* just for test, remove */
-    this.subscriptions.add(
-      this.authService.serverLogin('admin', 'admin')
-        .subscribe(value => this.authService.setToken(value))
-    );
+    // this.authService.testServerLogin();
   }
 
   nearLogin() {

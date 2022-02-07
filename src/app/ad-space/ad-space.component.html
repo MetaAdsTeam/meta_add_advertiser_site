@@ -4,10 +4,10 @@
       <a routerLink="/">
         <img src="assets/images/arrow-left.svg" alt="arrow-left">
       </a>
-      <span class="mat-subheading-2 ad-item-name">Addreality: {{ad?.name}}</span>
+      <span class="mat-subheading-2 ad-item-name">{{ad?.spot_type}}: {{ad?.name}}</span>
     </div>
     <div class="ad-item-content">
-      <img [src]="ad?.url" alt="{{ad?.name}}" style="height: 400px; padding-right: 27px">
+      <img [src]="ad?.preview_url" alt="{{ad?.name}}" style="height: 400px; padding-right: 27px">
       <div class="ad-item-properties">
         <span class="mat-body-1 ad-item-properties__title">Current Price:</span>
         <div class="ad-item-properties__value">
@@ -32,7 +32,7 @@
         <span class="mat-body-1 ad-item-properties__title">Total users:</span>
         <span class="mat-body-2 ad-item-properties__value">{{ad?.totalUsers}}</span>
         <span class="mat-body-1 ad-item-properties__title">Owned by:</span>
-        <span class="mat-body-2 ad-item-properties__value">{{ad?.publisher}}</span>
+        <span class="mat-body-2 ad-item-properties__value">{{ad?.publisher_name}}</span>
       </div>
       <div class="ad-item-add">
         <app-description *ngIf="selectedAddInfoType === 'desc'"

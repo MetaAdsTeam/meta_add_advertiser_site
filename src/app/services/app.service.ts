@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {Adspot} from '../model/adspot.model';
+import {Adspot, AdspotList} from '../model/adspot.model';
 import {User} from '../model/user.model';
 import {ConnectComponent} from '../connect/connect.component';
 import {MatDialog} from '@angular/material/dialog';
@@ -8,6 +8,7 @@ import {Timeslot} from '../model/timeslot.model';
 import {NearService} from './near.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
+import {map} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
@@ -77,12 +78,12 @@ export class AppService {
 
   getAds(filter: string = 'all'): Observable<Adspot[]> {
     // return of(this.ads)
-    return this.httpClient.get<Adspot[]>(`${this.api}/adspots`)
+    return this.httpClient.get<AdspotList>(`${this.api}/adspots`)
+      .pipe(map(l => {return l?.data}))
   }
 
-  getAdById(id: number): Observable<Adspot | undefined> {
-    // return of(this.ads.find(a => a.id === id))
-    return of(undefined)
+  getAdById(id: number): Observable<Adspot> {
+    return this.httpClient.get<Adspot>(`${this.api}/adspot/id/${id}`)
   }
 
   getAvailableSlots(adId: number): Observable<Timeslot[]> {

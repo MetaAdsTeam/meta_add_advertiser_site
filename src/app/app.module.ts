@@ -13,8 +13,9 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {DescriptionComponent, HistoryComponent} from './ad-space/components';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {CustomHeader} from './ad-space/custom-header/calendar-custom-header';
-import {DateFormatPipe} from './shared/date-format.pipe';
-import {AuthorizationInterceptor} from './interceptors';
+import {DateFormatPipe} from './pipes';
+import {AuthorizationInterceptor, NotAuthorizedInterceptor} from './interceptors';
+import {AuthService} from './services';
 
 @NgModule({
   declarations: [
@@ -43,13 +44,26 @@ import {AuthorizationInterceptor} from './interceptors';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthorizationInterceptor,
       multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NotAuthorizedInterceptor,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(private sanitizer: DomSanitizer,
-              private matIconRegistry: MatIconRegistry) {
+              private matIconRegistry: MatIconRegistry,
+              private authService: AuthService) {
+
+    if (!this.authService.loadToken()) {
+      /** just for test whiile no login form */
+      // todo: call login form
+      this.authService.testServerLogin();
+    }
+
     this.matIconRegistry.addSvgIcon(
       'close',
       this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/close.svg')

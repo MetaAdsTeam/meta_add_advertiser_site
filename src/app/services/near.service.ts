@@ -1,37 +1,45 @@
 import {Injectable} from '@angular/core';
 import * as nearApi from 'near-api-js';
-import {ConnectedWalletAccount} from 'near-api-js/lib/wallet-account';
+import {ConnectedWalletAccount, WalletConnection} from 'near-api-js/lib/wallet-account';
 import {environment} from '../../environments/environment';
+import {AccountBalance} from 'near-api-js/lib/account';
+import {ConnectConfig} from 'near-api-js/lib/connect'
+import { KeyPair} from 'near-api-js';
 
-const { connect, keyStores, WalletConnection } = nearApi;
+const { connect, keyStores } = nearApi;
+
+const PRIVATE_KEY = 'testing';
 
 @Injectable({providedIn: 'root'})
 export class NearService {
   private keyStore = new keyStores.BrowserLocalStorageKeyStore();
+  //private keyStore = new keyStores.InMemoryKeyStore();
+  // private keyPair = KeyPair.fromString(PRIVATE_KEY);
 
-  private config = {
+  private config: ConnectConfig = {
     networkId: environment.near.networkId,
-    keyStore: this.keyStore,
     nodeUrl: environment.near.nodeUrl,
     walletUrl: environment.near.walletUrl,
     helperUrl: environment.near.helperUrl,
-    explorerUrl: environment.near.explorerUrl,
     headers: {}
   };
   nearConnection: any;
-  wallet: any;
-  accountObj: ConnectedWalletAccount;
+  wallet: WalletConnection;
+  account: ConnectedWalletAccount;
 
   async nearConnect() {
+    // await this.keyStore.setKey("testnet", environment.near.accountId, this.keyPair);
+    this.config = {...this.config, keyStore: this.keyStore};
+
     this.nearConnection = await connect(this.config);
     this.wallet = new WalletConnection(this.nearConnection, environment.near.app);
-    this.accountObj = this.wallet.account();
-    console.log('accObj', this.accountObj);
+    this.account = this.wallet.account();
+    console.log('accObj', this.account);
   }
 
   nearSignIn() {
     this.wallet.requestSignIn(
-      environment.near.contractId,
+      environment.near.accountId,
       environment.near.app,
       window.location.href);
   }
@@ -55,5 +63,11 @@ export class NearService {
   }
 
   // todo: getBalance, getTransactions
+  getBalance(): Promise<AccountBalance> {
+    return this.account.getAccountBalance()
+  }
 
+  getAccountDetails(): Promise<any> {
+    return this.account.getAccountDetails()
+  }
 }
