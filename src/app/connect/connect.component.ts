@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {AppService} from '../app.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Subscription} from 'rxjs';
-import {NearService} from '../near.service';
+import {AppService} from '../services';
+
 
 @Component({
   selector: 'app-connect',
@@ -14,7 +14,6 @@ export class ConnectComponent implements OnInit {
   subscriptions = new Subscription();
 
   constructor(public dialogRef: MatDialogRef<ConnectComponent>,
-              private nearService: NearService,
               private appService: AppService) {
   }
 

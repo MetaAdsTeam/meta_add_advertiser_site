@@ -7,15 +7,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {AdSpaceComponent} from './ad-space/ad-space.component';
 import {ConnectComponent} from './connect/connect.component';
 import {MainPageComponent} from './main-page/main-page.component';
-import {AuthGuard} from './auth.guard';
 import {MatIconRegistry} from '@angular/material/icon';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ReactiveFormsModule} from '@angular/forms';
-import {DescriptionComponent} from './ad-space/description.component';
-import {HistoryComponent} from './ad-space/history.component';
+import {DescriptionComponent, HistoryComponent} from './ad-space/components';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {CustomHeader} from './ad-space/custom-header/calendar-custom-header';
-import {DateFormatPipe} from './shared/date-format.pipe';
+import {DateFormatPipe} from './pipes';
+import {AuthorizationInterceptor, NotAuthorizedInterceptor} from './interceptors';
+import {AuthService} from './services';
+import {MAT_DATE_LOCALE} from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -40,13 +41,33 @@ import {DateFormatPipe} from './shared/date-format.pipe';
     })
   ],
   providers: [
-    AuthGuard
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthorizationInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NotAuthorizedInterceptor,
+      multi: true
+    },
+    {
+      provide: MAT_DATE_LOCALE, useValue: 'en-GB'
+    },
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(private sanitizer: DomSanitizer,
-              private matIconRegistry: MatIconRegistry) {
+              private matIconRegistry: MatIconRegistry,
+              private authService: AuthService) {
+
+    if (!this.authService.loadToken()) {
+      /** just for test whiile no login form */
+      // todo: call login form
+      this.authService.testServerLogin();
+    }
+
     this.matIconRegistry.addSvgIcon(
       'close',
       this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/close.svg')
@@ -66,6 +87,10 @@ export class AppModule {
     this.matIconRegistry.addSvgIcon(
       'near',
       this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/near.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'eye',
+      this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/eye.svg')
     );
   }
 }
