@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {appVersion} from '../environments/app-version';
 import {Subscription} from 'rxjs';
-import {User} from './model/user.model';
 import {AppService, AuthService, NearService} from './services';
 
 @Component({
@@ -12,7 +11,7 @@ import {AppService, AuthService, NearService} from './services';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Meta-Add';
   version = appVersion;
-  user: User | null = null;
+  user: string = '';
 
   private subscriptions = new Subscription();
 
@@ -28,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.appService.user$.subscribe(result => {
         this.user = result;
+        console.log('user', result)
       })
     );
     /* just for test, remove */

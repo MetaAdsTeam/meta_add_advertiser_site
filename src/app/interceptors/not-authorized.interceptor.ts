@@ -23,8 +23,7 @@ export class NotAuthorizedInterceptor implements HttpInterceptor {
         tap(
           (event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {
-              // do stuff with response if you want
-              console.log('event', event)
+              // console.log('event', event)
             }
           },
           (err: any) => {
