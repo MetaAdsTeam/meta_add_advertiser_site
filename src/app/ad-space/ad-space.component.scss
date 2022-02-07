@@ -1,3 +1,6 @@
+.page-wrapper-1 {
+  padding: 0;
+}
 .ad-profile-panel {
   display: flex;
   flex-direction: column;
@@ -80,7 +83,6 @@
   @media(max-width: 1770px ) {
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
     margin-top: 20px;
 
     li {
@@ -153,8 +155,8 @@
     width: 100%;
     max-width: 484px;
     min-width: 300px;
-    object-fit: cover;
-    object-position: center;
+    // object-fit: cover;
+    // object-position: center;
     height: auto;
     display: block;
     margin-right: 30px;
@@ -218,4 +220,16 @@
   &__title {
     padding-bottom: 16px;
   }
+}
+.btn-pa {
+  font-family: Nexa;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 110%;
+  /* identical to box height, or 20px */
+  text-align: center;
+  letter-spacing: -0.7px;
+  /* txt / white */
+  color: #FFFFFF;
 }

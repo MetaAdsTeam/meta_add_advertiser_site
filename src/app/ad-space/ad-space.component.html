@@ -71,7 +71,7 @@
             [class.ad-item-place-ad__unsigned]="!signed"
             class="ad-item-place-ad" [class.mat-primary]="signed"
             (click)="placeAd()">
-      <span class="mat-subheading-1">Place Ad</span>
+      <span class="btn-pa">Place Ad</span>
     </button>
     <span *ngIf="!signed" class="mat-body-1 ad-item-unsigned">Only authorised users can add аdvertising </span>
     <span *ngIf="!signed" class="mat-body-2 ad-item-unsigned__button" (click)="signIn()">Connect wallet</span>
