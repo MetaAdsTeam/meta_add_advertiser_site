@@ -4,13 +4,13 @@
       <a routerLink="/">
         <img src="assets/images/arrow-left.svg" alt="arrow-left">
       </a>
-      <span class="mat-subheading-2 ad-item-name">Addreality: {{ad?.name}}</span>
+      <span class="mat-subheading-2 ad-item-name">{{ad?.spot_type}}: {{ad?.name}}</span>
     </div>
 <!-- start content -->
     <div class="ad-item-content">
       <!-- left-side -->
       <div class="left-item">
-        <img [src]="ad?.url" alt="{{ad?.name}}" >
+        <img [src]="ad?.preview_url" alt="{{ad?.name}}" >
         <ul class="ad-item-properties">
           <li>
           <div class="ad-item-properties__title">Current Price:</div>
@@ -34,7 +34,7 @@
           <li>
             <div class="ad-item-properties__title">Description:</div>
             <div class="ad-item-properties__value">
-              <span class="ad-item-properties__value">{{ad?.desc}}</span>
+              <span class="ad-item-properties__value">{{ad?.description}}</span>
               <span class="ad-item-properties__btn-budge"
                     [class.ad-item-properties__button__selected]="selectedAddInfoType === 'desc'"
                     (click)="selectAddInfoType('desc')">
@@ -52,7 +52,7 @@
           </li>
           <li>
             <div class="mat-body-1 ad-item-properties__title">Owned by:</div>
-            <div class="mat-body-2 ad-item-properties__value">{{ad?.owner}}</div>
+            <div class="mat-body-2 ad-item-properties__value">{{ad?.publisher_name}}</div>
           </li>
         </ul>
       </div>
