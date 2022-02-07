@@ -1,11 +1,14 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {Ad} from './model/ad.model';
-import {User} from './model/user.model';
-import {ConnectComponent} from './connect/connect.component';
+import {Adspot, AdspotList} from '../model/adspot.model';
+import {User} from '../model/user.model';
+import {ConnectComponent} from '../connect/connect.component';
 import {MatDialog} from '@angular/material/dialog';
-import {Timeslot} from './model/timeslot.model';
+import {Timeslot} from '../model/timeslot.model';
 import {NearService} from './near.service';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {map} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
@@ -14,20 +17,13 @@ export class AppService {
   private user = new BehaviorSubject<User | null>(null);
   user$ = this.user.asObservable();
 
+  api = environment.tornado_api;
+
   constructor(private dialog: MatDialog,
-              private nearService: NearService) {}
+              private nearService: NearService,
+              private httpClient: HttpClient) {}
 
   /* test data */
-  private ads: Ad[] = [
-    {id: '1', url: 'assets/images/test/add0.png', name: 'Mall', price: '$299,45', likes: 234, usersPerWeek: 111, totalUsers: 3456, owner: 'Owner LTD', desc: 'added'},
-    {id: '2', url: 'assets/images/test/add1.png', name: 'Subway'},
-    {id: '3', url: 'assets/images/test/add2.png', name: 'Business Center'}
-    ];
-
-  private testUser: User = {
-    username: '',
-    accountId: 'f740375728......9d5c25529'
-  };
 
   private timeslots: Timeslot[] = [
     {id: 1, from_time: '2020-02-03T09:24:15', to_time: '2020-02-03T09:30:15', locked: false},
@@ -38,7 +34,7 @@ export class AppService {
 
   /* end test data */
 
-  login(): Observable<boolean> {
+  nearLogin(): Observable<boolean> {
     const dialogRef = this.dialog.open(ConnectComponent, {
       width: '592px',
       height: '418px',
@@ -55,7 +51,7 @@ export class AppService {
     let signed = false;
     if (!accountId) {
       this.nearService.nearSignIn();
-      signed = false;
+      // signed = false;
     } else {
       signed = true
     }
@@ -80,15 +76,17 @@ export class AppService {
     this.user.next(null);
   }
 
-  getAds(filter: string = 'all'): Observable<Ad[]> {
-    return of(this.ads)
+  getAds(filter: string = 'all'): Observable<Adspot[]> {
+    // return of(this.ads)
+    return this.httpClient.get<AdspotList>(`${this.api}/adspots`)
+      .pipe(map(l => {return l?.data}))
   }
 
-  getAdById(id: string): Observable<Ad | undefined> {
-    return of(this.ads.find(a => a.id === id))
+  getAdById(id: number): Observable<Adspot> {
+    return this.httpClient.get<Adspot>(`${this.api}/adspot/id/${id}`)
   }
 
-  getAvailableSlots(adId: string): Observable<Timeslot[]> {
+  getAvailableSlots(adId: number): Observable<Timeslot[]> {
     return of(this.timeslots);
   }
 

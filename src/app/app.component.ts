@@ -1,9 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {appVersion} from '../environments/app-version';
 import {Subscription} from 'rxjs';
-import {AppService} from './app.service';
 import {User} from './model/user.model';
-import {NearService} from './near.service';
+import {AppService, AuthService, NearService} from './services';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   constructor(private appService: AppService,
+              private authService: AuthService,
               private nearService: NearService) { }
 
   ngOnInit() {
@@ -25,23 +25,23 @@ export class AppComponent implements OnInit, OnDestroy {
       this.appService.setSignIn();
     });
 
-
     this.subscriptions.add(
       this.appService.user$.subscribe(result => {
         this.user = result;
-        console.log('user', this.user)
       })
     );
+    /* just for test, remove */
+    // this.authService.testServerLogin();
   }
 
-  login() {
+  nearLogin() {
     this.subscriptions.add(
-      this.appService.login()
-        .subscribe(result => console.log('login', result))
+      this.appService.nearLogin()
+        .subscribe(result => console.log('nearLogin', result))
     );
   }
 
-  logout() {
+  nearLogout() {
     this.appService.signOut();
     /* redirect action, maybe */
 
