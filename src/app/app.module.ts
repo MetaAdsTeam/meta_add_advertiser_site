@@ -84,5 +84,9 @@ export class AppModule {
       'near',
       this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/near.svg')
     );
+    this.matIconRegistry.addSvgIcon(
+      'eye',
+      this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/eye.svg')
+    );
   }
 }

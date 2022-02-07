@@ -9,6 +9,7 @@ import {LuxonDateAdapter, MAT_LUXON_DATE_FORMATS} from '@angular/material-luxon-
 import {DateTime} from 'luxon';
 import {finalize} from 'rxjs/operators';
 import {HttpErrorResponse} from '@angular/common/http';
+import {Timeslot} from '../model/timeslot.model';
 
 type SelectedAddInfoType = 'desc' | 'history';
 
@@ -43,15 +44,14 @@ export enum TimeslotType {
 })
 export class AdSpaceComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
-  // user: User| null = null;
   signed = false;
   ad: Adspot | undefined;
   selectedAddInfoType: SelectedAddInfoType = 'desc';
   selectedDate: DateTime = DateTime.now();
-  place = false;
-  timeslots: TimeslotsByType[] = [];
+  isVisiblePlaceAd = false;
+//  timeslots: TimeslotsByType[] = [];
   private id: number;
-
+  timeslots: Timeslot[] = [];
   loading: boolean = false;
 
   constructor(private appService: AppService,
@@ -60,17 +60,8 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.add(
-      /*
-      this.appService.user$.subscribe(value => {
-        this.user = value;
-        if (!this.user) {
-          this.place = false;
-        }
-      })
-      */
       this.appService.signed$.subscribe(value => {
         this.signed = value;
-        this.place = value;
       })
     );
     this.loading = true;
@@ -119,8 +110,9 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   selectDate(event: any) {
     if (this.ad) {
       this.subscriptions.add(
-        this.appService.getAvailableSlots(this.ad.id)
+        this.appService.getTimeslots(this.ad.id)
           .subscribe(value => {
+            /*
             const ft: FormattedTimeslot[] = value.map(v => {
               const date = DateTime.fromISO(v.from_time).toLocaleString(DateTime.TIME_SIMPLE).split(' ')[0];
               return {
@@ -130,7 +122,8 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
             });
             this.timeslots[0] = ft.filter(t => t.type === TimeslotType.AM);
             this.timeslots[1] = ft.filter(t => t.type === TimeslotType.PM);
-            console.log(this.timeslots);
+            */
+            console.log(value);
           })
       );
     }
@@ -148,9 +141,8 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
     this.selectedAddInfoType = type;
   }
 
-  placeAd() {
-    console.log('place', this.signed);
-    this.place = this.signed;
+  showPlaceAd() {
+    this.isVisiblePlaceAd = this.signed;
   }
 
   ngOnDestroy() {
