@@ -10,7 +10,8 @@ export const environment = {
     helperUrl: "https://helper.testnet.near.org",
     explorerUrl: "https://explorer.testnet.near.org",
     contractId: 'trenger.testnet',
-    app: 'MetaAdd'
+    app: 'MetaAds',
+    accountId: 'trenger.testnet'
   },
   devmode: true
 };
