@@ -78,29 +78,44 @@
         <div class="ad-place-datetimes">
           <div style="padding: 40px 38px">
             <span>{{selectedDate | formatDate}}</span>
-            <div id="am" style="display: grid">
-              <span>a.m.</span>
-              <div *ngFor="let ts of timeslots.am">
-                <div class="timeslot"
-                     [class.timeslot__selected]="selectedTimeslot"
-                     [class.timeslot__locked]="ts.locked">
-                  <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
+            <div style="overflow-y: auto; overflow-x: hidden; max-height: 265px; width: fit-content;">
+              <div *ngIf="timeslots.am.length > 0" id="am" style="display: grid">
+                <span style="color: #636A77; padding: 8px 0">a.m.</span>
+                <div class="timeslot-list">
+                  <div *ngFor="let ts of timeslots.am" class="timeslot"
+                       [class.timeslot__selected]="selectedTimeslot === ts"
+                       [class.timeslot__locked]="ts.locked"
+                       (click)="selectTimeslot(ts)">
+                    <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div id="pm">
-              <span>p.m.</span>
-              <ng-container *ngFor="let ts of timeslots.pm">
-                <div class="timeslot"
-                     [class.timeslot__selected]="selectedTimeslot"
-                     [class.timeslot__locked]="ts.locked">
-                  <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
+              <div *ngIf="timeslots.pm.length > 0" id="pm" style="display: grid">
+                <span style="color: #636A77; padding: 8px 0">p.m.</span>
+                <div class="timeslot-list">
+                  <div *ngFor="let ts of timeslots.pm" class="timeslot"
+                       [class.timeslot__selected]="selectedTimeslot === ts"
+                       [class.timeslot__locked]="ts.locked"
+                       (click)="selectTimeslot(ts)">
+                    <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
+                  </div>
                 </div>
-              </ng-container>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!--div id="creative" class="creative">
+      <span class="mat-body-2 ad-place__title">Available slots</span>
+      <mat-form-field class="custom-form-field" appearance="outline">
+        <mat-label>Choose an option</mat-label>
+        <mat-select>
+          <mat-option value="option1">Option 1</mat-option>
+          <mat-option value="option2">Option 2</mat-option>
+          <mat-option value="option3">Option 3</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div -->
   </div>
 </div>
