@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {AppService, AuthService} from '../services';
+import {AppService, AuthService, NearService} from '../services';
 import {Adspot} from '../model/adspot.model';
 import {ActivatedRoute} from '@angular/router';
 import {CustomHeader} from './custom-header/calendar-custom-header';
@@ -8,10 +8,9 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 import {LuxonDateAdapter, MAT_LUXON_DATE_FORMATS} from '@angular/material-luxon-adapter';
 import {DateTime} from 'luxon';
 import {finalize} from 'rxjs/operators';
-import {HttpErrorResponse} from '@angular/common/http';
 import {Timeslot} from '../model/timeslot.model';
 
-type SelectedAddInfoType = 'desc' | 'history';
+type SelectedAddInfoType = 'desc' | 'history' | 'both';
 
 export interface ComponentType<T = any> {
   new (...args: any[]): T;
@@ -35,7 +34,7 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
   signed = false;
   ad: Adspot | undefined;
-  selectedAddInfoType: SelectedAddInfoType = 'desc';
+  selectedAddInfoType: SelectedAddInfoType;
   // showHistory = false;
   selectedDate: DateTime = DateTime.now().setLocale('en');
   isVisiblePlaceAd = false;
@@ -45,35 +44,29 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   timeslots: TimeslotsByType = {am: [], pm: []};
   selectedTimeslot: Timeslot;
 
+  /*****/
+  message: any;
+
   constructor(private appService: AppService,
-              private activatedRoute: ActivatedRoute,
-              private authService: AuthService) { }
+              private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.subscriptions.add(
       this.appService.signed$.subscribe(value => {
         this.signed = value;
+        this.selectedAddInfoType =  value ? 'desc' : 'both';
       })
     );
     this.loading = true;
     this.subscriptions.add(
       this.activatedRoute.params.subscribe(params => {
         this.id = params['id'];
-        this.subscriptions.add(
-          this.authService.authorization$.subscribe(
-            value => {
-              if (value) {
-                this.loadAdspot()
-              }
-            },
-            (error: HttpErrorResponse) => {
-              console.log(error);
-            }
-          )
-        )
+        this.loadAdspot();
       })
     );
-   // console.log(DateTime.fromSeconds(1644005655), DateTime.fromSeconds(1644005655).toFormat('yyyy-MM-dd'))
+
+    /** not working */
+    // this.nearService.contract.getMessages({accountId: 'example-account.testnet'}).then(val => console.log(val))
   }
 
   loadAdspot() {
@@ -99,6 +92,15 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   }
 
   loadTimespots() {
+    let minAvailableTime = DateTime.now();
+    console.log('before', minAvailableTime);
+    minAvailableTime.plus({minutes: 3});
+    console.log('after', minAvailableTime);
+
+    if (this.selectedDate < minAvailableTime) {
+      this.timeslots.am = [];
+      this.timeslots.pm = [];
+    }
     if (this.ad) {
       this.subscriptions.add(
         this.appService.getTimeslots(this.ad.id, this.selectedDate.toFormat('yyyy-MM-dd'))
@@ -120,13 +122,15 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
     }
   }
 
-  selectAddInfoType(type: SelectedAddInfoType) {
-    this.selectedAddInfoType = type;
+  selectAddInfoType() {
+    this.selectedAddInfoType = this.selectedAddInfoType === 'desc' ? 'history' : 'desc';
   }
 
   showPlaceAd() {
     this.isVisiblePlaceAd = this.signed;
-    this.loadTimespots();
+    if (this.signed) {
+      this.loadTimespots();
+    }
   }
 
   ngOnDestroy() {

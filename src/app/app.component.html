@@ -69,14 +69,11 @@
       <router-outlet></router-outlet>
     </div>
 
-    <div *ngIf="!user" class="app-footer">
-      <div class="app-social__full">
-        <img src="assets/images/telegram-blue.svg" alt="telegram-blue"/>
-        <img src="assets/images/discord-blue.svg" alt="discord-blue"/>
-        <img src="assets/images/twitter-blue.svg" alt="twitter-blue"/>
-        <img src="assets/images/facebook-blue.svg" alt="facebook-blue"/>
-      </div>
-      <span class="mat-caption">© 2022 «Metaadd»</span>
+    <div *ngIf="!user" class="app-footer app-social__full">
+      <img src="assets/images/telegram-blue.svg" alt="telegram-blue"/>
+      <img src="assets/images/discord-blue.svg" alt="discord-blue"/>
+      <img src="assets/images/twitter-blue.svg" alt="twitter-blue"/>
+      <img src="assets/images/facebook-blue.svg" alt="facebook-blue"/>
     </div>
   </div>
 </div>

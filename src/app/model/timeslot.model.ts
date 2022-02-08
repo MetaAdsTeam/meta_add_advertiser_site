@@ -10,8 +10,8 @@ export interface Timeslot {
 
 export interface TimeslotBE {
   id: number,
-  from_time: number,
-  to_time: number,
+  from_time: string,
+  to_time: string,
   locked: boolean,
   price: number
 }

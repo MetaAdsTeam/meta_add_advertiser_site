@@ -31,5 +31,6 @@ export class DescriptionComponent {
 
   more() {
     console.log('unknown action');
+    alert('Unknown action!')
   }
 }

@@ -16,32 +16,16 @@
           <div class="ad-item-properties__title">Current Price:</div>
           <div class="ad-item-properties__value-wrapp">
             <span class="ad-item-properties__value">{{ad?.price}}</span>
-            <span class="ad-item-properties__btn-budge"
-                  [class.ad-item-properties__button__selected]="selectedAddInfoType === 'history'"
-                  (click)="selectAddInfoType('history')">history
+            <span *ngIf="signed" class="ad-item-properties__btn-budge"
+                  [class.ad-item-properties__btn-budge__selected]="selectedAddInfoType === 'history'"
+                  (click)="selectAddInfoType()">history
               <mat-icon svgIcon="eye" style="width: 16px; height: 16px"></mat-icon>
-                  <!--svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left: 6px;">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.1074 8.03476C10.1074 9.19876 9.16342 10.1421 7.99942 10.1421C6.83542 10.1421 5.89209 9.19876 5.89209 8.03476C5.89209 6.87009 6.83542 5.92676 7.99942 5.92676C9.16342 5.92676 10.1074 6.87009 10.1074 8.03476Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.99883 12.903C10.5375 12.903 12.8595 11.0777 14.1668 8.03499C12.8595 4.99233 10.5375 3.16699 7.99883 3.16699H8.0015C5.46283 3.16699 3.14083 4.99233 1.8335 8.03499C3.14083 11.0777 5.46283 12.903 8.0015 12.903H7.99883Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg-->
-
             </span>
           </div>
           </li>
           <li>
             <div class="ad-item-properties__title">Likes:</div>
             <div class="ad-item-properties__value">{{ad?.likes}}</div>
-          </li>
-          <li>
-            <div class="ad-item-properties__title">Description:</div>
-            <div class="ad-item-properties__value">
-              <span class="ad-item-properties__value">{{ad?.description}}</span>
-              <span class="ad-item-properties__btn-budge"
-                    [class.ad-item-properties__button__selected]="selectedAddInfoType === 'desc'"
-                    (click)="selectAddInfoType('desc')">
-                show
-              </span>
-            </div>
           </li>
           <li>
             <div class="mat-body-1 ad-item-properties__title">Users per week:</div>
@@ -59,11 +43,11 @@
       </div>
       <!-- end left-side -->
       <div class="ad-item-add">
-        <app-description *ngIf="selectedAddInfoType === 'desc'"
-                         [header]="'Test'"
-                         [body]="'Ownership gives NFTs their value. Anything online can be copied and reproduced, but an NFT is the original version of the digital item. This is why NFTs have taken the art world by storm because it has opened an entirely new lane for fine art collecting. An NFT can be sold at any price.'">
+        <app-description *ngIf="selectedAddInfoType === 'desc' || selectedAddInfoType === 'both'"
+                         [header]="'Description'"
+                         body="{{ ad?.description }}">
         </app-description>
-        <app-history *ngIf="selectedAddInfoType === 'history'"></app-history>
+        <app-history *ngIf="selectedAddInfoType === 'history' || selectedAddInfoType === 'both'"></app-history>
       </div>
     </div>
     <!-- end content -->
@@ -97,17 +81,21 @@
             <div id="am" style="display: grid">
               <span>a.m.</span>
               <div *ngFor="let ts of timeslots.am">
-                <span class="timeslot"
-                      [class.timeslot__selected]="selectedTimeslot"
-                      [class.timeslot__locked]="ts.locked">{{ts.from_time | formatDate : 'HH12MM'}}</span>
-                <!--span>{{ts.locked}}</span -->
+                <div class="timeslot"
+                     [class.timeslot__selected]="selectedTimeslot"
+                     [class.timeslot__locked]="ts.locked">
+                  <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
+                </div>
               </div>
             </div>
             <div id="pm">
               <span>p.m.</span>
               <ng-container *ngFor="let ts of timeslots.pm">
-                <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
-                <span>{{ts.locked}}</span>
+                <div class="timeslot"
+                     [class.timeslot__selected]="selectedTimeslot"
+                     [class.timeslot__locked]="ts.locked">
+                  <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
+                </div>
               </ng-container>
             </div>
           </div>
