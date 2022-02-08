@@ -61,9 +61,9 @@
     <span *ngIf="!signed" class="mat-body-1 ad-item-unsigned">Only authorised users can add аdvertising </span>
     <span *ngIf="!signed" class="mat-body-2 ad-item-unsigned__button" (click)="signIn()">Connect wallet</span>
   </div>
-  <div [hidden]="!isVisiblePlaceAd">
+  <div [hidden]="!isVisiblePlaceAd" style="padding: 0 64px">
     <div class="ad-place">
-      <div id="calendar">
+      <div id="calendar" style="margin-right: 24px">
         <span class="mat-body-2 ad-place__title">Date</span>
         <div class="ad-place-datetimes">
           <mat-calendar #calendar [(selected)]="selectedDate"
