@@ -17,7 +17,7 @@
           <div class="ad-item-properties__value-wrapp">
             <span class="ad-item-properties__value">{{ad?.price}}</span>
             <span *ngIf="signed" class="ad-item-properties__btn-budge"
-                  [class.ad-item-properties__button__selected]="selectedAddInfoType === 'history'"
+                  [class.ad-item-properties__btn-budge__selected]="selectedAddInfoType === 'history'"
                   (click)="selectAddInfoType()">history
               <mat-icon svgIcon="eye" style="width: 16px; height: 16px"></mat-icon>
             </span>
