@@ -1,4 +1,14 @@
+import {DateTime} from 'luxon';
+
 export interface Timeslot {
+  id: number,
+  from_time: DateTime,
+  to_time: DateTime,
+  locked: boolean,
+  price: number
+}
+
+export interface TimeslotBE {
   id: number,
   from_time: string,
   to_time: string,
@@ -7,5 +17,5 @@ export interface Timeslot {
 }
 
 export interface TimeslotList {
-  data: Timeslot[]
+  data: TimeslotBE[]
 }

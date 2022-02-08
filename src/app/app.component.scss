@@ -3,9 +3,23 @@
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  max-width: 262px;
+  // max-width: 262px;
   background: #2A2931;
-  padding: 64px 40px
+  // padding: 64px 40px;
+
+  &__minimize {
+    max-width: 90px;
+    padding: 64px 17px;
+
+    .app-user-menu-item {
+      justify-content: center;
+    }
+  }
+
+  &__full {
+    max-width: 262px;
+    padding: 64px 40px;
+  }
 }
 
 .app-metaads-panel {
@@ -17,9 +31,21 @@
 .app-user-info {
   display: flex;
   flex-direction: column;
-  span {
+  &__uname {
     padding-top: 16px;
     align-self: center;
+    font-family: Nexa;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 110%;
+    text-align: center;
+    letter-spacing: -0.7px;
+    color: #636A77;
+    width: 100%;
+    min-width: 103px;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   padding-bottom: 40px;
 }
@@ -40,28 +66,49 @@
   &__link {
     color: #fff;
   }
+
+  &__link2 {
+    color: #636A77;
+    font-size: 13px;
+  }
 }
 
 .app-footer {
   height: 32px;
-  flex-wrap: wrap;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin: 100px auto 46px;
   width: 100%;
   max-width: 1200px;
 }
 
 .app-social {
-  img {
-    &:nth-child(even) {
-      padding-right: 8px;
+  &__full {
+    img {
+      &:nth-child(even) {
+        padding-right: 8px;
+      }
+      &:nth-child(odd) {
+        padding-right: 8px;
+      }
+      &:last-child {
+        padding-right: 0;
+      }
     }
-    &:nth-child(odd) {
-      padding-right: 8px;
-    }
-    &:last-child {
-      padding-right: 0;
+  }
+
+  &__minimize {
+    display: grid;
+    img {
+      &:nth-child(even) {
+        padding-bottom: 8px;
+      }
+      &:nth-child(odd) {
+        padding-bottom: 8px;
+      }
+      &:last-child {
+        padding-bottom: 0;
+      }
     }
   }
 }
@@ -85,9 +132,21 @@
   margin: 0 auto;
 
   button {
+    font-size: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px 64px;
+    padding: 1em 4em;
   }
+}
+
+.app-metaads-logo {
+  height: 38px;
+  cursor: pointer;
+  padding-top: 48px;
+
+  &__minimize {
+    padding-top: 96px;
+  }
+
 }

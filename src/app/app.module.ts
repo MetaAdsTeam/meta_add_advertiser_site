@@ -15,7 +15,7 @@ import {NgxEchartsModule} from 'ngx-echarts';
 import {CustomHeader} from './ad-space/custom-header/calendar-custom-header';
 import {DateFormatPipe} from './pipes';
 import {AuthorizationInterceptor, NotAuthorizedInterceptor} from './interceptors';
-import {AuthService} from './services';
+import {MAT_DATE_LOCALE} from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -49,20 +49,16 @@ import {AuthService} from './services';
       provide: HTTP_INTERCEPTORS,
       useClass: NotAuthorizedInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: MAT_DATE_LOCALE, useValue: 'en-GB'
+    },
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(private sanitizer: DomSanitizer,
-              private matIconRegistry: MatIconRegistry,
-              private authService: AuthService) {
-
-    if (!this.authService.loadToken()) {
-      /** just for test whiile no login form */
-      // todo: call login form
-      this.authService.testServerLogin();
-    }
+              private matIconRegistry: MatIconRegistry) {
 
     this.matIconRegistry.addSvgIcon(
       'close',

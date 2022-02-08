@@ -111,4 +111,8 @@ body {
   font-size: 30px;
   line-height: 110%;
   color: #FFFFFF;
+
+  @media(max-width: 768px) {
+    font-size: 20px;
+  }
 }

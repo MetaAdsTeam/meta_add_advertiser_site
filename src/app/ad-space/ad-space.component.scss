@@ -67,6 +67,11 @@
     flex-direction: column;
   }
 }
+.mat-subheading-2 {
+  @media(max-width: 768px) {
+    font-size: 20px;
+  }
+}
 
 .ad-item-name {
   padding-left: 24px;
@@ -133,7 +138,7 @@
     color: #FFFFFF;
 
     &__selected {
-      color: #3888ff;
+      background: #2C44FF;
     }
   }
 }
@@ -193,7 +198,7 @@
 }
 
 .ad-item-place-ad {
-  height: 65px;
+  width: 100%;
   width: 231px;
   margin-bottom: 24px;
 
@@ -204,18 +209,33 @@
 }
 
 .ad-place-datetimes {
-  min-width: 357px;
-  max-width: 357px;
-  min-height: 359px;
-  max-height: 359px;
+  // min-width: 357px;
+  // max-width: 357px;
+  // min-height: 359px;
+  // max-height: 359px;
   background: #2a2931;
   // overflow: auto;
 }
 
 .ad-place {
-  display: flex;
-  flex-direction: row;
+  // display: flex;
+  // flex-direction: row;
   margin-bottom: 50px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+
+  div {
+    grid-column: span 3;
+    margin: 0;
+
+    @media(max-width: 1400px) {
+      grid-column: span 6;
+    }
+    @media(max-width: 767px) {
+      grid-column: span 12;
+    }
+  }
 
   &__title {
     padding-bottom: 16px;
@@ -224,12 +244,36 @@
 .btn-pa {
   font-family: Nexa;
   font-style: normal;
-  font-weight: 600;
   font-size: 18px;
+  font-weight: 600;
   line-height: 110%;
   /* identical to box height, or 20px */
   text-align: center;
   letter-spacing: -0.7px;
   /* txt / white */
   color: #FFFFFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1em 4em;
+}
+
+.timeslot {
+  width: 64px;
+  height: 36px;
+  border-radius: 4px;
+  background: #636A77;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &__selected {
+    background: #3888ff;
+  }
+
+  &__loccked {
+    background: #2A2931;
+    color: #636a77;
+  }
 }

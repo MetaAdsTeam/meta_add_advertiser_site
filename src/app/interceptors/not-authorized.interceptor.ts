@@ -32,9 +32,8 @@ export class NotAuthorizedInterceptor implements HttpInterceptor {
                 console.log('err', err);
                 // redirect to the login route
                 // or show a modal
-                /* while no login form */
                 // todo: call login form
-                this.authService.testServerLogin();
+                alert('Not Logged!')
               }
             }
           }
