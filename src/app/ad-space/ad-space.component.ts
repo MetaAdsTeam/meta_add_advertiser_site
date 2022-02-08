@@ -36,7 +36,7 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   ad: Adspot | undefined;
   selectedAddInfoType: SelectedAddInfoType;
   // showHistory = false;
-  selectedDate: DateTime = DateTime.now().setLocale('en');
+  selectedDate: DateTime = DateTime.now().set({hour: 0, minute: 0, second: 0, millisecond: 0}).setLocale('en');
   isVisiblePlaceAd = false;
   private id: number;
   loading: boolean = false;
@@ -93,7 +93,14 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
 
   loadTimeslots() {
     const minAvailableTime = DateTime.now().plus({minutes: 3});
-    const maxAvailableTime = DateTime.now().plus({hours: 2});
+    const today = DateTime.now().set({hour: 0, minute: 0, second: 0, millisecond: 0});
+    let maxAvailableTime: DateTime;
+    if (+today === +this.selectedDate) {
+      maxAvailableTime = DateTime.now().plus({hours: 2});
+    } else {
+      maxAvailableTime = this.selectedDate.plus({hours: 2});
+    }
+
     if (this.selectedDate < minAvailableTime) {
       this.timeslots.am = [];
       this.timeslots.pm = [];
@@ -104,7 +111,6 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
           .subscribe(value => {
             this.timeslots.am = value.filter(v => v.from_time.hour < 12 && v.from_time > minAvailableTime && v.from_time < maxAvailableTime);
             this.timeslots.pm = value.filter(v => v.from_time.hour >= 12 && v.from_time > minAvailableTime && v.from_time < maxAvailableTime);
-            // console.log('am', this.timeslots.am, 'pm', this.timeslots.pm);
           })
       );
     }
