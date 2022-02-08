@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {AppService, AuthService} from '../services';
+import {AppService, AuthService, NearService} from '../services';
 import {Adspot} from '../model/adspot.model';
 import {ActivatedRoute} from '@angular/router';
 import {CustomHeader} from './custom-header/calendar-custom-header';
@@ -45,9 +45,13 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   timeslots: TimeslotsByType = {am: [], pm: []};
   selectedTimeslot: Timeslot;
 
+  /*****/
+  message: any;
+
   constructor(private appService: AppService,
               private activatedRoute: ActivatedRoute,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private nearService: NearService) { }
 
   ngOnInit(): void {
     this.subscriptions.add(
@@ -73,7 +77,8 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
         )
       })
     );
-   // console.log(DateTime.fromSeconds(1644005655), DateTime.fromSeconds(1644005655).toFormat('yyyy-MM-dd'))
+
+    // this.nearService.contract.getMessages({accountId: 'example-account.testnet'}).then(val => console.log(val))
   }
 
   loadAdspot() {
