@@ -114,7 +114,7 @@ export class NearService {
       amount: utils.format.parseNearAmount('0.1')
     });
   }
-  
+
   /* not working: process is not defined */
   getNftTokens(): Promise<any> {
     return this.contract.nft_tokens_for_owner({account_id: environment.near.contractId, limit: 10})
