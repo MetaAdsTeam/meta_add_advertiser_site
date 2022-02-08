@@ -4,11 +4,9 @@ import {ConnectedWalletAccount, WalletConnection} from 'near-api-js/lib/wallet-a
 import {environment} from '../../environments/environment';
 import {AccountBalance} from 'near-api-js/lib/account';
 import {ConnectConfig} from 'near-api-js/lib/connect'
-import {Contract, KeyPair, Near, utils} from 'near-api-js';
+import {Contract, utils} from 'near-api-js';
 
 const { connect, keyStores } = nearApi;
-
-const PRIVATE_KEY = 'testing';
 
 interface ContractWithMethods extends Contract{
   nft_tokens_for_owner?: any,
@@ -19,8 +17,6 @@ interface ContractWithMethods extends Contract{
 @Injectable({providedIn: 'root'})
 export class NearService {
   private keyStore = new keyStores.BrowserLocalStorageKeyStore();
-  //private keyStore = new keyStores.InMemoryKeyStore();
-  // private keyPair = KeyPair.fromString(PRIVATE_KEY);
 
   private config: ConnectConfig = {
     networkId: environment.near.networkId,
@@ -35,7 +31,6 @@ export class NearService {
   contract: ContractWithMethods;
 
   async nearConnect() {
-    // await this.keyStore.setKey("testnet", environment.near.accountId, this.keyPair);
     this.config = {...this.config, keyStore: this.keyStore};
 
     this.nearConnection = await connect(this.config);
@@ -54,8 +49,7 @@ export class NearService {
   }
 
   nearSignIn() {
-    this.wallet.requestSignIn(
-      // environment.near.accountId,
+    return this.wallet.requestSignIn(
       {contractId: environment.near.contractId, methodNames: ['addMessage']},
       environment.near.app,
       window.location.href);
@@ -79,7 +73,6 @@ export class NearService {
     return this.wallet.getAccountId()
   }
 
-  // todo: getBalance, getTransactions
   getBalance(): Promise<AccountBalance> {
     return this.account.getAccountBalance()
   }
@@ -93,8 +86,6 @@ export class NearService {
   }
 
   async nearSubmit() {
-    // use a contract change method
-    // token_id must be unique - need generator
     const tokenId = 'token_' + Math.random().toString(36).substr(2, 9);
     await this.contract.nft_mint({
       meta: 'Sign contract',
@@ -115,7 +106,7 @@ export class NearService {
     });
   }
 
-  /* not working: process is not defined */
+  /** not working: process is not defined **/
   getNftTokens(): Promise<any> {
     return this.contract.nft_tokens_for_owner({account_id: environment.near.contractId, limit: 10})
   }

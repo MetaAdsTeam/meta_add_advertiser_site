@@ -9,19 +9,21 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {DateTime} from 'luxon';
+import {AuthService} from './auth.service';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
   private signed = new BehaviorSubject<boolean>(false);
   signed$ = this.signed.asObservable();
-  private user = new BehaviorSubject<string>('');
-  user$ = this.user.asObservable();
+  private nearAccountId = new BehaviorSubject<string>('');
+  nearAccountId$ = this.nearAccountId.asObservable();
 
   api = environment.tornado_api;
 
   constructor(private dialog: MatDialog,
               private nearService: NearService,
-              private httpClient: HttpClient) {}
+              private httpClient: HttpClient,
+              private authService: AuthService) {}
 
   nearLogin(): Observable<boolean> {
     const dialogRef = this.dialog.open(ConnectComponent, {
@@ -46,7 +48,7 @@ export class AppService {
     }
 
     this.signed.next(signed);
-    this.user.next(accountId);
+    this.nearAccountId.next(accountId);
 
     return of(signed);
   }
@@ -54,15 +56,15 @@ export class AppService {
   setSignIn() {
     const accountId = this.nearService.getAccountId();
     const signed = !(!accountId);
-
     this.signed.next(signed);
-    this.user.next(accountId);
+    this.nearAccountId.next(accountId);
+    this.authService.clearTokenInStorage();
   }
 
   signOut() {
     this.nearService.nearSignOut();
     this.signed.next(false);
-    this.user.next('');
+    this.nearAccountId.next('');
   }
 
   getAds(filter: string = 'all'): Observable<Adspot[]> {
@@ -81,7 +83,7 @@ export class AppService {
         map(l => {
           if (l) {
             return l.data.map(a => {
-              return {...a, from_time: DateTime.fromSeconds(a.from_time), to_time: DateTime.fromSeconds(a.to_time)}
+              return {...a, from_time: DateTime.fromISO(a.from_time), to_time: DateTime.fromISO(a.to_time)}
             });
           } else {
             return []

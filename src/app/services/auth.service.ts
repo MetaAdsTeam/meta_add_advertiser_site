@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs/index';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
@@ -19,6 +19,7 @@ export class AuthService {
 
   constructor(private httpClient: HttpClient) {}
 
+  /** unused **/
   serverLogin(login: string, pass: string): Observable<string> {
     return this.httpClient.post<Authorization>(`${this.api}/login`, {"login": login, "password": pass})
       .pipe(
@@ -26,11 +27,17 @@ export class AuthService {
       )
   }
 
-  testServerLogin() {
-    this.serverLogin("admin", "admin").subscribe(value => this.setToken(value));
+  tempLogin(login: string) {
+    this.httpClient.post<Authorization>(`${this.api}/login`, {"login": login})
+      .pipe(
+        map(value => {
+          return value.Authorization.split(' ')[1]
+        })
+      )
+      .subscribe(value => this.setToken(value))
   }
 
-  /* todo: get token from local storage on start, if null then call logon */
+  /** unused */
   loadToken(): boolean {
     const token = this.getToken();
     if (token) {
@@ -48,7 +55,6 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem(lsKey);
-    // return this.authorization.value;
   }
 
   clearTokenInStorage() {

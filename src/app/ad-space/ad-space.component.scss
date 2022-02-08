@@ -248,6 +248,10 @@
   height: 36px;
   border-radius: 4px;
   background: #636A77;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 
   &__selected {
     background: #3888ff;
@@ -255,5 +259,6 @@
 
   &__loccked {
     background: #2A2931;
+    color: #636a77;
   }
 }

@@ -28,13 +28,16 @@ export class AppComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.add(
-      this.appService.user$.subscribe(result => {
+      this.appService.nearAccountId$.subscribe(result => {
         this.user = result;
-        console.log('user', result)
+        console.log('user', result);
+        if (result) {
+          this.authService.tempLogin(result);
+        } else {
+          this.authService.setToken('');
+        }
       })
     );
-    /* just for test, remove */
-    // this.authService.testServerLogin();
   }
 
   nearLogin() {
@@ -46,8 +49,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   nearLogout() {
     this.appService.signOut();
-    /* redirect action, maybe */
-
   }
 
   resizeProfilePanel() {
