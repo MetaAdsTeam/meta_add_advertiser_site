@@ -31,9 +31,21 @@
 .app-user-info {
   display: flex;
   flex-direction: column;
-  span {
+  &__uname {
     padding-top: 16px;
     align-self: center;
+    font-family: Nexa;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 110%;
+    text-align: center;
+    letter-spacing: -0.7px;
+    color: #636A77;
+    width: 100%;
+    min-width: 103px;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   padding-bottom: 40px;
 }
