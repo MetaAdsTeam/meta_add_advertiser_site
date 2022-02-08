@@ -67,6 +67,11 @@
     flex-direction: column;
   }
 }
+.mat-subheading-2 {
+  @media(max-width: 768px) {
+    font-size: 20px;
+  }
+}
 
 .ad-item-name {
   padding-left: 24px;
@@ -193,7 +198,7 @@
 }
 
 .ad-item-place-ad {
-  height: 65px;
+  width: 100%;
   width: 231px;
   margin-bottom: 24px;
 
@@ -224,14 +229,18 @@
 .btn-pa {
   font-family: Nexa;
   font-style: normal;
-  font-weight: 600;
   font-size: 18px;
+  font-weight: 600;
   line-height: 110%;
   /* identical to box height, or 20px */
   text-align: center;
   letter-spacing: -0.7px;
   /* txt / white */
   color: #FFFFFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1em 4em;
 }
 
 .timeslot {
