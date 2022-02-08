@@ -88,10 +88,10 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   }
 
   selectDate(event: any) {
-    this.loadTimespots();
+    this.loadTimeslots();
   }
 
-  loadTimespots() {
+  loadTimeslots() {
     const minAvailableTime = DateTime.now().plus({minutes: 3});
     const maxAvailableTime = DateTime.now().plus({hours: 2});
     if (this.selectedDate < minAvailableTime) {
@@ -125,7 +125,7 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   showPlaceAd() {
     this.isVisiblePlaceAd = this.signed;
     if (this.signed) {
-      this.loadTimespots();
+      this.loadTimeslots();
     }
   }
 
