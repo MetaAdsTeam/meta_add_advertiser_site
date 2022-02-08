@@ -209,18 +209,19 @@
 }
 
 .ad-place-datetimes {
-  // min-width: 357px;
-  // max-width: 357px;
-  // min-height: 359px;
-  // max-height: 359px;
+  min-width: 357px;
+  max-width: 357px;
+  min-height: 359px;
+  max-height: 359px;
   background: #2a2931;
   // overflow: auto;
 }
 
 .ad-place {
-  // display: flex;
-  // flex-direction: row;
+  display: flex;
+  flex-direction: row;
   margin-bottom: 50px;
+  /*
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 24px;
@@ -236,6 +237,7 @@
       grid-column: span 12;
     }
   }
+  */
 
   &__title {
     padding-bottom: 16px;
@@ -258,6 +260,14 @@
   padding: 1em 4em;
 }
 
+.timeslot-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 36px;
+  justify-items: center;
+  grid-gap: 8px;
+}
+
 .timeslot {
   width: 64px;
   height: 36px;
@@ -276,4 +286,10 @@
     background: #2A2931;
     color: #636a77;
   }
+}
+
+.creative {
+  display: grid;
+  margin-bottom: 40px;
+  max-width: 357px;
 }

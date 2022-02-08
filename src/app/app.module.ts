@@ -9,7 +9,7 @@ import {ConnectComponent} from './connect/connect.component';
 import {MainPageComponent} from './main-page/main-page.component';
 import {MatIconRegistry} from '@angular/material/icon';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DescriptionComponent, HistoryComponent} from './ad-space/components';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {CustomHeader} from './ad-space/custom-header/calendar-custom-header';
@@ -35,6 +35,7 @@ import {MAT_DATE_LOCALE} from '@angular/material/core';
     BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    FormsModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts'),
     })
