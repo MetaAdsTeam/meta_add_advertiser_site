@@ -96,6 +96,7 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
     console.log('before', minAvailableTime);
     minAvailableTime.plus({minutes: 3});
     console.log('after', minAvailableTime);
+    
     if (this.selectedDate < minAvailableTime) {
       this.timeslots.am = [];
       this.timeslots.pm = [];
@@ -127,7 +128,9 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
 
   showPlaceAd() {
     this.isVisiblePlaceAd = this.signed;
-    this.loadTimespots();
+    if (this.signed) {
+      this.loadTimespots();
+    }
   }
 
   ngOnDestroy() {
