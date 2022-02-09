@@ -7,10 +7,11 @@ import {CustomHeader} from './custom-header/calendar-custom-header';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {LuxonDateAdapter, MAT_LUXON_DATE_FORMATS} from '@angular/material-luxon-adapter';
 import {DateTime} from 'luxon';
-import {finalize} from 'rxjs/operators';
+import {finalize, max} from 'rxjs/operators';
 import {Timeslot} from '../model/timeslot.model';
 import {Creative} from '../model/creative.model';
 import {HttpErrorResponse, HttpEventType} from '@angular/common/http';
+import {FormControl} from '@angular/forms';
 
 type SelectedAddInfoType = 'desc' | 'history' | 'both';
 
@@ -60,7 +61,7 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
 
   /* creative */
   creatives: Creative[];
-  selectedCreative: Creative;
+  selectedCreativeId: number;
   creating = false;
   creativeName = '';
   creativeDescription = '';
@@ -181,19 +182,20 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
     }
   }
 
+  // todo: animated progress needed
   uploadImage() {
     this.isSaving = true;
-    console.log('file', this.file);
     this.appService.saveCreative(this.creativeName, this.creativeDescription, this.filename, this.file)
       .subscribe(event2 => {
         if (event2.type === HttpEventType.UploadProgress) {
           console.log('loaded ', event2.loaded, 'from', event2.total, ' percent: ', Math.round(event2.loaded / event2.total * 100), '%');
         } else if (event2.type === HttpEventType.Response) {
-          /** upload ended */
-          // console.log(event2);
           /** maybe, show modal form or notifier **/
           if (event2.body?.data) {
             this.creatives = event2.body?.data;
+            this.creating = false;
+            /** id is increment number, for uuid response body must be changed **/
+            this.selectedCreativeId = Math.max.apply(Math, this.creatives.map(function(o) { return o.id }))
           }
         }
         this.isSaving = false;
@@ -235,10 +237,9 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
 
   /** call after uploading creative **/
    makeCreative() {
-    console.log('creative', this.selectedCreative);
-    return;
-    if (this.selectedCreative) {
-      this.nearService.make_creative(this.creativeName, this.selectedCreative.url, this.selectedCreative.nft_ref)
+    const selectedCreative = this.creatives.find(c => c.id === this.selectedCreativeId);
+    if (selectedCreative) {
+      this.nearService.make_creative(this.creativeName, selectedCreative.url, selectedCreative.nft_ref)
         .then(result => console.log(result));
     }
   }
