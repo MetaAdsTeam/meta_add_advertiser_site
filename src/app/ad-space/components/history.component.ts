@@ -6,7 +6,7 @@ import {EChartsOption} from 'echarts';
   template: `
     <div class="history">
       <div class="history__titles">
-        <span class="mat-body-1">Total price</span>
+        <h5 class="">Total price</h5>
         <div class="history__type">
           <span>All time</span>
           <span>Month</span>
@@ -20,17 +20,39 @@ import {EChartsOption} from 'echarts';
   `,
   styles: [`
     .history {
-      display: grid;
-      padding: 48px 56px 61px;
-      
+      padding: 0;
+
       &__titles {
         display: flex;
+        flex-wrap: wrap;
+        align-items: center;
         justify-content: space-between;
-         max-width: 630px;
+        width: 100%;
+
+        h5 {
+          font-style: normal;
+          font-weight: normal;
+          font-size: 24px;
+          line-height: 110%;
+          /* or 26px */
+          letter-spacing: -1px;
+          color: #FFFFFF;
+          margin: 0;
+          padding: 0;
+        }
       }
-       
+
       &__type {
+        display: flex;
+        flex-wrap: wrap;
         span {
+          font-style: normal;
+          font-weight: normal;
+          font-size: 15px;
+          line-height: 110%;
+          letter-spacing: -0.7px;
+          color: #FFFFFF;
+
           &:nth-child(even) {
             padding-right: 16px;
           }
@@ -41,12 +63,12 @@ import {EChartsOption} from 'echarts';
             padding-right: 0;
           }
         }
-      } 
+      }
     }
     .price-chart {
       height: 350px;
       top: -20px;
-      width: 700px;
+      width: 100%;
     }
   `]
 })
