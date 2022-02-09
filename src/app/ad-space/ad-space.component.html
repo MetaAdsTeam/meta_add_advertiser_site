@@ -109,7 +109,7 @@
     <div *ngIf="selectedTimeslot" id="creative" class="creative">
       <span class="mat-body-2">Available slots</span>
       <mat-form-field class="custom-form-field" appearance="outline">
-        <mat-select placeholder="Select">
+        <mat-select placeholder="Select" [(ngModel)]="selectedCreative">
           <mat-option *ngFor="let c of creatives" [value]="c">{{c.name}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -150,6 +150,7 @@
                 (click)="uploadImage()"
                 [disabled]="!filename || isSaving">Save</button>
       </ng-container>
+      <!-- button mat-flat-button (click)="makeCreative()">testNFT</button -->
     </div>
   </div>
 </div>
