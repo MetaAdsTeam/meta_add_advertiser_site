@@ -6,6 +6,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatButtonModule} from '@angular/material/button';
 import {MatLuxonDateModule} from '@angular/material-luxon-adapter';
+import {MatSelectModule} from '@angular/material/select';
 
 const modules = [
   MatIconModule,
@@ -14,7 +15,8 @@ const modules = [
   MatInputModule,
   MatDialogModule,
   MatDatepickerModule,
-  MatLuxonDateModule
+  MatLuxonDateModule,
+  MatSelectModule
 ];
 
 @NgModule({

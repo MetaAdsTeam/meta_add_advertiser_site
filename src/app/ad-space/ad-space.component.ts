@@ -88,15 +88,12 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   }
 
   selectDate(event: any) {
-    this.loadTimespots();
+    this.loadTimeslots();
   }
 
-  loadTimespots() {
-    let minAvailableTime = DateTime.now();
-    console.log('before', minAvailableTime);
-    minAvailableTime.plus({minutes: 3});
-    console.log('after', minAvailableTime);
-
+  loadTimeslots() {
+    const minAvailableTime = DateTime.now().plus({minutes: 3});
+    const maxAvailableTime = DateTime.now().plus({hours: 2});
     if (this.selectedDate < minAvailableTime) {
       this.timeslots.am = [];
       this.timeslots.pm = [];
@@ -105,10 +102,9 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
       this.subscriptions.add(
         this.appService.getTimeslots(this.ad.id, this.selectedDate.toFormat('yyyy-MM-dd'))
           .subscribe(value => {
-
-            this.timeslots.am = value.filter(v => v.from_time.hour < 12);
-            this.timeslots.pm = value.filter(v => v.from_time.hour >= 12);
-            console.log('am', this.timeslots.am, 'pm', this.timeslots.pm);
+            this.timeslots.am = value.filter(v => v.from_time.hour < 12 && v.from_time > minAvailableTime && v.from_time < maxAvailableTime);
+            this.timeslots.pm = value.filter(v => v.from_time.hour >= 12 && v.from_time > minAvailableTime && v.from_time < maxAvailableTime);
+            // console.log('am', this.timeslots.am, 'pm', this.timeslots.pm);
           })
       );
     }
@@ -129,8 +125,12 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   showPlaceAd() {
     this.isVisiblePlaceAd = this.signed;
     if (this.signed) {
-      this.loadTimespots();
+      this.loadTimeslots();
     }
+  }
+
+  selectTimeslot(timeslot: Timeslot) {
+    this.selectedTimeslot = timeslot;
   }
 
   ngOnDestroy() {
