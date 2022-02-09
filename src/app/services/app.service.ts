@@ -10,6 +10,7 @@ import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {DateTime} from 'luxon';
 import {AuthService} from './auth.service';
+import {Creative, CreativeBE} from '../model/creative.model';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
@@ -90,7 +91,25 @@ export class AppService {
           }
         })
       )
+  }
 
+  getCreatives(): Observable<Creative[]> {
+    return this.httpClient.get<CreativeBE>(`${this.api}/creatives`)
+      .pipe(
+        map(c => { return c.data })
+      );
+  }
+
+  saveCreative(name: string, description: string, filename: string, file: File): Observable<any> {
+/*
+    const formData: FormData = new FormData();
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('filename', file.name);
+    formData.append('file', file, file.name);
+*/
+    const formData = {name, description, filename, file};
+    return this.httpClient.post<any>(`${this.api}/creative`, formData, {reportProgress: true, observe: 'events'});
   }
 
 }

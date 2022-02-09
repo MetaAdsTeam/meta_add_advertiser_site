@@ -117,12 +117,24 @@ body {
   }
 }
 
+.mat-calendar-body-today.mat-calendar-body-selected {
+  box-shadow: none;
+}
+
 .mat-form-field {
   font-size: 15px;
   line-height: inherit;
 }
 
 .custom-form-field {
+  input::placeholder {
+    color: #636A77;
+  }
+
+  textarea::placeholder {
+    color: #636A77;
+  }
+
   &.mat-form-field-appearance-outline {
 
     .mat-form-field-outline {
@@ -160,3 +172,7 @@ body {
   }
 }
 
+.mat-flat-button.mat-primary.mat-button-disabled {
+  background: #636A77;
+  color: white;
+}
