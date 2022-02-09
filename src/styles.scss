@@ -16,6 +16,11 @@ body {
   color: white;
 }
 
+*,
+*::before,
+*::after{
+  box-sizing: border-box;
+}
 
 /* scrollbar redesign */
 * {
@@ -95,6 +100,9 @@ body {
 
 .mat-calendar-body-label[colspan="7"] {
   display: none;
+}
+.mat-calendar-body-today.mat-calendar-body-selected {
+  box-shadow: none;
 }
 .mat-body-2 {
   font-family: Nexa;
