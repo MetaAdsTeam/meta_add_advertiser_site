@@ -157,13 +157,6 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
     if (this.signed) {
       this.loadTimeslots();
       this.loadCreatives();
-      this.selectedCreative = {
-        id: 56,
-        nft_ref: 'bafkreie2t2nj4enllciv4ftjuum74w5ypgil64dnt4jpzbpjhpspbc2puq',
-        url: 'https://metaads.team/data/1644422258.946563_скрин.jpg',
-        name: '1',
-        description: '1'
-      };
     }
   }
 
