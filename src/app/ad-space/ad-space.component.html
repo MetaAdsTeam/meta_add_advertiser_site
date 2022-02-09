@@ -74,16 +74,16 @@
         <div id="timeslots" class="time">
           <h4 class="ad-place__title">Available slots</h4>
           <div class="ad-place-datetimes">
-
-              <h5 class="box-title-time">{{selectedDate | formatDate}}</h5>
-              <div class="scroll-container">
+            <h5 class="box-title-time">{{selectedDate | formatDate}}</h5>
+            <div class="scroll-container">
               <div id="am" class="am-grid">
                 <h5>a.m.</h5>
                 <div class="grid-time">
                   <div *ngFor="let ts of timeslots.am"
-                      class="timeslot"
-                      [class.timeslot__selected]="selectedTimeslot"
-                      [class.timeslot__locked]="ts.locked">
+                       class="timeslot"
+                       [class.active]="selectedTimeslot === ts"
+                       [class.timeslot__locked]="ts.locked"
+                       (click)="selectTimeslot(ts)">
                     <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
                   </div>
                 </div>
@@ -93,9 +93,10 @@
                 <div class="grid-time">
                 <ng-container *ngFor="let ts of timeslots.pm">
                   <div class="timeslot"
-                      [class.timeslot__selected]="selectedTimeslot"
-                      [class.timeslot__locked]="ts.locked">
-                      <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
+                       [class.active]="selectedTimeslot === ts"
+                       [class.timeslot__locked]="ts.locked"
+                       (click)="selectTimeslot(ts)">
+                    <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
                   </div>
                 </ng-container>
                 </div>
