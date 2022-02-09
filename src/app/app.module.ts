@@ -85,5 +85,9 @@ export class AppModule {
       'eye',
       this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/eye.svg')
     );
+    this.matIconRegistry.addSvgIcon(
+      'upload',
+      this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/paper-plus.svg')
+    );
   }
 }

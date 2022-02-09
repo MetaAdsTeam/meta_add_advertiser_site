@@ -9,6 +9,8 @@ import {LuxonDateAdapter, MAT_LUXON_DATE_FORMATS} from '@angular/material-luxon-
 import {DateTime} from 'luxon';
 import {finalize} from 'rxjs/operators';
 import {Timeslot} from '../model/timeslot.model';
+import {Creative} from '../model/creative.model';
+import {HttpErrorResponse, HttpEventType} from '@angular/common/http';
 
 type SelectedAddInfoType = 'desc' | 'history' | 'both';
 
@@ -19,6 +21,17 @@ export interface ComponentType<T = any> {
 interface TimeslotsByType {
   am: Timeslot[],
   pm: Timeslot[]
+}
+
+function dataURItoBlob(dataURI: string): Blob {
+  const byteString = atob(dataURI.split(',')[1]);
+  const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ab], { type: mimeString });
 }
 
 @Component({
@@ -39,13 +52,23 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   selectedDate: DateTime = DateTime.now().set({hour: 0, minute: 0, second: 0, millisecond: 0}).setLocale('en');
   isVisiblePlaceAd = false;
   private id: number;
-  loading: boolean = false;
+  loading: boolean = false; /* not used */
 
+  /* timeslot */
   timeslots: TimeslotsByType = {am: [], pm: []};
   selectedTimeslot: Timeslot;
 
-  /*****/
-  message: any;
+  /* creative */
+  creatives: Creative[];
+  selectedCreative: Creative;
+  creating = false;
+  creativeName = '';
+  creativeDescription = '';
+
+  /* upload creative file */
+  isSaving: boolean;
+  file: any;
+  filename: string;
 
   constructor(private appService: AppService,
               private activatedRoute: ActivatedRoute) { }
@@ -132,6 +155,7 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
     this.isVisiblePlaceAd = this.signed;
     if (this.signed) {
       this.loadTimeslots();
+      this.loadCreatives();
     }
   }
 
@@ -139,9 +163,70 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
     this.selectedTimeslot = timeslot;
   }
 
+  loadCreatives() {
+    this.subscriptions.add(
+      this.appService.getCreatives()
+        .subscribe(value => this.creatives = value)
+    )
+  }
+
+  setCreatingCreative(state: boolean) {
+    this.creating = state;
+  }
+
   ngOnDestroy() {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
+  }
+
+  uploadImage() {
+    this.isSaving = true;
+    console.log('file', this.file);
+    this.appService.saveCreative(this.creativeName, this.creativeDescription, this.filename, this.file)
+      .subscribe(event2 => {
+        if (event2.type === HttpEventType.UploadProgress) {
+          console.log('loaded ', event2.loaded, 'from', event2.total, ' percent: ', Math.round(event2.loaded / event2.total * 100), '%');
+        } else if (event2.type === HttpEventType.Response) {
+          /* upload ended */
+          alert('end');
+          console.log(event2);
+        }
+        this.isSaving = false;
+      }, (error: HttpErrorResponse) => {
+        if (error.status === 415) {
+          /* Unsupported media file */
+          alert('Unsupported media file');
+        } else {
+          console.log(error);
+        }
+        this.isSaving = false;
+      });
+  }
+
+  fileChangeEvent(event: any) {
+    let file = event.dataTransfer ? event.dataTransfer.files[0] : event.target.files[0];
+    const pattern = /image-*/;
+    const reader = new FileReader();
+    if (!file.type.match(pattern)) {
+      alert('invalid format');
+      return;
+    }
+    reader.onload = this._handleReaderLoaded.bind(this);
+    reader.readAsDataURL(file);
+    this.filename = file.name;
+  }
+
+  _handleReaderLoaded(event: any) {
+    let reader = event.target;
+    this.file = reader.result
+      .replace("data:", "")
+      .replace(/^.+,/, "");
+  }
+
+  clearFile() {
+    /* delete selected file */
+    this.filename = '';
+    this.file = null;
   }
 }
