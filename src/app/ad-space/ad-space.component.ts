@@ -71,7 +71,8 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   filename: string;
 
   constructor(private appService: AppService,
-              private activatedRoute: ActivatedRoute) { }
+              private activatedRoute: ActivatedRoute,
+              private nearService: NearService) { }
 
   ngOnInit(): void {
     this.subscriptions.add(
@@ -156,6 +157,13 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
     if (this.signed) {
       this.loadTimeslots();
       this.loadCreatives();
+      this.selectedCreative = {
+        id: 56,
+        nft_ref: 'bafkreie2t2nj4enllciv4ftjuum74w5ypgil64dnt4jpzbpjhpspbc2puq',
+        url: 'https://metaads.team/data/1644422258.946563_скрин.jpg',
+        name: '1',
+        description: '1'
+      };
     }
   }
 
@@ -188,9 +196,12 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
         if (event2.type === HttpEventType.UploadProgress) {
           console.log('loaded ', event2.loaded, 'from', event2.total, ' percent: ', Math.round(event2.loaded / event2.total * 100), '%');
         } else if (event2.type === HttpEventType.Response) {
-          /* upload ended */
-          alert('end');
-          console.log(event2);
+          /** upload ended */
+          // console.log(event2);
+          /** maybe, show modal form or notifier **/
+          if (event2.body?.data) {
+            this.creatives = event2.body?.data;
+          }
         }
         this.isSaving = false;
       }, (error: HttpErrorResponse) => {
@@ -225,8 +236,17 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   }
 
   clearFile() {
-    /* delete selected file */
     this.filename = '';
     this.file = null;
+  }
+
+  /** call after uploading creative **/
+   makeCreative() {
+    console.log('creative', this.selectedCreative);
+    return;
+    if (this.selectedCreative) {
+      this.nearService.make_creative(this.creativeName, this.selectedCreative.url, this.selectedCreative.nft_ref)
+        .then(result => console.log(result));
+    }
   }
 }
