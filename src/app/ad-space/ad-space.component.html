@@ -42,119 +42,34 @@
         </ul>
 
       </div>
-      <div class="right-item">
-        <div class="ad-item-add">
-          <app-description *ngIf="selectedAddInfoType === 'desc' || selectedAddInfoType === 'both'"
-            [header]="'Description'" body="{{ ad?.description }}">
-          </app-description>
-          <app-history *ngIf="selectedAddInfoType === 'history' || selectedAddInfoType === 'both'"></app-history>
-        </div>
+      <div *ngIf="signed" class="right-item">
+        <app-description *ngIf="selectedAddInfoType === 'desc'"
+                         [header]="'Description'" body="{{ ad?.description }}">
+        </app-description>
+        <app-history *ngIf="selectedAddInfoType === 'history'"></app-history>
       </div>
     </div>
+
+    <!-- блоки для незарегистрированного  -->
+    <div class="ad-item-content">
+      <div *ngIf="!signed" class="right-item">
+        <app-description [header]="'Description'" body="{{ ad?.description }}">
+        </app-description>
+        <app-history></app-history>
+      </div>
+    </div>
+    <!-- end -->
+
+    <button [class.btn-pa__unsigned]="!signed" class="btn-pa" [class.mat-primary]="signed" (click)="showPlaceAd()">
+      Place Ad
+    </button>
+    <h5 *ngIf="!signed" class="mat-body-1 block-unsigned">Only authorised users can add аdvertising </h5>
+    <h5 *ngIf="!signed" class="mat-body-2 block-unsigned block-unsigned__btn" (click)="signIn()">Connect wallet</h5>
     <!-- End Top Block -->
 
     <!-- START: calendar -->
-    <button [class.ad-item-place-ad__unsigned]="!signed" class="btn-pa" [class.mat-primary]="signed" (click)="showPlaceAd()">
-      Place Ad
-    </button>
-    <span *ngIf="!signed" class="mat-body-1 ad-item-unsigned">Only authorised users can add аdvertising </span>
-    <span *ngIf="!signed" class="mat-body-2 ad-item-unsigned__button" (click)="signIn()">Connect wallet</span>
-
-    <div class="wrapper-data" [hidden]="!isVisiblePlaceAd">
-      <div class="ad-place">
-        <div id="calendar" class="cal">
-          <h4 class="ad-place__title">Date</h4>
-          <div class="ad-place-datetimes">
-            <mat-calendar #calendar [(selected)]="selectedDate"
-                          [headerComponent]="getCustomHeader()"
-                          (selectedChange)="selectDate($event)">
-            </mat-calendar>
-          </div>
-        </div>
-        <div id="timeslots" class="time">
-          <h4 class="ad-place__title">Available slots</h4>
-          <div class="ad-place-datetimes">
-            <h5 class="box-title-time">{{selectedDate | formatDate}}</h5>
-            <div class="scroll-container">
-              <div id="am" class="am-grid">
-                <h5>a.m.</h5>
-                <div class="grid-time">
-                  <div *ngFor="let ts of timeslots.am"
-                       class="timeslot"
-                       [class.active]="selectedTimeslot === ts"
-                       [class.timeslot__locked]="ts.locked"
-                       (click)="selectTimeslot(ts)">
-                    <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
-                  </div>
-                </div>
-              </div>
-              <div id="pm" class="pm-grid">
-                <h5>p.m.</h5>
-                <div class="grid-time">
-                <ng-container *ngFor="let ts of timeslots.pm">
-                  <div class="timeslot"
-                       [class.active]="selectedTimeslot === ts"
-                       [class.timeslot__locked]="ts.locked"
-                       (click)="selectTimeslot(ts)">
-                    <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
-                  </div>
-                </ng-container>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div *ngIf="selectedTimeslot" id="creative" class="creative">
-      <h5 class="creative__title">Ad creative</h5>
-      <mat-form-field class="custom-form-field" appearance="outline">
-        <mat-select placeholder="Select" [(value)]="selectedCreativeId">
-          <mat-option *ngFor="let c of creatives" [value]="c.id">{{c.name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <span class="mat-button create_btn create_btn__blue"
-            (click)="setCreatingCreative(true)">Create new creative</span>
-      <ng-container *ngIf="creating">
-        <mat-form-field class="custom-form-field" appearance="outline">
-          <input matInput
-                 type="text"
-                 autocomplete="off"
-                 placeholder="Name" [(ngModel)]="creativeName">
-        </mat-form-field>
-        <mat-form-field class="custom-form-field" appearance="outline">
-          <textarea matInput
-                    maxlength="255"
-                    autocomplete="off"
-                    [(ngModel)]="creativeDescription"
-                    placeholder="Description"
-                    [matTextareaAutosize]="true"
-                    [matAutosizeMinRows]="7"></textarea>
-        </mat-form-field>
-        <div style="display: flex; flex-direction: row;flex-wrap: wrap;">
-          <button mat-button
-                  class="create_btn"
-                  (click)="fileInput.click()">
-            <mat-icon svgIcon="upload"></mat-icon>
-            <span style="padding: 0 7px">Choose file</span>
-          </button>
-          <input type="file" (change)="fileChangeEvent($event)"
-                 #fileInput id="fileUpload"
-                 name="fileUpload" accept="video/webm" style="display: none" />
-          <div *ngIf="filename" style="display: flex;">
-            <span class="filename-wrapper">{{filename}}</span>
-            <mat-icon svgIcon="close" (click)="clearFile()"></mat-icon>
-          </div>
-        </div>
-        <button mat-flat-button
-                class="mat-primary btn-save"
-                style="width: 115px"
-                (click)="uploadFile()"
-                [disabled]="!filename || isSaving">Save</button>
-      </ng-container>
-      <!-- button mat-flat-button (click)="makeCreative()">testNFT</button -->
-    </div>
+    <ng-container *ngIf="isVisiblePlaceAd">
+      <app-place-ad [ad]="ad" style="margin-top: 16px"></app-place-ad>
+    </ng-container>
   </div>
 </div>
