@@ -12,6 +12,10 @@ import {Timeslot} from '../model/timeslot.model';
 import {Creative} from '../model/creative.model';
 import {HttpErrorResponse, HttpEventType} from '@angular/common/http';
 import {FormControl} from '@angular/forms';
+import {ConnectComponent} from '../connect/connect.component';
+import {MatDialog} from '@angular/material/dialog';
+import {ProgressPopupComponent} from '../progress-popup/progress-popup.component';
+import {ProgressService} from '../services/progress.service';
 
 type SelectedAddInfoType = 'desc' | 'history' | 'both';
 
@@ -73,7 +77,8 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
 
   constructor(private appService: AppService,
               private activatedRoute: ActivatedRoute,
-              private nearService: NearService) { }
+              private nearService: NearService,
+              private progressService: ProgressService) { }
 
   ngOnInit(): void {
     this.subscriptions.add(
@@ -185,17 +190,32 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   // todo: animated progress needed
   uploadImage() {
     this.isSaving = true;
+    this.progressService.showProgressPopup();
     this.appService.saveCreative(this.creativeName, this.creativeDescription, this.filename, this.file)
+      .pipe(
+        finalize(() => this.progressService.closeProgressPopup())
+      )
       .subscribe(event2 => {
+        console.log('event', event2);
         if (event2.type === HttpEventType.UploadProgress) {
-          console.log('loaded ', event2.loaded, 'from', event2.total, ' percent: ', Math.round(event2.loaded / event2.total * 100), '%');
+          // console.log('loaded ', event2.loaded, 'from', event2.total, ' percent: ', Math.round(event2.loaded / event2.total * 100), '%');
+          if (event2.loaded !== event2.total) {
+            this.progressService.setProgressData(`Uploading file... ${Math.round(event2.loaded / event2.total * 100)}%`);
+          } else {
+            this.progressService.setProgressData('Saving file in NFT.Storage...')
+          }
         } else if (event2.type === HttpEventType.Response) {
           /** maybe, show modal form or notifier **/
+          this.progressService.setProgressData('Receiving response from server...');
           if (event2.body?.data) {
             this.creatives = event2.body?.data;
             this.creating = false;
+            this.creativeName = '';
+            this.creativeDescription = '';
+            this.clearFile();
             /** id is increment number, for uuid response body must be changed **/
-            this.selectedCreativeId = Math.max.apply(Math, this.creatives.map(function(o) { return o.id }))
+            this.selectedCreativeId = Math.max.apply(Math, this.creatives.map(function(o) { return o.id }));
+            this.makeCreative();
           }
         }
         this.isSaving = false;
@@ -206,13 +226,14 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
         } else {
           console.log(error);
         }
+        this.progressService.setProgressData(`Saving creative failed: ${error.statusText}`);
         this.isSaving = false;
       });
   }
 
   fileChangeEvent(event: any) {
     let file = event.dataTransfer ? event.dataTransfer.files[0] : event.target.files[0];
-    const pattern = /image-*/;
+    const pattern = /webm-*/;
     const reader = new FileReader();
     if (!file.type.match(pattern)) {
       alert('invalid format');
@@ -235,11 +256,10 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
     this.file = null;
   }
 
-  /** call after uploading creative **/
    makeCreative() {
     const selectedCreative = this.creatives.find(c => c.id === this.selectedCreativeId);
     if (selectedCreative) {
-      this.nearService.make_creative(this.creativeName, selectedCreative.url, selectedCreative.nft_ref)
+      this.nearService.make_creative(selectedCreative.name, selectedCreative.url, selectedCreative.nft_ref)
         .then(result => console.log(result));
     }
   }
