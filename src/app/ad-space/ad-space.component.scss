@@ -157,7 +157,7 @@
 .wrapper-data {
   .ad-place {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(2, 356px);
     gap: 20px;
 
     &__title {
@@ -165,24 +165,28 @@
       margin-bottom: 16px;
       padding: 0;
     }
+
+    @media(max-width: 990px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
   }
   .cal,
   .time {
-    grid-column: span 3;
+    // grid-column: span 3;
     background: #2a2931;
     border-radius: 8px;
     padding: 40px;
     margin-bottom: 50px;
     // width: 356px;
-    @media(max-width: 1600px) {
-      grid-column: span 4;
-    }
-    @media(max-width: 1300px) {
-      grid-column: span 6;
-    }
-    @media(max-width: 990px) {
-      grid-column: span 12;
-    }
+    // @media(max-width: 1600px) {
+    //   grid-column: span 4;
+    // }
+    // @media(max-width: 1300px) {
+    //   grid-column: span 6;
+    // }
+    // @media(max-width: 990px) {
+    //   grid-column: span 12;
+    // }
   }
   .ad-place-datetimes {
     box-sizing: border-box;
