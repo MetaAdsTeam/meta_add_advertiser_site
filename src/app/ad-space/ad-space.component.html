@@ -109,7 +109,7 @@
 
 
     <div *ngIf="selectedTimeslot" id="creative" class="creative">
-      <h5 class="creative__title">Available slots</h5>
+      <h5 class="creative__title">Ad creative</h5>
       <mat-form-field class="custom-form-field" appearance="outline">
         <mat-select placeholder="Select" [(ngModel)]="selectedCreative">
           <mat-option *ngFor="let c of creatives" [value]="c">{{c.name}}</mat-option>
@@ -140,7 +140,9 @@
             <mat-icon svgIcon="upload"></mat-icon>
             <span style="padding: 0 7px">Choose image</span>
           </button>
-          <input type="file" (change)="fileChangeEvent($event)" #fileInput id="fileUpload" name="fileUpload" accept="image/*" style="display: none" />
+          <input type="file" (change)="fileChangeEvent($event)"
+                 #fileInput id="fileUpload"
+                 name="fileUpload" accept="video/webm" style="display: none" />
           <div *ngIf="filename" style="display: flex;">
             <span class="filename-wrapper">{{filename}}</span>
             <mat-icon svgIcon="close" (click)="clearFile()"></mat-icon>
@@ -149,7 +151,7 @@
         <button mat-flat-button
                 class="mat-primary btn-save"
                 style="width: 115px"
-                (click)="uploadImage()"
+                (click)="uploadFile()"
                 [disabled]="!filename || isSaving">Save</button>
       </ng-container>
       <!-- button mat-flat-button (click)="makeCreative()">testNFT</button -->
