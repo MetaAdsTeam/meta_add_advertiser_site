@@ -188,7 +188,7 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   }
 
   // todo: animated progress needed
-  uploadImage() {
+  uploadFile() {
     this.isSaving = true;
     this.progressService.showProgressPopup();
     this.appService.saveCreative(this.creativeName, this.creativeDescription, this.filename, this.file)
