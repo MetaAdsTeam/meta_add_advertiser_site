@@ -74,16 +74,16 @@
         <div id="timeslots" class="time">
           <h4 class="ad-place__title">Available slots</h4>
           <div class="ad-place-datetimes">
-
-              <h5 class="box-title-time">{{selectedDate | formatDate}}</h5>
-              <div class="scroll-container">
+            <h5 class="box-title-time">{{selectedDate | formatDate}}</h5>
+            <div class="scroll-container">
               <div id="am" class="am-grid">
                 <h5>a.m.</h5>
                 <div class="grid-time">
                   <div *ngFor="let ts of timeslots.am"
-                      class="timeslot"
-                      [class.timeslot__selected]="selectedTimeslot"
-                      [class.timeslot__locked]="ts.locked">
+                       class="timeslot"
+                       [class.active]="selectedTimeslot === ts"
+                       [class.timeslot__locked]="ts.locked"
+                       (click)="selectTimeslot(ts)">
                     <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
                   </div>
                 </div>
@@ -93,9 +93,10 @@
                 <div class="grid-time">
                 <ng-container *ngFor="let ts of timeslots.pm">
                   <div class="timeslot"
-                      [class.timeslot__selected]="selectedTimeslot"
-                      [class.timeslot__locked]="ts.locked">
-                      <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
+                       [class.active]="selectedTimeslot === ts"
+                       [class.timeslot__locked]="ts.locked"
+                       (click)="selectTimeslot(ts)">
+                    <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
                   </div>
                 </ng-container>
                 </div>
@@ -105,16 +106,51 @@
         </div>
       </div>
     </div>
-    <!--div id="creative" class="creative">
-      <span class="mat-body-2 ad-place__title">Available slots</span>
+    <div *ngIf="selectedTimeslot" id="creative" class="creative">
+      <span class="mat-body-2">Available slots</span>
       <mat-form-field class="custom-form-field" appearance="outline">
-        <mat-label>Choose an option</mat-label>
-        <mat-select>
-          <mat-option value="option1">Option 1</mat-option>
-          <mat-option value="option2">Option 2</mat-option>
-          <mat-option value="option3">Option 3</mat-option>
+        <mat-select placeholder="Select" [(ngModel)]="selectedCreative">
+          <mat-option *ngFor="let c of creatives" [value]="c">{{c.name}}</mat-option>
         </mat-select>
       </mat-form-field>
-    </div -->
+      <span class="mat-button create_btn create_btn__blue"
+            (click)="setCreatingCreative(true)">Create new creative</span>
+      <ng-container *ngIf="creating">
+        <mat-form-field class="custom-form-field" appearance="outline">
+          <input matInput
+                 type="text"
+                 autocomplete="off"
+                 placeholder="Name" [(ngModel)]="creativeName">
+        </mat-form-field>
+        <mat-form-field class="custom-form-field" appearance="outline">
+          <textarea matInput
+                    maxlength="255"
+                    autocomplete="off"
+                    [(ngModel)]="creativeDescription"
+                    placeholder="Description"
+                    [matTextareaAutosize]="true"
+                    [matAutosizeMinRows]="7"></textarea>
+        </mat-form-field>
+        <div style="display: flex; flex-direction: row; justify-content: space-between">
+          <button mat-button
+                  class="create_btn"
+                  (click)="fileInput.click()">
+            <mat-icon svgIcon="upload"></mat-icon>
+            <span style="padding: 0 7px">Choose image</span>
+          </button>
+          <input type="file" (change)="fileChangeEvent($event)" #fileInput id="fileUpload" name="fileUpload" accept="image/*" style="display: none" />
+          <div *ngIf="filename" style="display: flex;align-items: center">
+            <span>{{filename}}</span>
+            <mat-icon svgIcon="close" (click)="clearFile()"></mat-icon>
+          </div>
+        </div>
+        <button mat-flat-button
+                class="mat-primary"
+                style="width: 115px"
+                (click)="uploadImage()"
+                [disabled]="!filename || isSaving">Save</button>
+      </ng-container>
+      <!-- button mat-flat-button (click)="makeCreative()">testNFT</button -->
+    </div>
   </div>
 </div>

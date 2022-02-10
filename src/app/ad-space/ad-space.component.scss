@@ -255,6 +255,21 @@
 
 .creative {
   display: grid;
+  grid-gap: 16px;
   margin-bottom: 40px;
   max-width: 357px;
+}
+
+.create_btn {
+  width: fit-content;
+  padding: 0;
+  line-height: inherit;
+
+  &__blue {
+    color: #3888ff;
+
+    &__pressed {
+      color: #133971;
+    }
+  }
 }

@@ -9,9 +9,10 @@ import {Contract, utils} from 'near-api-js';
 const { connect, keyStores } = nearApi;
 
 interface ContractWithMethods extends Contract{
-  nft_tokens_for_owner?: any,
-  nft_mint?: any,
-  nft_token?: any
+  make_creative?: any,
+  fetch_creative_by_id?: any,
+  fetch_all_creatives?: any,
+  do_agreement?: any
 }
 
 @Injectable({providedIn: 'root'})
@@ -40,8 +41,8 @@ export class NearService {
 
 
     const methodOptions = {
-      viewMethods: ['nft_tokens_for_owner', 'nft_token'],
-      changeMethods: ['nft_mint']
+      viewMethods: ['fetch_creative_by_id', 'fetch_all_creatives'],
+      changeMethods: ['make_creative', 'do_agreement']
     };
     this.contract = new Contract(this.account, environment.near.contractId, methodOptions);
     console.log('contract', this.contract);
@@ -85,30 +86,14 @@ export class NearService {
     return this.account.state();
   }
 
-  async nearSubmit() {
-    const tokenId = 'token_' + Math.random().toString(36).substr(2, 9);
-    await this.contract.nft_mint({
-      meta: 'Sign contract',
-      callbackUrl: document.location.href,
+  async make_creative(creativeName: string, url: string, nftCid: string) {
+    await this.contract.make_creative({
       args: {
-        token_id: tokenId,
-        metadata: {
-          title: `NFT Token: ${tokenId}`,
-          description: 'NFT Token with WebData',
-          media: 'https://bafybeiftczwrtyr3k7a2k4vutd3amkwsmaqyhrdzlhvpt33dyjivufqusq.ipfs.dweb.link/goteam-gif.gif'
-        },
-        receiver_id: environment.near.accountId,
-        webdata: {
-          uri: 'https://bafybeiftczwrtyr3k7a2k4vutd3amkwsmaqyhrdzlhvpt33dyjivufqusq.ipfs.dweb.link/goteam-gif.gif'
-        }
-      },
-      amount: utils.format.parseNearAmount('0.1')
+        name: creativeName,
+        content: url,
+        nft: nftCid
+      }
     });
-  }
-
-  /** not working: process is not defined **/
-  getNftTokens(): Promise<any> {
-    return this.contract.nft_tokens_for_owner({account_id: environment.near.contractId, limit: 10})
   }
 
 }
