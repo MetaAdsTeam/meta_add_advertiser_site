@@ -16,6 +16,7 @@ import {CustomHeader} from './ad-space/custom-header/calendar-custom-header';
 import {DateFormatPipe} from './pipes';
 import {AuthorizationInterceptor, NotAuthorizedInterceptor} from './interceptors';
 import {MAT_DATE_LOCALE} from '@angular/material/core';
+import {ProgressPopupComponent} from './progress-popup/progress-popup.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {MAT_DATE_LOCALE} from '@angular/material/core';
     DescriptionComponent,
     HistoryComponent,
     CustomHeader,
-    DateFormatPipe
+    DateFormatPipe,
+    ProgressPopupComponent
   ],
   imports: [
     BrowserModule,
