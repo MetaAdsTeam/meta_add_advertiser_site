@@ -4,10 +4,10 @@
        [class.app-profile__minimize]="currentState !== 'full'"
        [class.app-profile__full]="currentState === 'full'">
     <div>
-      <div class="app-user-info">
+      <!--div class="app-user-info">
         <img src="assets/images/profile.svg" alt="profile" height="56"/>
         <span class="app-user-info__uname" style="color: #636A77">{{user}}</span>
-      </div>
+      </div-->
       <div class="app-user-menu">
         <div class="app-user-menu-item">
           <img src="assets/images/home.svg" alt="home">
@@ -35,10 +35,10 @@
       </div>
     </div>
     <div class="app-metaads-panel">
-      <div class="app-metaads-logout" (click)="nearLogout()">
+      <!--div class="app-metaads-logout" (click)="nearLogout()">
         <mat-icon svgIcon="logout"></mat-icon>
         <span *ngIf="currentState === 'full'">Logout</span>
-      </div>
+      </div-->
       <div [class.app-social__full]="currentState === 'full'"
            [class.app-social__minimize]="currentState !== 'full'">
         <img src="assets/images/telegram.svg" alt="telegram">
@@ -64,6 +64,32 @@
       <img src="assets/images/logo-full.svg">
       <button mat-flat-button class="mat-primary" (click)="nearLogin()">Connect</button>
     </div>
+
+    <mat-toolbar *ngIf="user" class="app-mat-toolbar">
+      <button mat-stroked-button
+         [matMenuTriggerFor]="userMenu">
+        <img src="assets/images/profile.svg"/>
+        <span [matTooltip]="user">{{ user }}</span>
+      </button>
+
+      <mat-menu #userMenu="matMenu"
+                xPosition="before"
+                class="user-menu">
+        <a mat-menu-item
+           [href]="explorerNearUrl" target="_blank">
+          Recent activity
+        </a>
+        <a mat-menu-item
+           href=" https://wallet.near.org" target="_blank">
+           Go to NEAR Wallet
+        </a>
+        <button mat-menu-item
+                (click)="nearLogout()">
+          <mat-icon svgIcon="logout"></mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
 
     <div style="height: 100%">
       <router-outlet></router-outlet>

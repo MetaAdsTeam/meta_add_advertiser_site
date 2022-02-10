@@ -148,5 +148,27 @@
   &__minimize {
     padding-top: 96px;
   }
-
 }
+
+.app-mat-toolbar {
+  background: none;
+  display: flex;
+  justify-content: flex-end;
+
+  img {
+    height: 28px;
+  }
+
+  button {
+    border-color: #636A77;
+    border-radius: 30px;
+    padding: 0 5px;
+    max-width: 250px;
+  }
+
+  span {
+    color: #636A77;
+    padding: 0 10px;
+  }
+}
+
