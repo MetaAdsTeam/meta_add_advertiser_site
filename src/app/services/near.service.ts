@@ -4,7 +4,7 @@ import {ConnectedWalletAccount, WalletConnection} from 'near-api-js/lib/wallet-a
 import {environment} from '../../environments/environment';
 import {AccountBalance} from 'near-api-js/lib/account';
 import {ConnectConfig} from 'near-api-js/lib/connect'
-import {Contract, utils} from 'near-api-js';
+import {Contract} from 'near-api-js';
 
 const { connect, keyStores } = nearApi;
 
@@ -82,7 +82,7 @@ export class NearService {
     return this.account.getAccountDetails()
   }
 
-  getAccountState() {
+  getAccountState(): Promise<any> {
     return this.account.state();
   }
 
@@ -94,6 +94,15 @@ export class NearService {
         nft: nftCid
       }
     });
+  }
+
+  /** working */
+  fetchAllCreatives(): Promise<any> {
+    return this.getViewFunction('fetch_all_creatives');
+  }
+
+  getViewFunction(methodName: string, args?: any): Promise<any> {
+    return this.account.viewFunction(environment.near.contractId, methodName, args)
   }
 
 }

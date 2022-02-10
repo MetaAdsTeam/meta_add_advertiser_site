@@ -17,6 +17,7 @@ import {DateFormatPipe} from './pipes';
 import {AuthorizationInterceptor, NotAuthorizedInterceptor} from './interceptors';
 import {MAT_DATE_LOCALE} from '@angular/material/core';
 import {ProgressPopupComponent} from './progress-popup/progress-popup.component';
+import {PlaceAdComponent} from './ad-space/place-ad/place-ad.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import {ProgressPopupComponent} from './progress-popup/progress-popup.component'
     HistoryComponent,
     CustomHeader,
     DateFormatPipe,
-    ProgressPopupComponent
+    ProgressPopupComponent,
+    PlaceAdComponent
   ],
   imports: [
     BrowserModule,

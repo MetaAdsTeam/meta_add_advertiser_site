@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {Adspot} from '../model/adspot.model';
+import {Adspot} from '../model';
 import {Router} from '@angular/router';
-import {finalize, map} from 'rxjs/operators';
+import {finalize} from 'rxjs/operators';
 import {HttpErrorResponse} from '@angular/common/http';
 import {AppService, AuthService} from '../services';
 

@@ -67,3 +67,7 @@ import 'zone.js';  // Included with Angular CLI.
 
 import * as buffer from 'buffer';
 (window as any).Buffer = buffer.Buffer;
+
+(window as any).process = { env: { NEAR_NO_LOGS: 'true' } };
+
+
