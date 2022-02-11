@@ -76,6 +76,10 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
       this.selectedTimeslot = timeslot;
       this.selectedCreativeId = this.savedPlaceAd.creativeId;
       this.markCreativeAsNft(this.selectedCreativeId);
+      const selectedCreative = this.creatives.find(c => c.id === this.selectedCreativeId);
+      if (selectedCreative && selectedCreative.blockchain_ref) {
+        this.sendBlockchainRefToServer(selectedCreative.id, selectedCreative.blockchain_ref.toString());
+      }
     }
   }
 
@@ -220,7 +224,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
       if (creative) {
         for (let i = 0; i < rec.length; i++) {
           if (rec[i].creative_ref === creativeId) {
-            creative.record_id = rec[i].record_id;
+            creative.blockchain_ref = rec[i].record_id;
             break;
           }
         }
@@ -228,27 +232,19 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
     });
   }
 
+  sendBlockchainRefToServer(creativeId: number, blockchainRef: string) {
+    this.appService.markCreativeAsNft(creativeId, blockchainRef)
+      .subscribe(value => console.log(value));
+  }
+
+  pay() {
+
+
+  }
+
   ngOnDestroy() {
     if (this.subscriptions) {
       this.subscriptions.unsubscribe();
     }
   }
-
-  getC() {
-    this.markCreativeAsNft(this.selectedCreativeId);
-    /*
-    this.nearService.fetchAllCreatives().then((res: NftCreativeList) => {
-      this.creatives.forEach(c => {
-        const rec: NftCreative[] = Object.values(res);
-        for (let i = 0; i < rec.length; i++) {
-          if (rec[i].creative_ref === c.id) {
-            c.record_id = rec[i].record_id;
-            break;
-          }
-        }
-      });
-    })
-    */
-  }
-
 }

@@ -101,15 +101,12 @@ export class AppService {
   }
 
   saveCreative(name: string, description: string, filename: string, file: File): Observable<any> {
-/*
-    const formData: FormData = new FormData();
-    formData.append('name', name);
-    formData.append('description', description);
-    formData.append('filename', file.name);
-    formData.append('file', file, file.name);
-*/
     const formData = {name, description, filename, file};
     return this.httpClient.post<any>(`${this.api}/creative`, formData, {reportProgress: true, observe: 'events'});
+  }
+
+  markCreativeAsNft(creativeId: number, blockchain_ref: string): Observable<any> {
+    return this.httpClient.put(`${this.api}/creative/id/${creativeId}`, {blockchain_ref: blockchain_ref})
   }
 
   savePlaceAdToStorage(placeAdStorage: PlaceAdStorageModel) {

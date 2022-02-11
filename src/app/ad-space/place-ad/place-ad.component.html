@@ -71,7 +71,7 @@
                     [matTextareaAutosize]="true"
                     [matAutosizeMinRows]="7"></textarea>
     </mat-form-field>
-    <div style="display: flex; flex-direction: row;flex-wrap: wrap;">
+    <div style="display: flex; flex-direction: row;flex-wrap: wrap; justify-content: space-between">
       <button mat-button
               class="create_btn"
               (click)="fileInput.click()">
@@ -92,5 +92,12 @@
             (click)="uploadFile()"
             [disabled]="!filename || isSaving">Save</button>
   </ng-container>
-  <button mat-button (click)="getC()">get creatives</button>
+
+  <ng-container *ngIf="selectedCreativeId">
+
+      <span style="margin-top: 32px; font-size: 18px; font-weight: 800;">Link to smart contract</span>
+      <span style="margin-bottom: 32px; font-size: 15px; font-weight: 800; color: #3888ff">Check your link here</span>
+      <button mat-flat-button class="mat-primary" style="height: 68px" (click)="pay()">Pay</button>
+
+  </ng-container>
 </div>
