@@ -3,9 +3,23 @@ export interface Creative {
   nft_ref: string,
   url: string,
   name: string,
-  description: string
+  description: string,
+  record_id?: number;
 }
 
 export interface CreativeBE {
   data: Creative[]
+}
+
+export interface NftCreativeList {
+  [id: number]: NftCreative
+}
+
+export interface NftCreative {
+  record_id: number,
+  creative_ref: number,
+  name: string,
+  content: string,
+  nft_cid: string,
+  owner_account_id: string
 }
