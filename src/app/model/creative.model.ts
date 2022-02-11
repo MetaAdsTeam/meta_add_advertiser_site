@@ -4,7 +4,7 @@ export interface Creative {
   url: string,
   name: string,
   description: string,
-  record_id?: number;
+  blockchain_ref?: number;
 }
 
 export interface CreativeBE {
