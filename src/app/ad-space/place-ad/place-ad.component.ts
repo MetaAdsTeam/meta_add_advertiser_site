@@ -2,12 +2,15 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {DateTime} from 'luxon';
 import {CustomHeader} from '../custom-header/calendar-custom-header';
 import {ComponentType} from '../ad-space.component';
-import {Adspot, Creative, Timeslot} from '../../model';
+import {Adspot, Creative, NftCreative, Timeslot, NftCreativeList, PlaceAdStorageModel} from '../../model';
 import {HttpErrorResponse, HttpEventType} from '@angular/common/http';
-import {finalize} from 'rxjs/operators';
+import {finalize, map} from 'rxjs/operators';
 import {AppService, NearService} from '../../services';
 import {ProgressService} from '../../services/progress.service';
 import {Subscription} from 'rxjs/internal/Subscription';
+import {Observable} from 'rxjs/internal/Observable';
+import {of} from 'rxjs/internal/observable/of';
+import {forkJoin} from 'rxjs/internal/observable/forkJoin';
 
 interface TimeslotsByType {
   am: Timeslot[],
@@ -21,10 +24,9 @@ interface TimeslotsByType {
 })
 export class PlaceAdComponent implements OnInit, OnDestroy {
   @Input() ad: Adspot;
+  @Input() savedPlaceAd: PlaceAdStorageModel | null;
   private subscriptions = new Subscription();
   selectedDate: DateTime = DateTime.now().set({hour: 0, minute: 0, second: 0, millisecond: 0}).setLocale('en');
-
-
 
   /* timeslot */
   timeslots: TimeslotsByType = {am: [], pm: []};
@@ -47,8 +49,34 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
               private progressService: ProgressService) { }
 
   ngOnInit() {
-    this.loadTimeslots();
-    this.loadCreatives();
+    this.subscriptions.add(
+      forkJoin([this.loadTimeslots(), this.loadCreatives()])
+        .pipe()
+        .subscribe(([timeslots, creatives]) => {
+          this.timeslots = timeslots;
+          this.creatives = creatives;
+          this.initSavedPlaceAd();
+        })
+    );
+  }
+
+  initSavedPlaceAd() {
+    if (this.savedPlaceAd &&
+        this.savedPlaceAd.accountId === this.nearService.getAccountId() &&
+        this.savedPlaceAd.adId === this.ad.id) {
+      this.selectedDate = DateTime.fromISO(this.savedPlaceAd.dateISO);
+      let timeslot: any;
+      const from_time = this.savedPlaceAd.timeslotFromTimeISO;
+      if (this.timeslots.am.length > 0) {
+        timeslot = this.timeslots.am.find(t => +t.from_time === +DateTime.fromISO(from_time));
+      }
+      if (!timeslot && this.timeslots.pm.length > 0) {
+        timeslot = this.timeslots.pm.find(t => +t.from_time === +DateTime.fromISO(from_time));
+      }
+      this.selectedTimeslot = timeslot;
+      this.selectedCreativeId = this.savedPlaceAd.creativeId;
+      this.markCreativeAsNft(this.selectedCreativeId);
+    }
   }
 
   getCustomHeader(): ComponentType<any> {
@@ -59,40 +87,41 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
     this.loadTimeslots();
   }
 
-  loadTimeslots() {
-    const minAvailableTime = DateTime.now().plus({minutes: 3});
-    const today = DateTime.now().set({hour: 0, minute: 0, second: 0, millisecond: 0});
-    let maxAvailableTime: DateTime;
-    if (+today === +this.selectedDate) {
-      maxAvailableTime = DateTime.now().plus({hours: 2});
-    } else {
-      maxAvailableTime = this.selectedDate.plus({hours: 2});
-    }
-
-    if (this.selectedDate < minAvailableTime) {
-      this.timeslots.am = [];
-      this.timeslots.pm = [];
-    }
+  loadTimeslots(): Observable<TimeslotsByType> {
     if (this.ad) {
-      this.subscriptions.add(
-        this.appService.getTimeslots(this.ad.id, this.selectedDate.toFormat('yyyy-MM-dd'))
-          .subscribe(value => {
-            this.timeslots.am = value.filter(v => v.from_time.hour < 12 && v.from_time > minAvailableTime && v.from_time < maxAvailableTime);
-            this.timeslots.pm = value.filter(v => v.from_time.hour >= 12 && v.from_time > minAvailableTime && v.from_time < maxAvailableTime);
-          })
-      );
+      const minAvailableTime = DateTime.now().plus({minutes: 3});
+      const today = DateTime.now().set({hour: 0, minute: 0, second: 0, millisecond: 0});
+      let maxAvailableTime: DateTime;
+      if (+today === +this.selectedDate) {
+        maxAvailableTime = DateTime.now().plus({hours: 2});
+      } else {
+        maxAvailableTime = this.selectedDate.plus({hours: 2});
+      }
+
+      if (this.selectedDate < minAvailableTime) {
+        this.timeslots.am = [];
+        this.timeslots.pm = [];
+      }
+
+      return this.appService.getTimeslots(this.ad.id, this.selectedDate.toFormat('yyyy-MM-dd'))
+          .pipe(
+            map(value => {
+              const timeslots: TimeslotsByType = {am: [], pm: []};
+              timeslots.am = value.filter(v => v.from_time.hour < 12 && v.from_time > minAvailableTime && v.from_time < maxAvailableTime);
+              timeslots.pm = value.filter(v => v.from_time.hour >= 12 && v.from_time > minAvailableTime && v.from_time < maxAvailableTime);
+              return timeslots;
+            })
+          )
     }
+    return of({am: [], pm: []});
   }
 
   selectTimeslot(timeslot: Timeslot) {
     this.selectedTimeslot = timeslot;
   }
 
-  loadCreatives() {
-    this.subscriptions.add(
-      this.appService.getCreatives()
-        .subscribe(value => this.creatives = value)
-    )
+  loadCreatives(): Observable<Creative[]> {
+    return this.appService.getCreatives();
   }
 
   setCreatingCreative(state: boolean) {
@@ -107,7 +136,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
         finalize(() => this.progressService.closeProgressPopup())
       )
       .subscribe(event2 => {
-        console.log('event', event2);
+        // console.log('event', event2);
         if (event2.type === HttpEventType.UploadProgress) {
           // console.log('loaded ', event2.loaded, 'from', event2.total, ' percent: ', Math.round(event2.loaded / event2.total * 100), '%');
           if (event2.loaded !== event2.total) {
@@ -116,7 +145,6 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
             this.progressService.setProgressData('Saving file in NFT.Storage...')
           }
         } else if (event2.type === HttpEventType.Response) {
-          /** maybe, show modal form or notifier **/
           this.progressService.setProgressData('Receiving response from server...');
           if (event2.body?.data) {
             this.creatives = event2.body?.data;
@@ -170,9 +198,34 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   makeCreative() {
     const selectedCreative = this.creatives.find(c => c.id === this.selectedCreativeId);
     if (selectedCreative) {
-      this.nearService.make_creative(selectedCreative.name, selectedCreative.url, selectedCreative.nft_ref)
+      /** saving data to localStorage **/
+      this.appService.savePlaceAdToStorage({
+        accountId: this.nearService.getAccountId(),
+        adId: this.ad.id,
+        creativeId: this.selectedCreativeId,
+        dateISO: this.selectedDate.toISO(),
+        timeslotFromTimeISO: this.selectedTimeslot.from_time.toISO()
+      });
+
+      /** call contract method **/
+      this.nearService.make_creative(selectedCreative.name, selectedCreative.url, selectedCreative.nft_ref, selectedCreative.id)
         .then(result => console.log(result));
     }
+  }
+
+  markCreativeAsNft(creativeId: number) {
+    this.nearService.fetchAllCreatives().then((res: NftCreativeList) => {
+      const rec: NftCreative[] = Object.values(res);
+      const creative = this.creatives.find(c => c.id === creativeId);
+      if (creative) {
+        for (let i = 0; i < rec.length; i++) {
+          if (rec[i].creative_ref === creativeId) {
+            creative.record_id = rec[i].record_id;
+            break;
+          }
+        }
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -181,7 +234,21 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
     }
   }
 
-  test() {
-    this.nearService.fetchAllCreatives().then(res => console.log(res))
+  getC() {
+    this.markCreativeAsNft(this.selectedCreativeId);
+    /*
+    this.nearService.fetchAllCreatives().then((res: NftCreativeList) => {
+      this.creatives.forEach(c => {
+        const rec: NftCreative[] = Object.values(res);
+        for (let i = 0; i < rec.length; i++) {
+          if (rec[i].creative_ref === c.id) {
+            c.record_id = rec[i].record_id;
+            break;
+          }
+        }
+      });
+    })
+    */
   }
+
 }

@@ -6,6 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {LuxonDateAdapter, MAT_LUXON_DATE_FORMATS} from '@angular/material-luxon-adapter';
 import {finalize} from 'rxjs/operators';
+import {PlaceAdStorageModel} from '../model/placeAdStorage.model';
 
 type SelectedAddInfoType = 'desc' | 'history';
 
@@ -33,6 +34,7 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   private id: number;
   loading: boolean = false; /* not used */
 
+  savedPlaceAd: PlaceAdStorageModel | null;
 
   constructor(private appService: AppService,
               private activatedRoute: ActivatedRoute) { }
@@ -40,7 +42,7 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscriptions.add(
       this.appService.signed$.subscribe(value => {
-        console.log('signed', value)
+        // console.log('signed', value)
         this.signed = value;
         this.selectedAddInfoType =  'desc';
       })
@@ -53,8 +55,11 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
       })
     );
 
-    /** not working */
-    // this.nearService.contract.getMessages({accountId: 'example-account.testnet'}).then(val => console.log(val))
+    this.savedPlaceAd = this.appService.getPlaceAdFromStorage();
+    if (this.savedPlaceAd) {
+      this.showPlaceAd();
+      this.appService.clearPlaceAdInStorage();
+    }
   }
 
   loadAdspot() {

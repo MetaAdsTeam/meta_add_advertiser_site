@@ -37,7 +37,7 @@ export class NearService {
     this.nearConnection = await connect(this.config);
     this.wallet = new WalletConnection(this.nearConnection, environment.near.app);
     this.account = this.wallet.account();
-    console.log('accObj', this.account);
+    // console.log('accObj', this.account);
 
 
     const methodOptions = {
@@ -45,7 +45,7 @@ export class NearService {
       changeMethods: ['make_creative', 'do_agreement']
     };
     this.contract = new Contract(this.account, environment.near.contractId, methodOptions);
-    console.log('contract', this.contract);
+    // console.log('contract', this.contract);
 
   }
 
@@ -65,7 +65,7 @@ export class NearService {
 
   nearSignOut() {
     if (this.wallet.isSignedIn()) {
-      console.log('sign out');
+      // console.log('sign out');
       this.wallet.signOut();
     }
   }
@@ -86,12 +86,13 @@ export class NearService {
     return this.account.state();
   }
 
-  async make_creative(creativeName: string, url: string, nftCid: string) {
+  async make_creative(creativeName: string, url: string, nftCid: string, creativeId: number) {
     await this.contract.make_creative({
       args: {
         name: creativeName,
         content: url,
-        nft: nftCid
+        nft_cid: nftCid,
+        creative_ref: creativeId
       }
     });
   }

@@ -1,16 +1,16 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {Adspot, AdspotList} from '../model/adspot.model';
+import {Adspot, AdspotList, Timeslot, TimeslotList, Creative, CreativeBE, PlaceAdStorageModel} from '../model';
 import {ConnectComponent} from '../connect/connect.component';
 import {MatDialog} from '@angular/material/dialog';
-import {Timeslot, TimeslotBE, TimeslotList} from '../model/timeslot.model';
 import {NearService} from './near.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {DateTime} from 'luxon';
 import {AuthService} from './auth.service';
-import {Creative, CreativeBE} from '../model/creative.model';
+
+const placeAdStorageKey = 'MetaAds-PlaceAd';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
@@ -110,6 +110,22 @@ export class AppService {
 */
     const formData = {name, description, filename, file};
     return this.httpClient.post<any>(`${this.api}/creative`, formData, {reportProgress: true, observe: 'events'});
+  }
+
+  savePlaceAdToStorage(placeAdStorage: PlaceAdStorageModel) {
+    localStorage.setItem(placeAdStorageKey, JSON.stringify(placeAdStorage));
+  }
+
+  getPlaceAdFromStorage(): PlaceAdStorageModel | null{
+    const storageData = localStorage.getItem(placeAdStorageKey);
+    if (storageData) {
+      return JSON.parse(storageData);
+    }
+    return null;
+  }
+
+  clearPlaceAdInStorage() {
+    localStorage.removeItem(placeAdStorageKey);
   }
 
 }
