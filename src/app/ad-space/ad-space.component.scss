@@ -162,21 +162,19 @@
 
 .block-unsigned {
   margin: 8px 0;
-font-style: normal;
-font-weight: 300;
-font-size: 18px;
-line-height: 30px;
-color: #FFFFFF;
-
-
+  font-style: normal;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 30px;
+  color: #ffffff;
 
   &__btn {
-font-style: normal;
-font-weight: 800;
-font-size: 18px;
-line-height: 110%;
-letter-spacing: -0.7px;
-color: #3888FF;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 110%;
+    letter-spacing: -0.7px;
+    color: #3888ff;
   }
 }
 
@@ -233,7 +231,7 @@ color: #3888FF;
 
   .grid-item {
     grid-column: span 6;
-    background: #2A2931;
+    background: #2a2931;
     border-radius: 8px;
     padding: 40px;
 
