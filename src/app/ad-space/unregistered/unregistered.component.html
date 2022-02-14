@@ -1,0 +1,58 @@
+<div class="page-wrapper-1-unregistered" style="p0">
+  <div *ngIf="ad" class="ad-item-info">
+    <div class="page-link-title">
+      <a routerLink="/">
+        <img src="assets/images/arrow-left.svg" alt="arrow-left">
+      </a>
+      <span class="ad-item-name">{{ad?.spot_type}}: {{ad?.name}}</span>
+    </div>
+
+    <div class="ad-item-content-top">
+      <div class="left-item">
+
+        <img [src]="ad?.preview_url" alt="{{ad?.name}}">
+        <ul class="ad-item-properties">
+          <li>
+            <div class="ad-item-properties__title">Current Price:</div>
+            <div class="ad-item-properties__value-wrapp">
+              <span class="ad-item-properties__value">{{ad?.price}}</span>
+            </div>
+          </li>
+          <li>
+            <div class="ad-item-properties__title">Likes:</div>
+            <div class="ad-item-properties__value">{{ad?.likes}}</div>
+          </li>
+          <li>
+            <div class="mat-body-1 ad-item-properties__title">Users per week:</div>
+            <div class="mat-body-2 ad-item-properties__value">{{ad?.usersPerWeek}}</div>
+          </li>
+          <li>
+            <div class="mat-body-1 ad-item-properties__title">Total users:</div>
+            <div class="mat-body-2 ad-item-properties__value">{{ad?.totalUsers}}</div>
+          </li>
+          <li>
+            <div class="mat-body-1 ad-item-properties__title">Owned by:</div>
+            <div class="mat-body-2 ad-item-properties__value">{{ad?.publisher_name}}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ad-item-content-unregistered">
+      <div class="grid-item left-itm">
+        <app-history></app-history>
+      </div>
+      <div class="grid-item right-itm">
+        <app-description [header]="'Description'" body="{{ ad?.description }}">
+        </app-description>
+      </div>
+    </div>
+
+    <button class="btn-pa__unsigned btn-pa">
+      Place Ad
+    </button>
+    <h5 class="block-unsigned">Only authorised users can add аdvertising </h5>
+    <h5 class="mat-body-2 block-unsigned block-unsigned__btn" (click)="signIn()">Connect wallet</h5>
+    <!-- End Top Block -->
+  </div>
+</div>

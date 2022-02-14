@@ -18,6 +18,8 @@ import {AuthorizationInterceptor, NotAuthorizedInterceptor} from './interceptors
 import {MAT_DATE_LOCALE} from '@angular/material/core';
 import {ProgressPopupComponent} from './progress-popup/progress-popup.component';
 import {PlaceAdComponent} from './ad-space/place-ad/place-ad.component';
+import {RegisteredComponent} from './ad-space/registered/registered.component';
+import {UnregisteredComponent} from './ad-space/unregistered/unregistered.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import {PlaceAdComponent} from './ad-space/place-ad/place-ad.component';
     CustomHeader,
     DateFormatPipe,
     ProgressPopupComponent,
-    PlaceAdComponent
+    PlaceAdComponent,
+    RegisteredComponent,
+    UnregisteredComponent
   ],
   imports: [
     BrowserModule,
