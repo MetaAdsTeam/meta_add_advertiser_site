@@ -1,3 +1,39 @@
 <div>
   <span>Creatives</span>
+  <div>
+    <button mat-flat-button class="mat-primary">New</button>
+    <mat-form-field matTooltip="Search creatives" class="custom-form-field" appearance="outline">
+      <input matInput type="text"
+             placeholder="Search..."
+             [formControl]="search"
+             autocomplete="off"
+             (keyup.enter)="parseSearch(search.value)">
+      <button mat-icon-button
+              matSuffix
+              (click)="parseSearch(search.value)"
+              style="margin-left: 8px;">
+        <mat-icon svgIcon="search"></mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-form-field class="custom-form-field" appearance="outline">
+      <mat-select placeholder="Sort" [(value)]="sortType" (valueChange)="sorting()">
+        <mat-option value="status">Status</mat-option>
+        <mat-option value="id">Newest</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <ng-container *ngFor="let cr of creatives">
+      <video controls>
+        <source [src]="cr.url" type="video/webm">
+      </video>
+      <div>
+        <span>s</span>
+        <span>{{cr.name}} - {{cr.description}}</span>
+        <button mat-icon-button (click)="deleteCreatives(cr)">
+          <mat-icon svgIcon="delete"></mat-icon>
+        </button>
+      </div>
+    </ng-container>
+  </div>
 </div>

@@ -82,7 +82,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   initSavedPayData() {
     this.initSavedData(this.savedPayData);
     if (this.savedPayData && this.savedPayData.playbackId) {
-      this.nearService.fetchAllPresentaions().then((res: NftPlaybackList) => {
+      this.nearService.fetchAllPresentations().then((res: NftPlaybackList) => {
         const nft: NftPlayback[] = Object.values(res);
         for (let i = 0; i < nft.length; i++) {
           /** record_id equal playbackid **/
@@ -318,10 +318,6 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
     } else {
       alert('Creative not in blockchain');
     }
-  }
-
-  test() {
-    this.nearService.fetchAllPresentaions().then(res => console.log(res));
   }
 
   ngOnDestroy() {

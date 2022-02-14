@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs/index';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 
@@ -54,7 +54,16 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem(lsKey);
+    let token = this.authorization.value;
+    if (token) {
+      return token;
+    } else {
+      token = localStorage.getItem(lsKey) || '';
+      if (token) {
+        this.authorization.next(token);
+      }
+      return token;
+    }
   }
 
   clearTokenInStorage() {

@@ -59,7 +59,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
           })
         )
         .subscribe(value => {
-          this.ads = value.map(v => {return {...v, preview_url: 'assets/images/test/add0.png'}});
+          this.ads = value;
           this.selectedAdFilter = filter;
         })
     );
