@@ -2,15 +2,20 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {DateTime} from 'luxon';
 import {CustomHeader} from '../custom-header/calendar-custom-header';
 import {ComponentType} from '../ad-space.component';
-import {Adspot, Creative, NftCreative, Timeslot, NftCreativeList, PlaceAdStorageModel} from '../../model';
+import {
+  Adspot,
+  Creative,
+  NftCreative,
+  Timeslot,
+  NftCreativeList,
+  PlaceAdStorageModel,
+  NftPlaybackList, NftPlayback
+} from '../../model';
 import {HttpErrorResponse, HttpEventType} from '@angular/common/http';
 import {finalize, map} from 'rxjs/operators';
-import {AppService, NearService} from '../../services';
-import {ProgressService} from '../../services/progress.service';
-import {Subscription} from 'rxjs/internal/Subscription';
-import {Observable} from 'rxjs/internal/Observable';
-import {of} from 'rxjs/internal/observable/of';
-import {forkJoin} from 'rxjs/internal/observable/forkJoin';
+import {AppService, NearService, StorageService, ProgressService} from '../../services';
+import {Subscription, Observable, of, forkJoin} from 'rxjs';
+import {PayDataStorageModel} from '../../model/pay-data.storage.model';
 
 interface TimeslotsByType {
   am: Timeslot[],
@@ -25,6 +30,8 @@ interface TimeslotsByType {
 export class PlaceAdComponent implements OnInit, OnDestroy {
   @Input() ad: Adspot;
   @Input() savedPlaceAd: PlaceAdStorageModel | null;
+  @Input() savedPayData: PayDataStorageModel | null;
+
   private subscriptions = new Subscription();
   selectedDate: DateTime = DateTime.now().set({hour: 0, minute: 0, second: 0, millisecond: 0}).setLocale('en');
 
@@ -46,7 +53,8 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
 
   constructor(private appService: AppService,
               private nearService: NearService,
-              private progressService: ProgressService) { }
+              private progressService: ProgressService,
+              private storageService: StorageService) { }
 
   ngOnInit() {
     this.subscriptions.add(
@@ -61,20 +69,8 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   }
 
   initSavedPlaceAd() {
-    if (this.savedPlaceAd &&
-        this.savedPlaceAd.accountId === this.nearService.getAccountId() &&
-        this.savedPlaceAd.adId === this.ad.id) {
-      this.selectedDate = DateTime.fromISO(this.savedPlaceAd.dateISO);
-      let timeslot: any;
-      const from_time = this.savedPlaceAd.timeslotFromTimeISO;
-      if (this.timeslots.am.length > 0) {
-        timeslot = this.timeslots.am.find(t => +t.from_time === +DateTime.fromISO(from_time));
-      }
-      if (!timeslot && this.timeslots.pm.length > 0) {
-        timeslot = this.timeslots.pm.find(t => +t.from_time === +DateTime.fromISO(from_time));
-      }
-      this.selectedTimeslot = timeslot;
-      this.selectedCreativeId = this.savedPlaceAd.creativeId;
+    this.initSavedData(this.savedPlaceAd);
+    if (this.selectedCreativeId) {
       this.markCreativeAsNft(this.selectedCreativeId);
       const selectedCreative = this.creatives.find(c => c.id === this.selectedCreativeId);
       if (selectedCreative && selectedCreative.blockchain_ref) {
@@ -83,15 +79,49 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
     }
   }
 
+  initSavedPayData() {
+    this.initSavedData(this.savedPayData);
+    if (this.savedPayData && this.savedPayData.playbackId) {
+      this.nearService.fetchAllPresentaions().then((res: NftPlaybackList) => {
+        const nft: NftPlayback[] = Object.values(res);
+        for (let i = 0; i < nft.length; i++) {
+          /** record_id equal playbackid **/
+        }
+      });
+    }
+  }
+
+  private initSavedData(saved: PlaceAdStorageModel | PayDataStorageModel | null) {
+    if (saved &&
+      saved.accountId === this.nearService.getAccountId() &&
+      saved.adId === this.ad.id ) {
+      this.selectedDate = DateTime.fromISO(saved.dateISO);
+      let timeslot: any;
+      const from_time = saved.timeslotFromTimeISO;
+      if (this.timeslots.am.length > 0) {
+        timeslot = this.timeslots.am.find(t => +t.from_time === +DateTime.fromISO(from_time));
+      }
+      if (!timeslot && this.timeslots.pm.length > 0) {
+        timeslot = this.timeslots.pm.find(t => +t.from_time === +DateTime.fromISO(from_time));
+      }
+      this.selectedTimeslot = timeslot;
+      this.selectedCreativeId = saved.creativeId;
+    }
+  }
+
   getCustomHeader(): ComponentType<any> {
     return CustomHeader
   }
 
   selectDate(event: any) {
-    this.loadTimeslots();
+    console.log(event);
+    this.loadTimeslots().subscribe(
+      value => this.timeslots = value
+    );
   }
 
   loadTimeslots(): Observable<TimeslotsByType> {
+    console.log('ad', this.ad);
     if (this.ad) {
       const minAvailableTime = DateTime.now().plus({minutes: 3});
       const today = DateTime.now().set({hour: 0, minute: 0, second: 0, millisecond: 0});
@@ -102,17 +132,12 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
         maxAvailableTime = this.selectedDate.plus({hours: 2});
       }
 
-      if (this.selectedDate < minAvailableTime) {
-        this.timeslots.am = [];
-        this.timeslots.pm = [];
-      }
-
       return this.appService.getTimeslots(this.ad.id, this.selectedDate.toFormat('yyyy-MM-dd'))
           .pipe(
             map(value => {
               const timeslots: TimeslotsByType = {am: [], pm: []};
-              timeslots.am = value.filter(v => v.from_time.hour < 12 && v.from_time > minAvailableTime && v.from_time < maxAvailableTime);
-              timeslots.pm = value.filter(v => v.from_time.hour >= 12 && v.from_time > minAvailableTime && v.from_time < maxAvailableTime);
+              timeslots.am = value.filter(v => v.from_time.hour < 12 && +v.from_time > +minAvailableTime && +v.from_time < +maxAvailableTime);
+              timeslots.pm = value.filter(v => v.from_time.hour >= 12 && +v.from_time > +minAvailableTime && +v.from_time < +maxAvailableTime);
               return timeslots;
             })
           )
@@ -125,7 +150,11 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   }
 
   loadCreatives(): Observable<Creative[]> {
-    return this.appService.getCreatives();
+    return this.appService.getCreatives().pipe(
+      map((cArr: Creative[]) => {
+        return cArr.filter(c => c.blockchain_ref )
+      })
+    );
   }
 
   setCreatingCreative(state: boolean) {
@@ -203,7 +232,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
     const selectedCreative = this.creatives.find(c => c.id === this.selectedCreativeId);
     if (selectedCreative) {
       /** saving data to localStorage **/
-      this.appService.savePlaceAdToStorage({
+      this.storageService.savePlaceAdToStorage({
         accountId: this.nearService.getAccountId(),
         adId: this.ad.id,
         creativeId: this.selectedCreativeId,
@@ -237,9 +266,56 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
       .subscribe(value => console.log(value));
   }
 
+  setPlaybackBlockchainInfo(playbackId: number) {
+    /** call backend **/
+  }
+
   pay() {
+    const creative = this.creatives.find(c => c.id === this.selectedCreativeId);
+    let blockchainRef = '';
+    if (creative && creative.blockchain_ref) {
+      blockchainRef = creative.blockchain_ref.toString();
+    }
+    if (blockchainRef) {
+      this.appService.pay({
+        adspot_id: this.ad.id,
+        creative_id: this.selectedCreativeId,
+        from_time: this.selectedTimeslot.from_time.toISO(),
+        to_time: this.selectedTimeslot.to_time.toISO(),
+        play_price: this.ad.price
+        })
+        .subscribe(value => {
+          /** save data to storage **/
+          this.storageService.savePayDataToStorage({
+            accountId: this.nearService.getAccountId(),
+            adId: this.ad.id,
+            dateISO: this.selectedDate.toISO(),
+            timeslotFromTimeISO: this.selectedTimeslot.from_time.toISO(),
+            creativeId: this.selectedCreativeId,
+            playbackId: value.id
+          });
 
+          this.nearService.do_agreement(
+            value.id,
+            this.ad.id,
+            +blockchainRef,
+            this.selectedTimeslot.from_time,
+            this.selectedTimeslot.to_time,
+            'trenger.testnet' // for test use this.ad.publisher - near accountid
+          ).then(
+            res => console.log(res),
+            err => {
+              alert(`do_agreement error: ${err}`);
+              this.storageService.clearPayDataInStorage();
+            });
+        });
+    } else {
+      alert('Creative not in blockchain');
+    }
+  }
 
+  test() {
+    this.nearService.fetchAllPresentaions().then(res => console.log(res));
   }
 
   ngOnDestroy() {
