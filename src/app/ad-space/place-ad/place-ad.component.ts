@@ -41,7 +41,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
 
   /* creative */
   creatives: Creative[];
-  selectedCreativeId: number;
+  selectedCreativeId: number | undefined;
   creating = false;
   creativeName = '';
   creativeDescription = '';
@@ -159,6 +159,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
 
   setCreatingCreative(state: boolean) {
     this.creating = state;
+    this.selectedCreativeId = undefined;
   }
 
   uploadFile() {
@@ -181,7 +182,8 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
           this.progressService.setProgressData('Receiving response from server...');
           if (event2.body?.data) {
             this.creatives = event2.body?.data;
-            this.creating = false;
+            // this.creating = false;
+            this.setCreatingCreative(false);
             this.creativeName = '';
             this.creativeDescription = '';
             this.clearFile();
@@ -235,7 +237,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
       this.storageService.savePlaceAdToStorage({
         accountId: this.nearService.getAccountId(),
         adId: this.ad.id,
-        creativeId: this.selectedCreativeId,
+        creativeId: this.selectedCreativeId!,
         dateISO: this.selectedDate.toISO(),
         timeslotFromTimeISO: this.selectedTimeslot.from_time.toISO()
       });
@@ -279,7 +281,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
     if (blockchainRef) {
       this.appService.pay({
         adspot_id: this.ad.id,
-        creative_id: this.selectedCreativeId,
+        creative_id: this.selectedCreativeId!,
         from_time: this.selectedTimeslot.from_time.toISO(),
         to_time: this.selectedTimeslot.to_time.toISO(),
         play_price: this.ad.price
@@ -291,7 +293,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
             adId: this.ad.id,
             dateISO: this.selectedDate.toISO(),
             timeslotFromTimeISO: this.selectedTimeslot.from_time.toISO(),
-            creativeId: this.selectedCreativeId,
+            creativeId: this.selectedCreativeId!,
             playbackId: value.id
           });
 
