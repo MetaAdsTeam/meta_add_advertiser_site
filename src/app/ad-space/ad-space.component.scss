@@ -149,14 +149,15 @@
   text-align: center;
   color: #e7e7e8;
   cursor: pointer;
-  &:hover {
-    transition: all 0.3s ease;
-    background: rgba(#3888ff, 0.8);
-  }
+  // &:hover {
+  //   transition: all 0.3s ease;
+  //   background: rgba(#3888ff, 0.8);
+  // }
 
   &__unsigned {
     background: #727378;
     color: #353535;
+    cursor: default;
   }
 }
 
