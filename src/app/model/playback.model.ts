@@ -34,7 +34,7 @@ export interface NftPlaybackList {
 }
 
 export interface NftPlayback {
-  record_id: number,
+  playback_id: number,
   adspace_id: number,
   creative_id: number,
   advertiser_cost: number,

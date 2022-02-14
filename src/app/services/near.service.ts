@@ -78,36 +78,24 @@ export class NearService {
     return this.wallet.getAccountId()
   }
 
-  getBalance(): Promise<AccountBalance> {
-    return this.account.getAccountBalance()
-  }
-
-  getAccountDetails(): Promise<any> {
-    return this.account.getAccountDetails()
-  }
-
-  getAccountState(): Promise<any> {
-    return this.account.state();
-  }
-
   async make_creative(creativeName: string, url: string, nftCid: string, creativeId: number) {
     await this.contract.make_creative({
       args: {
         name: creativeName,
         content: url,
         nft_cid: nftCid,
-        creative_ref: creativeId
+        creative_id: creativeId
       }
     });
   }
 
   /** working */
-  fetchAllCreatives(): Promise<any> {
-    return this.getViewFunction('fetch_all_creatives');
+  fetchCreativeById(id: number): Promise<any> {
+    return this.getViewFunction('fetch_creative_by_id', {id: id});
   }
 
-  fetchAllPresentations(): Promise<any> {
-    return this.getViewFunction('fetch_all_presentations');
+  fetchPresentationsById(id: number): Promise<any> {
+    return this.getViewFunction('fetch_presentation_by_id', {id: id});
   }
 
   getViewFunction(methodName: string, args?: any): Promise<any> {
@@ -115,17 +103,17 @@ export class NearService {
   }
   /** record_id equal playbackid **/
   /** Publisher its a near accountid **/
-  async do_agreement(playback_id: number, adId: number, blockchain_ref: number, from_time: DateTime, to_time: DateTime, publisher: string): Promise<any> {
+  async do_agreement(playback_id: number, adId: number, creative_id: number, from_time: DateTime, to_time: DateTime, price: number): Promise<any> {
     await this.contract.do_agreement({
       args: {
+        playback_id: playback_id,
         adspace_id: adId,
-        creative_id: blockchain_ref,
+        creative_id: creative_id,
         start_time: +from_time,
-        end_time: +to_time,
-        publisher_id: publisher
+        end_time: +to_time
       },
       accountId: this.getAccountId(),
-      amount: utils.format.parseNearAmount('0.001') // 1000000000000000000000
+      amount: utils.format.parseNearAmount(price.toString())
     });
   }
 }

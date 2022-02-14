@@ -113,11 +113,15 @@ export class AppService {
     return this.httpClient.post<any>(`${this.api}/creative`, formData, {reportProgress: true, observe: 'events'});
   }
 
-  markCreativeAsNft(creativeId: number, blockchain_ref: string): Observable<any> {
-    return this.httpClient.put(`${this.api}/creative/id/${creativeId}`, {blockchain_ref: blockchain_ref})
+  markCreativeAsNft(creativeId: number, blockchainRef: string): Observable<any> {
+    return this.httpClient.put(`${this.api}/creative/id/${creativeId}`, {blockchain_ref: blockchainRef})
   }
 
   pay(playback: PlaybackBody): Observable<Playback> {
     return this.httpClient.post<Playback>(`${this.api}/playback`, playback);
+  }
+
+  markPlaybackAsNft(playbackId: number, status: string, smartContract: number): Observable<any> {
+    return this.httpClient.put(`${this.api}/playback/id/${playbackId}`, {status: status, smart_contract: smartContract.toString()})
   }
 }

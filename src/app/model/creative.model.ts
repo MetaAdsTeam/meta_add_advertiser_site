@@ -16,8 +16,7 @@ export interface NftCreativeList {
 }
 
 export interface NftCreative {
-  record_id: number,
-  creative_ref: number,
+  creative_id: number,
   name: string,
   content: string,
   nft_cid: string,
