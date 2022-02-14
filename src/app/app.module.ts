@@ -99,5 +99,13 @@ export class AppModule {
       'upload',
       this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/paper-plus.svg')
     );
+    this.matIconRegistry.addSvgIcon(
+      'search',
+      this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/search.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'delete',
+      this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/delete.svg')
+    );
   }
 }

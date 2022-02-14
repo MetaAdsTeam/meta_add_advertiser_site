@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy} from '@angular/core';
 import {Adspot} from '../../model';
 import {AppService} from '../../services';
-import {Subscription} from 'rxjs/internal/Subscription';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-ad-unregistered',

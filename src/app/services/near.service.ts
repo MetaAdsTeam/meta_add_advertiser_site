@@ -14,6 +14,8 @@ interface ContractWithMethods extends Contract{
   make_creative?: any,
   fetch_creative_by_id?: any,
   fetch_all_creatives?: any,
+  fetch_all_presentations?: any,
+  fetch_presentation_by_id?: any,
   do_agreement?: any
 }
 
@@ -104,7 +106,7 @@ export class NearService {
     return this.getViewFunction('fetch_all_creatives');
   }
 
-  fetchAllPresentaions(): Promise<any> {
+  fetchAllPresentations(): Promise<any> {
     return this.getViewFunction('fetch_all_presentations');
   }
 

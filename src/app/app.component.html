@@ -8,25 +8,47 @@
         <img src="assets/images/profile.svg" alt="profile" height="56"/>
         <span class="app-user-info__uname" style="color: #636A77">{{user}}</span>
       </div-->
-      <div class="app-user-menu">
-        <!-- mat-nav-list>
 
-        </mat-nav-list-->
+        <mat-nav-list class="app-user-menu">
+          <a mat-list-item
+             [routerLink]="'/'"
+             routerLinkActive
+             #rla0="routerLinkActive"
+             [class.active]="rla0.isActive"
+             class="app-user-menu-item">
+            <img src="assets/images/home.svg" alt="home">
+            <span *ngIf="currentState === 'full'"
+                  class="app-user-menu-item__link">Home</span>
+          </a>
+          <a mat-list-item
+             [routerLink]="['creatives']"
+             routerLinkActive #rla1="routerLinkActive"
+             [class.active]="rla1.isActive">
+            <img src="assets/images/my-ad.svg" alt="my-ad">
+            <span *ngIf="currentState === 'full'"
+                  class="app-user-menu-item__link">My Ad Creatives</span>
+          </a>
+          <a mat-list-item *ngIf="currentState === 'full'"
+               class="app-user-menu-item"
+               (click)="resizeProfilePanel()"
+               style="cursor: pointer">
+            <img src="assets/images/arrow2-left-grey.svg" alt="minimize">
+            <span class="app-user-menu-item__link2">Minimize</span>
+          </a>
+          <a mat-list-item *ngIf="currentState !== 'full'"
+               class="app-user-menu-item"
+               (click)="resizeProfilePanel()"
+               style="cursor: pointer">
+            <img src="assets/images/arrow2-right-grey.svg" alt="minimize">
+          </a>
+        </mat-nav-list>
+
+      <!-- div class="app-user-menu">
         <div class="app-user-menu-item">
           <img src="assets/images/home.svg" alt="home">
           <span *ngIf="currentState === 'full'"
                 class="app-user-menu-item__link">Home</span>
         </div>
-
-        <!-- a mat-list-item
-           [routerLink]="['users']"
-           routerLinkActive #rla0="routerLinkActive"
-           [class.active]="rla0.isActive"
-           *ngIf="auth.hasRole(adminRolesList[2])">
-          <mat-icon svgIcon="supervisor_account"></mat-icon>
-          <span class="mat-button">Users</span>
-        </a -->
-
         <div class="app-user-menu-item">
           <img src="assets/images/my-ad.svg" alt="my-ad">
           <span *ngIf="currentState === 'full'"
@@ -45,7 +67,7 @@
              style="cursor: pointer">
           <img src="assets/images/arrow2-right-grey.svg" alt="minimize">
         </div>
-      </div>
+      </div-->
     </div>
     <div class="app-metaads-panel">
       <!--div class="app-metaads-logout" (click)="nearLogout()">

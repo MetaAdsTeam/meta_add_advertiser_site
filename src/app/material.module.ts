@@ -9,6 +9,7 @@ import {MatLuxonDateModule} from '@angular/material-luxon-adapter';
 import {MatSelectModule} from '@angular/material/select';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatListModule} from '@angular/material/list';
 
 const modules = [
   MatIconModule,
@@ -20,7 +21,8 @@ const modules = [
   MatLuxonDateModule,
   MatSelectModule,
   MatMenuModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatListModule
 ];
 
 @NgModule({
