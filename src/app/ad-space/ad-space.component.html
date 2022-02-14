@@ -1,75 +1,8 @@
-<div class="page-wrapper-1" style="p0">
-  <div *ngIf="ad" class="ad-item-info">
-    <div class="page-link-title">
-      <a routerLink="/">
-        <img src="assets/images/arrow-left.svg" alt="arrow-left">
-      </a>
-      <span class="ad-item-name">{{ad?.spot_type}}: {{ad?.name}}</span>
-    </div>
+<ng-container *ngIf="signed; else unregistered">
+  <app-ad-registered [ad]="ad"></app-ad-registered>
+</ng-container>
+<ng-template #unregistered>
+  <app-ad-unregistered [ad]="ad"></app-ad-unregistered>
+</ng-template>
+<!-- unregistered -->
 
-    <div class="ad-item-content">
-      <div class="left-item">
-
-        <img [src]="ad?.preview_url" alt="{{ad?.name}}">
-        <ul class="ad-item-properties">
-          <li>
-            <div class="ad-item-properties__title">Current Price:</div>
-            <div class="ad-item-properties__value-wrapp">
-              <span class="ad-item-properties__value">{{ad?.price}}</span>
-              <span *ngIf="signed" class="ad-item-properties__btn-budge"
-                [class.ad-item-properties__btn-budge__selected]="selectedAddInfoType === 'history'"
-                (click)="selectAddInfoType()">history
-                <mat-icon svgIcon="eye" style="width: 16px; height: 16px"></mat-icon>
-              </span>
-            </div>
-          </li>
-          <li>
-            <div class="ad-item-properties__title">Likes:</div>
-            <div class="ad-item-properties__value">{{ad?.likes}}</div>
-          </li>
-          <li>
-            <div class="mat-body-1 ad-item-properties__title">Users per week:</div>
-            <div class="mat-body-2 ad-item-properties__value">{{ad?.usersPerWeek}}</div>
-          </li>
-          <li>
-            <div class="mat-body-1 ad-item-properties__title">Total users:</div>
-            <div class="mat-body-2 ad-item-properties__value">{{ad?.totalUsers}}</div>
-          </li>
-          <li>
-            <div class="mat-body-1 ad-item-properties__title">Owned by:</div>
-            <div class="mat-body-2 ad-item-properties__value">{{ad?.publisher_name}}</div>
-          </li>
-        </ul>
-
-      </div>
-      <div *ngIf="signed" class="right-item">
-        <app-description *ngIf="selectedAddInfoType === 'desc'"
-                         [header]="'Description'" body="{{ ad?.description }}">
-        </app-description>
-        <app-history *ngIf="selectedAddInfoType === 'history'"></app-history>
-      </div>
-    </div>
-
-    <!-- блоки для незарегистрированного  -->
-    <div class="ad-item-content">
-      <div *ngIf="!signed" class="right-item">
-        <app-description [header]="'Description'" body="{{ ad?.description }}">
-        </app-description>
-        <app-history></app-history>
-      </div>
-    </div>
-    <!-- end -->
-
-    <button [class.btn-pa__unsigned]="!signed" class="btn-pa" [class.mat-primary]="signed" (click)="showPlaceAd()">
-      Place Ad
-    </button>
-    <h5 *ngIf="!signed" class="mat-body-1 block-unsigned">Only authorised users can add аdvertising </h5>
-    <h5 *ngIf="!signed" class="mat-body-2 block-unsigned block-unsigned__btn" (click)="signIn()">Connect wallet</h5>
-    <!-- End Top Block -->
-
-    <!-- START: calendar -->
-    <ng-container *ngIf="isVisiblePlaceAd">
-      <app-place-ad [ad]="ad" style="margin-top: 16px"></app-place-ad>
-    </ng-container>
-  </div>
-</div>
