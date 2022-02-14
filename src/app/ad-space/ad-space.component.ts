@@ -8,8 +8,6 @@ import {LuxonDateAdapter, MAT_LUXON_DATE_FORMATS} from '@angular/material-luxon-
 import {finalize} from 'rxjs/operators';
 import {PlaceAdStorageModel} from '../model/place-ad-storage.model';
 
-type SelectedAddInfoType = 'desc' | 'history';
-
 export interface ComponentType<T = any> {
   new (...args: any[]): T;
 }
@@ -27,10 +25,8 @@ export interface ComponentType<T = any> {
 export class AdSpaceComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
   signed = false;
-  ad: Adspot | undefined;
-  selectedAddInfoType: SelectedAddInfoType;
+  ad: Adspot;
 
-  isVisiblePlaceAd = false;
   private id: number;
   loading: boolean = false; /* not used */
 
@@ -43,8 +39,8 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscriptions.add(
       this.appService.signed$.subscribe(value => {
+        console.log('signed', value);
         this.signed = value;
-        this.selectedAddInfoType =  'desc';
       })
     );
     this.loading = true;
@@ -71,25 +67,9 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
               () => this.loading = false
             )
           )
-          .subscribe(value => this.ad = {...value, preview_url: 'assets/images/test/add0.png'})
+          .subscribe(value => this.ad = value)
       );
     }
-  }
-
-  signIn() {
-    if (!this.signed) {
-      this.subscriptions.add(
-        this.appService.nearLogin().subscribe(result => console.log('nearLogin', result))
-      );
-    }
-  }
-
-  selectAddInfoType() {
-    this.selectedAddInfoType = this.selectedAddInfoType === 'desc' ? 'history' : 'desc';
-  }
-
-  showPlaceAd() {
-    this.isVisiblePlaceAd = this.signed;
   }
 
   ngOnDestroy() {
