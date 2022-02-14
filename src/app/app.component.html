@@ -9,15 +9,28 @@
         <span class="app-user-info__uname" style="color: #636A77">{{user}}</span>
       </div-->
       <div class="app-user-menu">
+        <!-- mat-nav-list>
+
+        </mat-nav-list-->
         <div class="app-user-menu-item">
           <img src="assets/images/home.svg" alt="home">
           <span *ngIf="currentState === 'full'"
                 class="app-user-menu-item__link">Home</span>
         </div>
+
+        <!-- a mat-list-item
+           [routerLink]="['users']"
+           routerLinkActive #rla0="routerLinkActive"
+           [class.active]="rla0.isActive"
+           *ngIf="auth.hasRole(adminRolesList[2])">
+          <mat-icon svgIcon="supervisor_account"></mat-icon>
+          <span class="mat-button">Users</span>
+        </a -->
+
         <div class="app-user-menu-item">
           <img src="assets/images/my-ad.svg" alt="my-ad">
           <span *ngIf="currentState === 'full'"
-                class="app-user-menu-item__link">My Ad Creatives</span>
+                class="app-user-menu-item__link" routerLink="creatives" routerLinkActive>My Ad Creatives</span>
         </div>
         <div *ngIf="currentState === 'full'"
              class="app-user-menu-item"

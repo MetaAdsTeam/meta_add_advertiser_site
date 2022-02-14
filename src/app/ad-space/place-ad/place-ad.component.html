@@ -49,12 +49,12 @@
 <div *ngIf="selectedTimeslot" id="creative" class="creative">
   <h5 class="creative__title">Ad creative</h5>
   <mat-form-field class="custom-form-field" appearance="outline">
-    <mat-select placeholder="Select" [(value)]="selectedCreativeId">
+    <mat-select placeholder="Select" [(value)]="selectedCreativeId" (valueChange)="showCreatingPanel()">
       <mat-option *ngFor="let c of creatives" [value]="c.id">{{c.name}}</mat-option>
     </mat-select>
   </mat-form-field>
   <span class="mat-button create_btn create_btn__blue"
-        (click)="setCreatingCreative(true)">Create new creative</span>
+        (click)="showCreatingPanel(true)">Create new creative</span>
   <ng-container *ngIf="creating">
     <mat-form-field class="custom-form-field" appearance="outline">
       <input matInput
