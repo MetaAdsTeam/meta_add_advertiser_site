@@ -71,10 +71,15 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   initSavedPlaceAd() {
     this.initSavedData(this.savedPlaceAd);
     if (this.selectedCreativeId) {
-      this.markCreativeAsNft(this.selectedCreativeId);
       const selectedCreative = this.creatives.find(c => c.id === this.selectedCreativeId);
-      if (selectedCreative && selectedCreative.blockchain_ref) {
-        this.sendBlockchainRefToServer(selectedCreative.id, selectedCreative.blockchain_ref.toString());
+      if (selectedCreative) {
+        this.markCreativeAsNft(this.selectedCreativeId).then((res: NftCreativeList) => {
+          const rec: NftCreative = res[this.selectedCreativeId!!];
+          if (rec.creative_id) {
+            selectedCreative.blockchain_ref = rec.creative_id;
+            this.sendCreativeBlockchainRefToServer(selectedCreative.id, selectedCreative.blockchain_ref.toString());
+          }
+        });
       }
     }
   }
@@ -82,12 +87,20 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   initSavedPayData() {
     this.initSavedData(this.savedPayData);
     if (this.savedPayData && this.savedPayData.playbackId) {
-      this.nearService.fetchAllPresentations().then((res: NftPlaybackList) => {
-        const nft: NftPlayback[] = Object.values(res);
-        for (let i = 0; i < nft.length; i++) {
-          /** record_id equal playbackid **/
-        }
-      });
+      this.markPlaybackAsNft(this.savedPayData.playbackId)
+        .then((res: NftPlaybackList) => {
+          const rec: NftPlayback = res[this.savedPayData!!.playbackId];
+          if (rec) {
+            this.subscriptions.add(
+              this.sendPlaybackBlockchainInfoToServer(this.savedPayData!!.playbackId, rec.status, rec.playback_id)
+                .subscribe(
+                  value => alert('Success'),
+                  (error: HttpErrorResponse) => {
+                    alert(`Error: ${error.statusText}`);
+                  })
+            )
+          }
+        });
     }
   }
 
@@ -134,7 +147,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
 
       return this.appService.getTimeslots(this.ad.id, this.selectedDate.toFormat('yyyy-MM-dd'))
           .pipe(
-            map(value => {
+            map((value: Timeslot[]) => {
               const timeslots: TimeslotsByType = {am: [], pm: []};
               timeslots.am = value.filter(v => v.from_time.hour < 12 && +v.from_time > +minAvailableTime && +v.from_time < +maxAvailableTime);
               timeslots.pm = value.filter(v => v.from_time.hour >= 12 && +v.from_time > +minAvailableTime && +v.from_time < +maxAvailableTime);
@@ -252,28 +265,21 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
     }
   }
 
-  markCreativeAsNft(creativeId: number) {
-    this.nearService.fetchAllCreatives().then((res: NftCreativeList) => {
-      const rec: NftCreative[] = Object.values(res);
-      const creative = this.creatives.find(c => c.id === creativeId);
-      if (creative) {
-        for (let i = 0; i < rec.length; i++) {
-          if (rec[i].creative_ref === creativeId) {
-            creative.blockchain_ref = rec[i].record_id;
-            break;
-          }
-        }
-      }
-    });
+  markCreativeAsNft(creativeId: number): Promise<any> {
+    return this.nearService.fetchCreativeById(creativeId);
   }
 
-  sendBlockchainRefToServer(creativeId: number, blockchainRef: string) {
+  sendCreativeBlockchainRefToServer(creativeId: number, blockchainRef: string) {
     this.appService.markCreativeAsNft(creativeId, blockchainRef)
       .subscribe(value => console.log(value));
   }
 
-  setPlaybackBlockchainInfo(playbackId: number) {
-    /** call backend **/
+  sendPlaybackBlockchainInfoToServer(playbackId: number, status: string, smartContract: number): Observable<any> {
+    return this.appService.markPlaybackAsNft(playbackId, status, smartContract)
+  }
+
+  markPlaybackAsNft(playbackId: number): Promise<any> {
+    return this.nearService.fetchPresentationsById(playbackId);
   }
 
   pay() {
@@ -307,7 +313,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
             +blockchainRef,
             this.selectedTimeslot.from_time,
             this.selectedTimeslot.to_time,
-            'trenger.testnet' // for test use this.ad.publisher - near accountid
+            10// this.ad.price  // todo: replace hardcode
           ).then(
             res => console.log(res),
             err => {
