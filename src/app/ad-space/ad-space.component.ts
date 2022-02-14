@@ -29,14 +29,12 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   private id: number;
   loading: boolean = false; /* not used */
 
-
   constructor(private appService: AppService,
               private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.subscriptions.add(
       this.appService.signed$.subscribe(value => {
-        console.log('signed', value);
         this.signed = value;
       })
     );
