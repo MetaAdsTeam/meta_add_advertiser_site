@@ -157,9 +157,13 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
     );
   }
 
-  setCreatingCreative(state: boolean) {
-    this.creating = state;
-    this.selectedCreativeId = undefined;
+  showCreatingPanel(state: boolean | undefined = undefined) {
+    if (state) {
+      this.creating = state;
+      this.selectedCreativeId = undefined;
+    } else {
+      this.creating = !this.selectedCreativeId;
+    }
   }
 
   uploadFile() {
@@ -183,7 +187,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
           if (event2.body?.data) {
             this.creatives = event2.body?.data;
             // this.creating = false;
-            this.setCreatingCreative(false);
+            this.showCreatingPanel(false);
             this.creativeName = '';
             this.creativeDescription = '';
             this.clearFile();

@@ -20,6 +20,7 @@ import {ProgressPopupComponent} from './progress-popup/progress-popup.component'
 import {PlaceAdComponent} from './ad-space/place-ad/place-ad.component';
 import {RegisteredComponent} from './ad-space/registered/registered.component';
 import {UnregisteredComponent} from './ad-space/unregistered/unregistered.component';
+import {CreativesComponent} from './creatives/creatives.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import {UnregisteredComponent} from './ad-space/unregistered/unregistered.compon
     ProgressPopupComponent,
     PlaceAdComponent,
     RegisteredComponent,
-    UnregisteredComponent
+    UnregisteredComponent,
+    CreativesComponent
   ],
   imports: [
     BrowserModule,
