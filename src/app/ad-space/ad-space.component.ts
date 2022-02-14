@@ -1,12 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {AppService, StorageService} from '../services';
+import {AppService} from '../services';
 import {Adspot} from '../model';
 import {ActivatedRoute} from '@angular/router';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {LuxonDateAdapter, MAT_LUXON_DATE_FORMATS} from '@angular/material-luxon-adapter';
 import {finalize} from 'rxjs/operators';
-import {PlaceAdStorageModel} from '../model/place-ad-storage.model';
 
 export interface ComponentType<T = any> {
   new (...args: any[]): T;
@@ -30,16 +29,12 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   private id: number;
   loading: boolean = false; /* not used */
 
-  savedPlaceAd: PlaceAdStorageModel | null;
-
   constructor(private appService: AppService,
-              private activatedRoute: ActivatedRoute,
-              private storageService: StorageService) { }
+              private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.subscriptions.add(
       this.appService.signed$.subscribe(value => {
-        console.log('signed', value);
         this.signed = value;
       })
     );
@@ -50,12 +45,6 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
         this.loadAdspot();
       })
     );
-
-    this.savedPlaceAd = this.storageService.getPlaceAdFromStorage();
-    if (this.savedPlaceAd) {
-      this.showPlaceAd();
-      this.storageService.clearPlaceAdInStorage();
-    }
   }
 
   loadAdspot() {
