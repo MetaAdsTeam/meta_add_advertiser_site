@@ -41,9 +41,9 @@ body {
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
-  max-width: 1197px;
   margin: 0 auto;
   padding: 0 16px;
+  overflow: hidden;
 }
 
 .page-wrapper-2 {
@@ -111,4 +111,77 @@ body {
   font-size: 30px;
   line-height: 110%;
   color: #FFFFFF;
+
+  @media(max-width: 768px) {
+    font-size: 20px;
+  }
 }
+
+/*
+
+.custom-form-field {
+  &.mat-form-field-appearance-outline {
+    &.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+    &.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
+      transform: translateY(-1.1em) scale(0.75);
+    }
+
+    .mat-form-field-subscript-wrapper {
+      margin-top: 0.2666666667em;
+    }
+
+    .mat-form-field-suffix {
+      max-width: min-content;
+      margin-left: 8px;
+      // align-self: center;
+      top: 0;
+    }
+
+    .mat-form-field-prefix {
+      top: 0;
+      padding-right: 10px;
+      align-self: center;
+    }
+
+    .mat-form-field-infix {
+      border-top: 0.54375em solid transparent;
+      padding: 0.45em 0 0.76em 0;
+      width: auto;
+    }
+
+    .mat-form-field-label-wrapper {
+      top: -1.11375em;
+    }
+
+    .mat-select-arrow-wrapper {
+      transform: none;
+    }
+
+    .mat-form-field-flex {
+      border-color: #636A77;
+    }
+
+    .mat-form-field-label {
+      color: #636A77;
+    }
+
+    &.mat-focused {
+      .mat-form-field-label {
+        color: #636A77;
+      }
+      .mat-form-field-flex {
+        border-color: #636A77;
+      }
+    }
+
+    &.mat-form-field-invalid {
+      .mat-form-field-label {
+        color: #636A77;
+      }
+      .mat-form-field-flex {
+        border-color: #636A77;
+      }
+    }
+  }
+}
+*/

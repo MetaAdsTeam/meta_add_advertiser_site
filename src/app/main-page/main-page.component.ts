@@ -29,10 +29,13 @@ export class MainPageComponent implements OnInit, OnDestroy {
     );
     this.subscriptions.add(
       this.authService.authorization$.subscribe(
-        () => this.loadAds(),
+        value => {
+          if (value) {
+            this.loadAds()
+          }
+        },
         (error: HttpErrorResponse) => {
           console.log(error);
-          alert('not authorized')
         }
       )
     );
@@ -51,15 +54,12 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.appService.getAds(filter)
         .pipe(
-          map(spot => {
-            return {...spot, url: 'assets/images/test/add0.png'}
-          }),
           finalize(() => {
             this.loading = false;
           })
         )
         .subscribe(value => {
-          this.ads = value;
+          this.ads = value.map(v => {return {...v, preview_url: 'assets/images/test/add0.png'}});
           this.selectedAdFilter = filter;
         })
     );

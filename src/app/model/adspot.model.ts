@@ -8,6 +8,15 @@ export interface Adspot {
   likes?: number,
   usersPerWeek?: number,
   totalUsers?: number,
-  publisher?: string, // owner
-  spot_metadata: string // unknown destination
+  publisher_name?: string, // owner
+  preview_url: string,
+  preview_thumb_url: string,
+  spot_metadata?: string // unknown destination
+  views_amount?: number,
+  average_time?: number,
+  max_traffic?: number
+}
+
+export interface AdspotList {
+  data: Adspot[]
 }

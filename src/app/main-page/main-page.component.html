@@ -1,4 +1,4 @@
-<div style="width: 100%; display: flex; flex-direction: column">
+<div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column">
   <span class="mat-headline main-title">Ad space</span>
   <div *ngIf="signed" class="space-ad-filter">
     <span [class.selected]="selectedAdFilter === 'all'"
@@ -9,7 +9,7 @@
   <div class="space-ad-container">
     <div *ngFor="let ad of ads" class="space-ad-content">
       <img *ngIf="selectedAd !== ad"
-           [src]="ad.url"
+           [src]="ad.preview_url"
            alt="unavailable"
            (click)="selectAd(ad)">
       <div *ngIf="selectedAd === ad" class="space-ad-content-selected-logout">
@@ -20,7 +20,7 @@
       <span class="mat-body-2"
             [class.space-ad-content-selected-logout-color]="selectedAd === ad"
             style="padding-top: 23px; padding-bottom: 8px"
-            (click)="selectAd(ad)">Addreality</span>
+            (click)="selectAd(ad)">{{ad.spot_type}}</span>
       <span class="mat-subheading-1"
             style="text-transform: capitalize"
             [class.space-ad-content-selected-logout-color]="selectedAd === ad"

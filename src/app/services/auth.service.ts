@@ -2,10 +2,13 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs/index';
 import {environment} from '../../environments/environment';
+import {map} from 'rxjs/operators';
 
 interface Authorization {
   Authorization: string
 }
+
+const lsKey = 'ma-token';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -16,17 +19,46 @@ export class AuthService {
 
   constructor(private httpClient: HttpClient) {}
 
-  serverLogin(login: string, pass: string): Observable<Authorization> {
-    return this.httpClient.post<Authorization>(`${this.api}/login`, {login: login, password: pass})
+  /** unused **/
+  serverLogin(login: string, pass: string): Observable<string> {
+    return this.httpClient.post<Authorization>(`${this.api}/login`, {"login": login, "password": pass})
+      .pipe(
+        map(value => {return value.Authorization.split(' ')[1]})
+      )
   }
 
-  setToken(auth: Authorization) {
-    this.authorization.next(auth.Authorization);
+  tempLogin(login: string) {
+    this.httpClient.post<Authorization>(`${this.api}/login`, {"login": login})
+      .pipe(
+        map(value => {
+          return value.Authorization.split(' ')[1]
+        })
+      )
+      .subscribe(value => this.setToken(value))
   }
 
-  getToken(): string {
-    return this.authorization.value;
+  /** unused */
+  loadToken(): boolean {
+    const token = this.getToken();
+    if (token) {
+      this.authorization.next(token);
+      return true
+    } else {
+      return false;
+    }
   }
 
+  setToken(token: string) {
+    localStorage.setItem(lsKey, token);
+    this.authorization.next(token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(lsKey);
+  }
+
+  clearTokenInStorage() {
+    localStorage.removeItem(lsKey);
+  }
 }
 

@@ -1,37 +1,29 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {Adspot} from '../model/adspot.model';
-import {User} from '../model/user.model';
+import {Adspot, AdspotList} from '../model/adspot.model';
 import {ConnectComponent} from '../connect/connect.component';
 import {MatDialog} from '@angular/material/dialog';
-import {Timeslot} from '../model/timeslot.model';
+import {Timeslot, TimeslotBE, TimeslotList} from '../model/timeslot.model';
 import {NearService} from './near.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
+import {map} from 'rxjs/operators';
+import {DateTime} from 'luxon';
+import {AuthService} from './auth.service';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
   private signed = new BehaviorSubject<boolean>(false);
   signed$ = this.signed.asObservable();
-  private user = new BehaviorSubject<User | null>(null);
-  user$ = this.user.asObservable();
+  private nearAccountId = new BehaviorSubject<string>('');
+  nearAccountId$ = this.nearAccountId.asObservable();
 
   api = environment.tornado_api;
 
   constructor(private dialog: MatDialog,
               private nearService: NearService,
-              private httpClient: HttpClient) {}
-
-  /* test data */
-
-  private timeslots: Timeslot[] = [
-    {id: 1, from_time: '2020-02-03T09:24:15', to_time: '2020-02-03T09:30:15', locked: false},
-    {id: 2, from_time: '2020-02-03T09:35:15', to_time: '2020-02-03T09:40:15', locked: false},
-    {id: 3, from_time: '2020-02-03T12:50:15', to_time: '2020-02-03T12:55:15', locked: false},
-    {id: 4, from_time: '2020-02-03T14:04:15', to_time: '2020-02-03T14:24:15', locked: false}
-  ];
-
-  /* end test data */
+              private httpClient: HttpClient,
+              private authService: AuthService) {}
 
   nearLogin(): Observable<boolean> {
     const dialogRef = this.dialog.open(ConnectComponent, {
@@ -56,7 +48,7 @@ export class AppService {
     }
 
     this.signed.next(signed);
-    this.user.next({accountId: accountId});
+    this.nearAccountId.next(accountId);
 
     return of(signed);
   }
@@ -64,29 +56,41 @@ export class AppService {
   setSignIn() {
     const accountId = this.nearService.getAccountId();
     const signed = !(!accountId);
-
     this.signed.next(signed);
-    this.user.next({accountId: accountId});
+    this.nearAccountId.next(accountId);
+    this.authService.clearTokenInStorage();
   }
 
   signOut() {
     this.nearService.nearSignOut();
     this.signed.next(false);
-    this.user.next(null);
+    this.nearAccountId.next('');
   }
 
   getAds(filter: string = 'all'): Observable<Adspot[]> {
     // return of(this.ads)
-    return this.httpClient.get<Adspot[]>(`${this.api}/adspots`)
+    return this.httpClient.get<AdspotList>(`${this.api}/adspots`)
+      .pipe(map(l => {return l?.data}))
   }
 
-  getAdById(id: number): Observable<Adspot | undefined> {
-    // return of(this.ads.find(a => a.id === id))
-    return of(undefined)
+  getAdById(id: number): Observable<Adspot> {
+    return this.httpClient.get<Adspot>(`${this.api}/adspot/id/${id}`)
   }
 
-  getAvailableSlots(adId: number): Observable<Timeslot[]> {
-    return of(this.timeslots);
+  getTimeslots(adId: number, date: string): Observable<Timeslot[]> {
+    return this.httpClient.get<TimeslotList>(`${this.api}/timeslots_by_adspot/id/${adId}/date/${date}`)
+      .pipe(
+        map(l => {
+          if (l) {
+            return l.data.map(a => {
+              return {...a, from_time: DateTime.fromISO(a.from_time), to_time: DateTime.fromISO(a.to_time)}
+            });
+          } else {
+            return []
+          }
+        })
+      )
+
   }
 
 }

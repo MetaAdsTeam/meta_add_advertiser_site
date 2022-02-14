@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {appVersion} from '../environments/app-version';
 import {Subscription} from 'rxjs';
-import {User} from './model/user.model';
 import {AppService, AuthService, NearService} from './services';
+
+type CurrentState = 'full' | 'minimized';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,8 @@ import {AppService, AuthService, NearService} from './services';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Meta-Add';
   version = appVersion;
-  user: User | null = null;
+  user: string = '';
+  currentState: CurrentState = 'full';
 
   private subscriptions = new Subscription();
 
@@ -26,15 +28,15 @@ export class AppComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.add(
-      this.appService.user$.subscribe(result => {
+      this.appService.nearAccountId$.subscribe(result => {
         this.user = result;
-        console.log('user', this.user)
+        console.log('user', result);
+        if (result) {
+          this.authService.tempLogin(result);
+        } else {
+          this.authService.setToken('');
+        }
       })
-    );
-    /* just for test, remove */
-    this.subscriptions.add(
-      this.authService.serverLogin('admin', 'admin')
-        .subscribe(value => this.authService.setToken(value))
     );
   }
 
@@ -47,8 +49,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
   nearLogout() {
     this.appService.signOut();
-    /* redirect action, maybe */
+  }
 
+  resizeProfilePanel() {
+    if (this.currentState === 'full') {
+      /* minimize */
+      this.currentState = 'minimized';
+    } else {
+      /* full */
+      this.currentState = 'full'
+    }
   }
 
   ngOnDestroy() {

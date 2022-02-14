@@ -9,12 +9,13 @@ import {ConnectComponent} from './connect/connect.component';
 import {MainPageComponent} from './main-page/main-page.component';
 import {MatIconRegistry} from '@angular/material/icon';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DescriptionComponent, HistoryComponent} from './ad-space/components';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {CustomHeader} from './ad-space/custom-header/calendar-custom-header';
-import {DateFormatPipe} from './shared/date-format.pipe';
-import {AuthorizationInterceptor} from './interceptors';
+import {DateFormatPipe} from './pipes';
+import {AuthorizationInterceptor, NotAuthorizedInterceptor} from './interceptors';
+import {MAT_DATE_LOCALE} from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import {AuthorizationInterceptor} from './interceptors';
     BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    FormsModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts'),
     })
@@ -43,13 +45,22 @@ import {AuthorizationInterceptor} from './interceptors';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthorizationInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NotAuthorizedInterceptor,
+      multi: true
+    },
+    {
+      provide: MAT_DATE_LOCALE, useValue: 'en-GB'
+    },
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(private sanitizer: DomSanitizer,
               private matIconRegistry: MatIconRegistry) {
+
     this.matIconRegistry.addSvgIcon(
       'close',
       this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/close.svg')
@@ -69,6 +80,10 @@ export class AppModule {
     this.matIconRegistry.addSvgIcon(
       'near',
       this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/near.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'eye',
+      this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/eye.svg')
     );
   }
 }
