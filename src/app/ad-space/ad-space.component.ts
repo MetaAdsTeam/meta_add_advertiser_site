@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {AppService} from '../services';
+import {AppService, StorageService} from '../services';
 import {Adspot} from '../model';
 import {ActivatedRoute} from '@angular/router';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {LuxonDateAdapter, MAT_LUXON_DATE_FORMATS} from '@angular/material-luxon-adapter';
 import {finalize} from 'rxjs/operators';
-import {PlaceAdStorageModel} from '../model/placeAdStorage.model';
+import {PlaceAdStorageModel} from '../model/place-ad-storage.model';
 
 type SelectedAddInfoType = 'desc' | 'history';
 
@@ -37,12 +37,12 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
   savedPlaceAd: PlaceAdStorageModel | null;
 
   constructor(private appService: AppService,
-              private activatedRoute: ActivatedRoute) { }
+              private activatedRoute: ActivatedRoute,
+              private storageService: StorageService) { }
 
   ngOnInit(): void {
     this.subscriptions.add(
       this.appService.signed$.subscribe(value => {
-        // console.log('signed', value)
         this.signed = value;
         this.selectedAddInfoType =  'desc';
       })
@@ -55,10 +55,10 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.savedPlaceAd = this.appService.getPlaceAdFromStorage();
+    this.savedPlaceAd = this.storageService.getPlaceAdFromStorage();
     if (this.savedPlaceAd) {
       this.showPlaceAd();
-      this.appService.clearPlaceAdInStorage();
+      this.storageService.clearPlaceAdInStorage();
     }
   }
 

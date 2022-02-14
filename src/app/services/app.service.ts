@@ -1,6 +1,15 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {Adspot, AdspotList, Timeslot, TimeslotList, Creative, CreativeBE, PlaceAdStorageModel} from '../model';
+import {
+  Adspot,
+  AdspotList,
+  Timeslot,
+  TimeslotList,
+  Creative,
+  CreativeBE,
+  PlaceAdStorageModel,
+  PlaybackBody
+} from '../model';
 import {ConnectComponent} from '../connect/connect.component';
 import {MatDialog} from '@angular/material/dialog';
 import {NearService} from './near.service';
@@ -9,8 +18,7 @@ import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {DateTime} from 'luxon';
 import {AuthService} from './auth.service';
-
-const placeAdStorageKey = 'MetaAds-PlaceAd';
+import {Playback} from '../model/playback.model';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
@@ -109,20 +117,7 @@ export class AppService {
     return this.httpClient.put(`${this.api}/creative/id/${creativeId}`, {blockchain_ref: blockchain_ref})
   }
 
-  savePlaceAdToStorage(placeAdStorage: PlaceAdStorageModel) {
-    localStorage.setItem(placeAdStorageKey, JSON.stringify(placeAdStorage));
+  pay(playback: PlaybackBody): Observable<Playback> {
+    return this.httpClient.post<Playback>(`${this.api}/playback`, playback);
   }
-
-  getPlaceAdFromStorage(): PlaceAdStorageModel | null{
-    const storageData = localStorage.getItem(placeAdStorageKey);
-    if (storageData) {
-      return JSON.parse(storageData);
-    }
-    return null;
-  }
-
-  clearPlaceAdInStorage() {
-    localStorage.removeItem(placeAdStorageKey);
-  }
-
 }

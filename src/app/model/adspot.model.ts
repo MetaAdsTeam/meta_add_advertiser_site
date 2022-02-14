@@ -4,7 +4,7 @@ export interface Adspot {
   name: string,
   spot_type: string,
   description: string,
-  price: string,
+  price: number,
   likes?: number,
   usersPerWeek?: number,
   totalUsers?: number,

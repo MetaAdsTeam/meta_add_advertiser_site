@@ -4,9 +4,11 @@ import {ConnectedWalletAccount, WalletConnection} from 'near-api-js/lib/wallet-a
 import {environment} from '../../environments/environment';
 import {AccountBalance} from 'near-api-js/lib/account';
 import {ConnectConfig} from 'near-api-js/lib/connect'
-import {Contract} from 'near-api-js';
+import {Contract, utils} from 'near-api-js';
+import {DateTime} from 'luxon';
 
 const { connect, keyStores } = nearApi;
+const viewMethods = ['fetch_creative_by_id', 'fetch_all_creatives', 'fetch_all_presentations', 'fetch_presentation_by_id'];
 
 interface ContractWithMethods extends Contract{
   make_creative?: any,
@@ -41,7 +43,7 @@ export class NearService {
 
 
     const methodOptions = {
-      viewMethods: ['fetch_creative_by_id', 'fetch_all_creatives'],
+      viewMethods: viewMethods,
       changeMethods: ['make_creative', 'do_agreement']
     };
     this.contract = new Contract(this.account, environment.near.contractId, methodOptions);
@@ -51,7 +53,7 @@ export class NearService {
 
   nearSignIn() {
     return this.wallet.requestSignIn(
-      {contractId: environment.near.contractId, methodNames: ['addMessage']},
+      {contractId: environment.near.contractId, methodNames: viewMethods},
       environment.near.app,
       window.location.href);
   }
@@ -102,8 +104,26 @@ export class NearService {
     return this.getViewFunction('fetch_all_creatives');
   }
 
+  fetchAllPresentaions(): Promise<any> {
+    return this.getViewFunction('fetch_all_presentations');
+  }
+
   getViewFunction(methodName: string, args?: any): Promise<any> {
     return this.account.viewFunction(environment.near.contractId, methodName, args)
   }
-
+  /** record_id equal playbackid **/
+  /** Publisher its a near accountid **/
+  async do_agreement(playback_id: number, adId: number, blockchain_ref: number, from_time: DateTime, to_time: DateTime, publisher: string): Promise<any> {
+    await this.contract.do_agreement({
+      args: {
+        adspace_id: adId,
+        creative_id: blockchain_ref,
+        start_time: +from_time,
+        end_time: +to_time,
+        publisher_id: publisher
+      },
+      accountId: this.getAccountId(),
+      amount: utils.format.parseNearAmount('0.001') // 1000000000000000000000
+    });
+  }
 }
