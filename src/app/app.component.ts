@@ -15,7 +15,9 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'Meta-Add';
   version = appVersion;
   user: string = '';
+  metaMaskSigned: boolean = false;
   currentState: CurrentState = 'full';
+  signed: boolean = false;
   explorerNearUrl = `${environment.near.explorerUrl}/accounts`;
   private subscriptions = new Subscription();
 
@@ -25,20 +27,21 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.nearService.nearConnect().then(() => {
-      this.appService.setSignIn();
+      this.signed = this.appService.setSignIn();
     });
 
     this.subscriptions.add(
       this.appService.nearAccountId$.subscribe(result => {
         this.user = result;
         if (result) {
-          this.authService.tempLogin(result);
           this.explorerNearUrl = `${this.explorerNearUrl}/${result}`;
-        } else {
-          this.authService.setToken('');
         }
       })
+    );    
+    this.subscriptions.add(
+      this.appService.signed$.subscribe(value => this.signed = value)
     );
+    this.metaMaskSigned = this.authService.metaMaskSigned;
   }
 
   nearLogin() {
@@ -48,8 +51,26 @@ export class AppComponent implements OnInit, OnDestroy {
     );
   }
 
-  nearLogout() {
+  metaMaskLogin() {
+    this.authService
+      .loginMetaMask(this.user)
+      .then((address) => {
+        this.metaMaskSigned = !!address;
+        this.appService.refreshLogin(this.logined);
+      })
+      .catch((e) => {
+        console.log(e);
+        this.metaMaskSigned = false;
+      });
+  }
+
+  get logined(): boolean {
+    return this.metaMaskSigned && !!this.user
+  }
+
+  logout() {
     this.appService.signOut();
+    this.metaMaskSigned = false;
   }
 
   resizeProfilePanel() {

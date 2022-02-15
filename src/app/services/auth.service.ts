@@ -1,73 +1,51 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs/index';
 import {environment} from '../../environments/environment';
-import {map} from 'rxjs/operators';
+import Web3 from 'web3';
+import detectEthereumProvider from '@metamask/detect-provider';
+import * as Web3Token from "web3-token";
 
-interface Authorization {
-  Authorization: string
-}
-
-const lsKey = 'ma-token';
+const lsKeyMetaMask = 'web3token';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-  private authorization = new BehaviorSubject<string>('');
+  authorization = new BehaviorSubject<string>('');
   authorization$ = this.authorization.asObservable();
 
   api = environment.tornado_api;
 
-  constructor(private httpClient: HttpClient) {}
-
-  /** unused **/
-  serverLogin(login: string, pass: string): Observable<string> {
-    return this.httpClient.post<Authorization>(`${this.api}/login`, {"login": login, "password": pass})
-      .pipe(
-        map(value => {return value.Authorization.split(' ')[1]})
-      )
-  }
-
-  tempLogin(login: string) {
-    this.httpClient.post<Authorization>(`${this.api}/login`, {"login": login})
-      .pipe(
-        map(value => {
-          return value.Authorization.split(' ')[1]
-        })
-      )
-      .subscribe(value => this.setToken(value))
-  }
-
-  /** unused */
-  loadToken(): boolean {
-    const token = this.getToken();
-    if (token) {
-      this.authorization.next(token);
-      return true
-    } else {
-      return false;
-    }
-  }
+  constructor() {}
 
   setToken(token: string) {
-    localStorage.setItem(lsKey, token);
+    localStorage.setItem(lsKeyMetaMask, token);
     this.authorization.next(token);
   }
 
   getToken(): string | null {
-    let token = this.authorization.value;
-    if (token) {
-      return token;
-    } else {
-      token = localStorage.getItem(lsKey) || '';
-      if (token) {
-        this.authorization.next(token);
-      }
-      return token;
-    }
+    return localStorage.getItem(lsKeyMetaMask);
   }
 
-  clearTokenInStorage() {
-    localStorage.removeItem(lsKey);
+  logOut() {
+    localStorage.removeItem(lsKeyMetaMask);
+  }
+
+  get metaMaskSigned(): boolean {
+    return !!this.getToken();
+  }
+
+  async loginMetaMask(login: string) {
+    const ethereum: any = await detectEthereumProvider();
+    const web3 = new Web3(ethereum);
+    await ethereum.request({ method: 'eth_requestAccounts' });
+    // getting address from which we will sign message
+    var accounts = await web3.eth.getAccounts();
+    const address = accounts[0];
+    const token: any = await Web3Token.sign(
+      (msg) => web3.eth.personal.sign(msg, address, ''),
+      { expires_in: '1d', statement: login }
+    );
+    this.setToken(token);
+    return address;
   }
 }
 

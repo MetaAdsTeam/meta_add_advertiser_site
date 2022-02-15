@@ -22,7 +22,7 @@ export class ConnectComponent implements OnInit {
 
   connect() {
     this.subscriptions.add(
-      this.appService.signIn()
+      this.appService.signInNear()
         .subscribe((result) => {
           this.close(result)
         },
