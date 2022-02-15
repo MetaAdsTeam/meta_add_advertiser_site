@@ -1,8 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Adspot} from '../../model';
-import {PlaceAdStorageModel} from '../../model/place-ad-storage.model';
+import {Adspot, PlaceAdStorageModel, PayDataStorageModel} from '../../model';
 import {StorageService} from '../../services';
-import {PayDataStorageModel} from '../../model/pay-data.storage.model';
 
 type SelectedAddInfoType = 'desc' | 'history';
 

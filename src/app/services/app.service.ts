@@ -7,18 +7,16 @@ import {
   TimeslotList,
   Creative,
   CreativeBE,
-  PlaceAdStorageModel,
-  PlaybackBody
+  PlaybackBody,
+  Playback
 } from '../model';
-import {ConnectComponent} from '../connect/connect.component';
-import {MatDialog} from '@angular/material/dialog';
 import {NearService} from './near.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {DateTime} from 'luxon';
 import {AuthService} from './auth.service';
-import {Playback} from '../model/playback.model';
+import {PopupService} from './popup.service';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
@@ -29,30 +27,23 @@ export class AppService {
 
   api = environment.tornado_api;
 
-  constructor(private dialog: MatDialog,
-              private nearService: NearService,
+  constructor(private nearService: NearService,
               private httpClient: HttpClient,
-              private authService: AuthService) {}
+              private authService: AuthService,
+              private popupService: PopupService) {}
 
   nearLogin(): Observable<boolean> {
-    const dialogRef = this.dialog.open(ConnectComponent, {
-      width: '592px',
-      height: '418px',
-      maxHeight: '100%',
-      // disableClose: true,
-      // panelClass: 'connect-dialog-panel',
-      backdropClass: 'modal-backdrop'
-    });
-    return dialogRef.afterClosed()
+    return this.popupService.popupNearLogin();
   }
 
-  signIn(): Observable<boolean> {
+  signInNear(): Observable<boolean> {
     const accountId = this.nearService.getAccountId();
     let signed = false;
+    const token = this.authService.getToken();
     if (!accountId) {
       this.nearService.nearSignIn();
       // signed = false;
-    } else {
+    } else if (token) {
       signed = true
     }
 
@@ -62,16 +53,22 @@ export class AppService {
     return of(signed);
   }
 
+  refreshLogin(signed: boolean) {
+    this.signed.next(signed);
+  }
+
   setSignIn() {
     const accountId = this.nearService.getAccountId();
-    const signed = !(!accountId);
+    const token = this.authService.getToken();
+    const signed = !(!accountId) && !(!token);
     this.signed.next(signed);
     this.nearAccountId.next(accountId);
-    this.authService.clearTokenInStorage();
+    return signed;
   }
 
   signOut() {
     this.nearService.nearSignOut();
+    this.authService.logOut();
     this.signed.next(false);
     this.nearAccountId.next('');
   }
@@ -123,5 +120,9 @@ export class AppService {
 
   markPlaybackAsNft(playbackId: number, status: string, smartContract: number): Observable<any> {
     return this.httpClient.put(`${this.api}/playback/id/${playbackId}`, {status: status, smart_contract: smartContract.toString()})
+  }
+
+  getCreative(id: number): Observable<Creative> {
+    return this.httpClient.get<Creative>(`${this.api}/creative/id/${id}`)
   }
 }

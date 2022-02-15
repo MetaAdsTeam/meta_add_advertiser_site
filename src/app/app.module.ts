@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import {MaterialModule} from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {AdSpaceComponent} from './ad-space/ad-space.component';
-import {ConnectComponent} from './connect/connect.component';
+import {ConnectComponent} from './popup-components/connect.component';
 import {MainPageComponent} from './main-page/main-page.component';
 import {MatIconRegistry} from '@angular/material/icon';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
@@ -16,11 +16,13 @@ import {CustomHeader} from './ad-space/custom-header/calendar-custom-header';
 import {DateFormatPipe} from './pipes';
 import {AuthorizationInterceptor, NotAuthorizedInterceptor} from './interceptors';
 import {MAT_DATE_LOCALE} from '@angular/material/core';
-import {ProgressPopupComponent} from './progress-popup/progress-popup.component';
+import {ProgressPopupComponent} from './popup-components/progress-popup.component';
 import {PlaceAdComponent} from './ad-space/place-ad/place-ad.component';
 import {RegisteredComponent} from './ad-space/registered/registered.component';
 import {UnregisteredComponent} from './ad-space/unregistered/unregistered.component';
 import {CreativesComponent} from './creatives/creatives.component';
+import {MessagePopupComponent} from './popup-components/message-popup.component';
+import {CreativeDetailsComponent} from './creative-details/creative-details.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import {CreativesComponent} from './creatives/creatives.component';
     PlaceAdComponent,
     RegisteredComponent,
     UnregisteredComponent,
-    CreativesComponent
+    CreativesComponent,
+    MessagePopupComponent,
+    CreativeDetailsComponent
   ],
   imports: [
     BrowserModule,

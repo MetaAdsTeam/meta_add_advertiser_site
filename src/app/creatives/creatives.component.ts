@@ -4,6 +4,7 @@ import {AppService, AuthService} from '../services';
 import {Subscription} from 'rxjs';
 import {Creative} from '../model';
 import {finalize} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-creatives',
@@ -16,9 +17,11 @@ export class CreativesComponent implements OnInit, OnDestroy {
   sortType: 'status' | 'id';
   creatives: Creative[];
   loading: boolean; /* not used */
+  filteredCreatives: Creative[];
 
   constructor(private appService: AppService,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private router: Router) { }
 
   ngOnInit() {
     this.subscriptions.add(
@@ -36,17 +39,34 @@ export class CreativesComponent implements OnInit, OnDestroy {
       .pipe(
         finalize(() => this.loading = false)
       )
-      .subscribe(value => this.creatives = value)
+      .subscribe(value => {
+        this.creatives = value;
+        this.filteredCreatives = value;
+      })
   }
 
   parseSearch(searchValue: string) {
-
+    this.filteredCreatives = this.creatives.filter(cr => cr.name.toLowerCase().includes(searchValue.toLowerCase().trim()))
   }
 
-  sorting() { }
+  sorting() {
+    if (this.sortType === 'id') {
+      this.filteredCreatives = this.filteredCreatives.sort((a, b) => {
+        return (a.id < b.id) ? 1 : -1;
+      });
+    } else if (this.sortType === 'status') {
+      this.filteredCreatives = this.filteredCreatives.sort((a, b) => {
+        return a.blockchain_ref ? -1 : 1;
+      });
+    }
+  }
 
   deleteCreatives(cr: Creative) {
 
+  }
+
+  goToDetails(id: number) {
+    this.router.navigate([`/creative/${id}`])
   }
 
   ngOnDestroy() {

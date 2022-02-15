@@ -66,6 +66,7 @@
   align-items: center;
   padding-bottom: 24px;
   &__link {
+<<<<<<< HEAD
     font-style: normal;
     font-weight: 100;
     font-size: 18px;
@@ -73,11 +74,23 @@
     letter-spacing: -0.7px;
     color: #e7e7e8;
     padding-left: 10px;
+=======
+    color: #fff;
+    font-size: 18px;
+    font-family: 'Nexa';
+>>>>>>> d491fbcb498225e46befbda6accd179c5956a621
   }
 
   &__link2 {
     color: #636a77;
     font-size: 13px;
+  }
+}
+
+a.active {
+  span {
+    color: #3888ff;
+    font-weight: bold;
   }
 }
 
