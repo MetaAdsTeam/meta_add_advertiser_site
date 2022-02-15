@@ -20,24 +20,12 @@ export class MainPageComponent implements OnInit, OnDestroy {
   loading = false; // not used
 
   constructor(private appService: AppService,
-              private authService: AuthService,
               private router: Router) { }
 
   ngOnInit(): void {
+    this.loadAds();
     this.subscriptions.add(
       this.appService.signed$.subscribe(value => this.signed = value)
-    );
-    this.subscriptions.add(
-      this.authService.authorization$.subscribe(
-        value => {
-          if (value) {
-            this.loadAds()
-          }
-        },
-        (error: HttpErrorResponse) => {
-          console.log(error);
-        }
-      )
     );
   }
 

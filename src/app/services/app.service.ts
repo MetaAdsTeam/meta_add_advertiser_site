@@ -36,13 +36,14 @@ export class AppService {
     return this.popupService.popupNearLogin();
   }
 
-  signIn(): Observable<boolean> {
+  signInNear(): Observable<boolean> {
     const accountId = this.nearService.getAccountId();
     let signed = false;
+    const token = this.authService.getToken();
     if (!accountId) {
       this.nearService.nearSignIn();
       // signed = false;
-    } else {
+    } else if (token) {
       signed = true
     }
 
@@ -52,16 +53,22 @@ export class AppService {
     return of(signed);
   }
 
+  refreshLogin(signed: boolean) {
+    this.signed.next(signed);
+  }
+
   setSignIn() {
     const accountId = this.nearService.getAccountId();
-    const signed = !(!accountId);
+    const token = this.authService.getToken();
+    const signed = !(!accountId) && !(!token);
     this.signed.next(signed);
     this.nearAccountId.next(accountId);
-    this.authService.clearTokenInStorage();
+    return signed;
   }
 
   signOut() {
     this.nearService.nearSignOut();
+    this.authService.logOut();
     this.signed.next(false);
     this.nearAccountId.next('');
   }
