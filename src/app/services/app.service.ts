@@ -57,6 +57,10 @@ export class AppService {
     this.signed.next(signed);
   }
 
+  isSigned(): boolean {
+    return this.signed.value;
+  }
+
   setSignIn() {
     const accountId = this.nearService.getAccountId();
     const token = this.authService.getToken();
