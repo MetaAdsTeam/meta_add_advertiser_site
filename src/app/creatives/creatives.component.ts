@@ -4,6 +4,7 @@ import {AppService, AuthService} from '../services';
 import {Subscription} from 'rxjs';
 import {Creative} from '../model';
 import {finalize} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-creatives',
@@ -18,7 +19,8 @@ export class CreativesComponent implements OnInit, OnDestroy {
   loading: boolean; /* not used */
 
   constructor(private appService: AppService,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private router: Router) { }
 
   ngOnInit() {
     this.subscriptions.add(
@@ -47,6 +49,10 @@ export class CreativesComponent implements OnInit, OnDestroy {
 
   deleteCreatives(cr: Creative) {
 
+  }
+
+  goToDetails(id: number) {
+    this.router.navigate([`/creative/${id}`])
   }
 
   ngOnDestroy() {

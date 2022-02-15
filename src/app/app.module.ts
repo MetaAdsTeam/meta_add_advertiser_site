@@ -22,6 +22,7 @@ import {RegisteredComponent} from './ad-space/registered/registered.component';
 import {UnregisteredComponent} from './ad-space/unregistered/unregistered.component';
 import {CreativesComponent} from './creatives/creatives.component';
 import {MessagePopupComponent} from './popup-components/message-popup.component';
+import {CreativeDetailsComponent} from './creative-details/creative-details.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {MessagePopupComponent} from './popup-components/message-popup.component'
     RegisteredComponent,
     UnregisteredComponent,
     CreativesComponent,
-    MessagePopupComponent
+    MessagePopupComponent,
+    CreativeDetailsComponent
   ],
   imports: [
     BrowserModule,

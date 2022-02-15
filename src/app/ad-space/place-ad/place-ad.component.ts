@@ -7,15 +7,14 @@ import {
   Creative,
   NftCreative,
   Timeslot,
-  NftCreativeList,
   PlaceAdStorageModel,
-  NftPlaybackList, NftPlayback,
+  NftPlayback,
   PayDataStorageModel
 } from '../../model';
 import {HttpErrorResponse, HttpEventType} from '@angular/common/http';
 import {finalize, map} from 'rxjs/operators';
 import {AppService, NearService, StorageService, ProgressService, PopupService} from '../../services';
-import {Subscription, Observable, of, forkJoin} from 'rxjs';
+import {Subscription, Observable, of} from 'rxjs';
 
 
 interface TimeslotsByType {
@@ -60,15 +59,14 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.add(
-      forkJoin([this.loadTimeslots(), this.loadCreatives()])
+      this.loadCreatives()
         .pipe(
           finalize(() => {
             /** remove creative not in blockchain **/
             this.creatives = this.creatives.filter(c => c.blockchain_ref)
           })
         )
-        .subscribe(([timeslots, creatives]) => {
-          this.timeslots = timeslots;
+        .subscribe(creatives => {
           this.creatives = creatives;
           if (this.savedPlaceAd) {
             this.initSavedPlaceAd();
@@ -105,7 +103,9 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
             this.subscriptions.add(
               this.sendPlaybackBlockchainInfoToServer(this.savedPayData!!.playbackId, res.status, res.playback_id)
                 .subscribe(
-                  () => this.popupService.popupMessage('Transaction successful', 'Got it!'),
+                  () => {
+                    this.popupService.popupMessage('Transaction successful', 'Got it!')
+                  },
                   (error: HttpErrorResponse) => {
                     alert(`Error: ${error.statusText}`);
                   })
@@ -120,17 +120,22 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
       saved.accountId === this.nearService.getAccountId() &&
       saved.adId === this.ad.id ) {
       this.selectedDate = DateTime.fromISO(saved.dateISO);
-      let timeslot: any;
-      const from_time = saved.timeslotFromTimeISO;
-      if (this.timeslots.am.length > 0) {
-        timeslot = this.timeslots.am.find(t => +t.from_time === +DateTime.fromISO(from_time));
-      }
-      if (!timeslot && this.timeslots.pm.length > 0) {
-        timeslot = this.timeslots.pm.find(t => +t.from_time === +DateTime.fromISO(from_time));
-      }
-      this.selectedTimeslot = timeslot;
+      this.subscriptions.add(
+        this.loadTimeslots()
+          .subscribe(value => {
+            this.timeslots = value;
+            let timeslot: any;
+            const from_time = saved.timeslotFromTimeISO;
+            if (this.timeslots.am.length > 0) {
+              timeslot = this.timeslots.am.find(t => +t.from_time === +DateTime.fromISO(from_time));
+            }
+            if (!timeslot && this.timeslots.pm.length > 0) {
+              timeslot = this.timeslots.pm.find(t => +t.from_time === +DateTime.fromISO(from_time));
+            }
+            this.selectedTimeslot = timeslot;
+          })
+      );
       this.selectedCreativeId = saved.creativeId;
-      console.log('saved', saved);
     }
   }
 
@@ -139,14 +144,12 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   }
 
   selectDate(event: any) {
-    console.log(event);
     this.loadTimeslots().subscribe(
       value => this.timeslots = value
     );
   }
 
   loadTimeslots(): Observable<TimeslotsByType> {
-    console.log('ad', this.ad);
     if (this.ad) {
       const minAvailableTime = DateTime.now().plus({minutes: 3});
       const today = DateTime.now().set({hour: 0, minute: 0, second: 0, millisecond: 0});
@@ -305,7 +308,6 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
         play_price: this.ad.price
         })
         .subscribe(value => {
-          console.log('pay', value);
           /** save data to storage **/
           this.storageService.savePayDataToStorage({
             accountId: this.nearService.getAccountId(),
@@ -330,7 +332,6 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
               alert(`do_agreement error: ${err}`);
               this.storageService.clearPayDataInStorage();
             });
-            
         });
     } else {
       alert('Creative not in blockchain');
@@ -345,7 +346,8 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
 
   /** test **/
   test() {
-    this.nearService.fetchAllCreatives().then(res => console.log(res))
+    // this.nearService.fetchAllCreatives().then(res => console.log(res))
+    this.nearService.fetchAllPresentations().then(res => console.log(res))
   }
 
   mark() {
