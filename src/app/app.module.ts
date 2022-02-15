@@ -16,23 +16,15 @@ import {CustomHeader} from './ad-space/custom-header/calendar-custom-header';
 import {DateFormatPipe} from './pipes';
 import {AuthorizationInterceptor, NotAuthorizedInterceptor} from './interceptors';
 import {MAT_DATE_LOCALE} from '@angular/material/core';
-import {ProgressPopupComponent} from './popup-components/progress-popup.component';
-import {PlaceAdComponent} from './ad-space/place-ad/place-ad.component';
-import {RegisteredComponent} from './ad-space/registered/registered.component';
-import {UnregisteredComponent} from './ad-space/unregistered/unregistered.component';
-import {CreativesComponent} from './creatives/creatives.component';
-import {MessagePopupComponent} from './popup-components/message-popup.component';
-import {CreativeDetailsComponent} from './creative-details/creative-details.component';
-import {AuthService} from './services';
-import {ProgressPopupComponent} from './popup-components/progress-popup.component';
-import {PlaceAdComponent} from './ad-space/place-ad/place-ad.component';
-import {RegisteredComponent} from './ad-space/registered/registered.component';
-import {UnregisteredComponent} from './ad-space/unregistered/unregistered.component';
-import {CreativesComponent} from './creatives/creatives.component';
-import {MessagePopupComponent} from './popup-components/message-popup.component';
-import {CreativeDetailsComponent} from './creative-details/creative-details.component';
-import {AuthService} from './services';
 import {AuthGuard} from './auth.guard';
+import {ProgressPopupComponent} from './popup-components/progress-popup.component';
+import {RegisteredComponent} from './ad-space/registered/registered.component';
+import {CreativesComponent} from './creatives/creatives.component';
+import {MessagePopupComponent} from './popup-components/message-popup.component';
+import {CreativeDetailsComponent} from './creative-details/creative-details.component';
+import {PlaceAdComponent} from './ad-space/place-ad/place-ad.component';
+import {UnregisteredComponent} from './ad-space/unregistered/unregistered.component';
+import {AuthService} from './services';
 
 @NgModule({
   declarations: [
