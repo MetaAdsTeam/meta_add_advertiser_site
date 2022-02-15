@@ -7,6 +7,7 @@
              placeholder="Search..."
              [formControl]="search"
              autocomplete="off"
+             (keyup)="parseSearch(search.value)"
              (keyup.enter)="parseSearch(search.value)">
       <button mat-icon-button
               matSuffix
@@ -23,7 +24,7 @@
     </mat-form-field>
   </div>
   <div>
-    <ng-container *ngFor="let cr of creatives">
+    <ng-container *ngFor="let cr of filteredCreatives">
       <video controls>
         <source [src]="cr.url" type="video/webm">
       </video>
