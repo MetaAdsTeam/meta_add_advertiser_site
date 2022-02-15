@@ -9,13 +9,14 @@ import {
   Timeslot,
   NftCreativeList,
   PlaceAdStorageModel,
-  NftPlaybackList, NftPlayback
+  NftPlaybackList, NftPlayback,
+  PayDataStorageModel
 } from '../../model';
 import {HttpErrorResponse, HttpEventType} from '@angular/common/http';
 import {finalize, map} from 'rxjs/operators';
-import {AppService, NearService, StorageService, ProgressService} from '../../services';
+import {AppService, NearService, StorageService, ProgressService, PopupService} from '../../services';
 import {Subscription, Observable, of, forkJoin} from 'rxjs';
-import {PayDataStorageModel} from '../../model/pay-data.storage.model';
+
 
 interface TimeslotsByType {
   am: Timeslot[],
@@ -54,16 +55,26 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   constructor(private appService: AppService,
               private nearService: NearService,
               private progressService: ProgressService,
-              private storageService: StorageService) { }
+              private storageService: StorageService,
+              private popupService: PopupService) { }
 
   ngOnInit() {
     this.subscriptions.add(
       forkJoin([this.loadTimeslots(), this.loadCreatives()])
-        .pipe()
+        .pipe(
+          finalize(() => {
+            /** remove creative not in blockchain **/
+            this.creatives = this.creatives.filter(c => c.blockchain_ref)
+          })
+        )
         .subscribe(([timeslots, creatives]) => {
           this.timeslots = timeslots;
           this.creatives = creatives;
-          this.initSavedPlaceAd();
+          if (this.savedPlaceAd) {
+            this.initSavedPlaceAd();
+          } else if (this.savedPayData) {
+            this.initSavedPayData();
+          }
         })
     );
   }
@@ -73,13 +84,14 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
     if (this.selectedCreativeId) {
       const selectedCreative = this.creatives.find(c => c.id === this.selectedCreativeId);
       if (selectedCreative) {
-        this.markCreativeAsNft(this.selectedCreativeId).then((res: NftCreativeList) => {
-          const rec: NftCreative = res[this.selectedCreativeId!!];
-          if (rec.creative_id) {
-            selectedCreative.blockchain_ref = rec.creative_id;
+        this.markCreativeAsNft(this.selectedCreativeId).then((res: NftCreative) => {
+          if (res) {
+            selectedCreative.blockchain_ref = res.creative_id;
             this.sendCreativeBlockchainRefToServer(selectedCreative.id, selectedCreative.blockchain_ref.toString());
           }
         });
+      } else {
+        this.selectedCreativeId = undefined;
       }
     }
   }
@@ -88,13 +100,12 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
     this.initSavedData(this.savedPayData);
     if (this.savedPayData && this.savedPayData.playbackId) {
       this.markPlaybackAsNft(this.savedPayData.playbackId)
-        .then((res: NftPlaybackList) => {
-          const rec: NftPlayback = res[this.savedPayData!!.playbackId];
-          if (rec) {
+        .then((res: NftPlayback) => {
+          if (res) {
             this.subscriptions.add(
-              this.sendPlaybackBlockchainInfoToServer(this.savedPayData!!.playbackId, rec.status, rec.playback_id)
+              this.sendPlaybackBlockchainInfoToServer(this.savedPayData!!.playbackId, res.status, res.playback_id)
                 .subscribe(
-                  value => alert('Success'),
+                  () => this.popupService.popupMessage('Transaction successful', 'Got it!'),
                   (error: HttpErrorResponse) => {
                     alert(`Error: ${error.statusText}`);
                   })
@@ -119,6 +130,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
       }
       this.selectedTimeslot = timeslot;
       this.selectedCreativeId = saved.creativeId;
+      console.log('saved', saved);
     }
   }
 
@@ -163,11 +175,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   }
 
   loadCreatives(): Observable<Creative[]> {
-    return this.appService.getCreatives().pipe(
-      map((cArr: Creative[]) => {
-        return cArr.filter(c => c.blockchain_ref )
-      })
-    );
+    return this.appService.getCreatives();
   }
 
   showCreatingPanel(state: boolean | undefined = undefined) {
@@ -297,6 +305,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
         play_price: this.ad.price
         })
         .subscribe(value => {
+          console.log('pay', value);
           /** save data to storage **/
           this.storageService.savePayDataToStorage({
             accountId: this.nearService.getAccountId(),
@@ -307,19 +316,21 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
             playbackId: value.id
           });
 
+          /** create mint **/
           this.nearService.do_agreement(
             value.id,
             this.ad.id,
             +blockchainRef,
             this.selectedTimeslot.from_time,
             this.selectedTimeslot.to_time,
-            10// this.ad.price  // todo: replace hardcode
+            this.ad.price
           ).then(
             res => console.log(res),
             err => {
               alert(`do_agreement error: ${err}`);
               this.storageService.clearPayDataInStorage();
             });
+            
         });
     } else {
       alert('Creative not in blockchain');
@@ -331,4 +342,28 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
       this.subscriptions.unsubscribe();
     }
   }
+
+  /** test **/
+  test() {
+    this.nearService.fetchAllCreatives().then(res => console.log(res))
+  }
+
+  mark() {
+    if (this.selectedCreativeId) {
+      const selectedCreative = this.creatives.find(c => c.id === this.selectedCreativeId);
+      console.log('selectedCreative',  selectedCreative);
+      if (selectedCreative) {
+        this.markCreativeAsNft(this.selectedCreativeId).then((res: NftCreative) => {
+          console.log('res', res);
+          if (res) {
+            selectedCreative.blockchain_ref = res.creative_id;
+            this.sendCreativeBlockchainRefToServer(selectedCreative.id, selectedCreative.blockchain_ref.toString());
+          }
+        });
+      } else {
+        this.selectedCreativeId = undefined;
+      }
+    }
+  }
+
 }

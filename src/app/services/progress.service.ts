@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {MatDialog} from '@angular/material/dialog';
-import {ProgressPopupComponent} from '../progress-popup/progress-popup.component';
+import {PopupService} from './popup.service';
 
 export interface ProgressData {
   close: boolean,
@@ -13,7 +12,7 @@ export class ProgressService {
   private progressData = new BehaviorSubject<ProgressData | null>(null);
   progressData$ = this.progressData.asObservable();
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private popupService: PopupService) { }
 
   private setData(close: boolean, data: string = '') {
     this.progressData.next({close, data})
@@ -31,12 +30,6 @@ export class ProgressService {
   }
 
   showProgressPopup() {
-    this.dialog.open(ProgressPopupComponent, {
-      width: '592px',
-      height: '418px',
-      maxHeight: '100%',
-      disableClose: true,
-      backdropClass: 'modal-backdrop'
-    });
+    this.popupService.popupProgress();
   }
 }
