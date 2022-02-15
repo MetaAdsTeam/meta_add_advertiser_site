@@ -7,18 +7,16 @@ import {
   TimeslotList,
   Creative,
   CreativeBE,
-  PlaceAdStorageModel,
-  PlaybackBody
+  PlaybackBody,
+  Playback
 } from '../model';
-import {ConnectComponent} from '../connect/connect.component';
-import {MatDialog} from '@angular/material/dialog';
 import {NearService} from './near.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {DateTime} from 'luxon';
 import {AuthService} from './auth.service';
-import {Playback} from '../model/playback.model';
+import {PopupService} from './popup.service';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
@@ -29,21 +27,13 @@ export class AppService {
 
   api = environment.tornado_api;
 
-  constructor(private dialog: MatDialog,
-              private nearService: NearService,
+  constructor(private nearService: NearService,
               private httpClient: HttpClient,
-              private authService: AuthService) {}
+              private authService: AuthService,
+              private popupService: PopupService) {}
 
   nearLogin(): Observable<boolean> {
-    const dialogRef = this.dialog.open(ConnectComponent, {
-      width: '592px',
-      height: '418px',
-      maxHeight: '100%',
-      // disableClose: true,
-      // panelClass: 'connect-dialog-panel',
-      backdropClass: 'modal-backdrop'
-    });
-    return dialogRef.afterClosed()
+    return this.popupService.popupNearLogin();
   }
 
   signIn(): Observable<boolean> {

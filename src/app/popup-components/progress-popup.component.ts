@@ -1,12 +1,28 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Subscription} from 'rxjs/internal/Subscription';
-import {ProgressService} from '../services/progress.service';
+import {Subscription} from 'rxjs';
+import {ProgressService} from '../services';
 
 @Component({
   selector: 'app-progress',
-  templateUrl: './progress-popup.component.html',
-  styleUrls: ['./progress-popup.component.scss']
+  template: `
+    <div class="progress">
+      <span>{{ dynamicData }}</span>
+    </div>
+  `,
+  styles: [`
+    .progress {
+      background: #2a2931;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      span {
+        color: white;
+        font-size: 30px;
+      }
+    }
+  `]
 })
 export class ProgressPopupComponent implements OnInit, OnDestroy {
   dynamicData: string | undefined;

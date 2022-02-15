@@ -11,7 +11,7 @@
 
         <mat-nav-list class="app-user-menu">
           <a mat-list-item
-             [routerLink]="'/'"
+             [routerLink]="'ad-space'"
              routerLinkActive
              #rla0="routerLinkActive"
              [class.active]="rla0.isActive"
@@ -23,7 +23,8 @@
           <a mat-list-item
              [routerLink]="['creatives']"
              routerLinkActive #rla1="routerLinkActive"
-             [class.active]="rla1.isActive">
+             [class.active]="rla1.isActive"
+             class="app-user-menu-item">
             <img src="assets/images/my-ad.svg" alt="my-ad">
             <span *ngIf="currentState === 'full'"
                   class="app-user-menu-item__link">My Ad Creatives</span>

@@ -65,11 +65,20 @@
   }
   &__link {
     color: #fff;
+    font-size: 18px;
+    font-family: 'Nexa';
   }
 
   &__link2 {
     color: #636A77;
     font-size: 13px;
+  }
+}
+
+a.active {
+  span {
+    color: #3888ff;
+    font-weight: bold;
   }
 }
 
