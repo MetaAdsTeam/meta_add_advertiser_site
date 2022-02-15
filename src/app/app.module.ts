@@ -24,6 +24,7 @@ import {CreativesComponent} from './creatives/creatives.component';
 import {MessagePopupComponent} from './popup-components/message-popup.component';
 import {CreativeDetailsComponent} from './creative-details/creative-details.component';
 import {AuthService} from './services';
+import {AuthGuard} from './auth.guard';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import {AuthService} from './services';
     {
       provide: MAT_DATE_LOCALE, useValue: 'en-GB'
     },
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })
