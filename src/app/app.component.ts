@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {appVersion} from '../environments/app-version';
 import {Subscription} from 'rxjs';
-import {AppService, AuthService, NearService} from './services';
+import {AppService, AuthService, NearService, PopupService} from './services';
 import {environment} from '../environments/environment';
 
 type CurrentState = 'full' | 'minimized';
@@ -23,7 +23,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private appService: AppService,
               private authService: AuthService,
-              private nearService: NearService) { }
+              private nearService: NearService,
+              private popupService: PopupService) {
+    if (!this.authService.isEthereumProviderAvailable()) {
+      this.popupService.popupMessage('Metamask extension is unavailable', 'Ok');
+    }
+  }
 
   ngOnInit() {
     this.nearService.nearConnect().then(() => {
@@ -37,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
           this.explorerNearUrl = `${this.explorerNearUrl}/${result}`;
         }
       })
-    );    
+    );
     this.subscriptions.add(
       this.appService.signed$.subscribe(value => this.signed = value)
     );
@@ -57,9 +62,11 @@ export class AppComponent implements OnInit, OnDestroy {
       .then((address) => {
         this.metaMaskSigned = !!address;
         this.appService.refreshLogin(this.logined);
+        if (!address) this.popupService.popupMessage('Metamask extension is unavailable', 'Ok');
       })
       .catch((e) => {
         console.log(e);
+        if (e.code = -32002) this.popupService.popupMessage('Please, login to Metamask', 'Ok');
         this.metaMaskSigned = false;
       });
   }

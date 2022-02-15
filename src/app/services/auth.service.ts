@@ -11,6 +11,7 @@ const lsKeyMetaMask = 'web3token';
 export class AuthService {
   authorization = new BehaviorSubject<string>('');
   authorization$ = this.authorization.asObservable();
+  private ethereum: any;
 
   api = environment.tornado_api;
 
@@ -29,23 +30,34 @@ export class AuthService {
     localStorage.removeItem(lsKeyMetaMask);
   }
 
+  async detectEthereumProvider() {
+    this.ethereum = await detectEthereumProvider();
+  }
+
+  isEthereumProviderAvailable(): boolean {
+    return !!this.ethereum;
+  }
+
   get metaMaskSigned(): boolean {
     return !!this.getToken();
   }
 
   async loginMetaMask(login: string) {
-    const ethereum: any = await detectEthereumProvider();
-    const web3 = new Web3(ethereum);
-    await ethereum.request({ method: 'eth_requestAccounts' });
-    // getting address from which we will sign message
-    var accounts = await web3.eth.getAccounts();
-    const address = accounts[0];
-    const token: any = await Web3Token.sign(
-      (msg) => web3.eth.personal.sign(msg, address, ''),
-      { expires_in: '1d', statement: login }
-    );
-    this.setToken(token);
-    return address;
+    if (this.ethereum) {
+      const web3 = new Web3(this.ethereum);
+      await this.ethereum.request({ method: 'eth_requestAccounts' });
+      // getting address from which we will sign message
+      const accounts = await web3.eth.getAccounts();
+      const address = accounts[0];
+      const token = await Web3Token.sign(
+        msg => web3.eth.personal.sign(msg, address, ''),
+        { expires_in: '1d', statement: login }
+      );
+      this.setToken(token);
+      return address;
+    } else {
+      return ''
+    }
   }
 }
 
