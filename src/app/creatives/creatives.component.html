@@ -1,7 +1,7 @@
-<div>
-  <span>Creatives</span>
-  <div>
-    <button mat-flat-button class="mat-primary">New</button>
+<div class="page-wrapper">
+  <h2 class="page-title">Creatives</h2>
+  <div class="form-wrapper">
+    <button class="button-search">New</button>
     <mat-form-field matTooltip="Search creatives" class="custom-form-field" appearance="outline">
       <input matInput type="text"
              placeholder="Search..."
@@ -22,18 +22,20 @@
       </mat-select>
     </mat-form-field>
   </div>
-  <div>
-    <ng-container *ngFor="let cr of creatives">
+  <div class="ad-grid">
+    <div class="ad-grid__item" *ngFor="let cr of creatives">
+    <ng-container >
       <video controls>
         <source [src]="cr.url" type="video/webm">
       </video>
-      <div>
-        <span>s</span>
+      <div class="ad-grid__description">
+        <span class="ad-grid__status success"><!--status color: success, orange, grey--></span>
         <span>{{cr.name}} - {{cr.description}}</span>
         <button mat-icon-button (click)="deleteCreatives(cr)">
           <mat-icon svgIcon="delete"></mat-icon>
         </button>
       </div>
     </ng-container>
+    </div>
   </div>
 </div>

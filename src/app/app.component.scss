@@ -4,7 +4,7 @@
   justify-content: space-between;
   width: 100%;
   // max-width: 262px;
-  background: #2A2931;
+  background: #2a2931;
   // padding: 64px 40px;
 
   &__minimize {
@@ -34,14 +34,13 @@
   &__uname {
     padding-top: 16px;
     align-self: center;
-    font-family: Nexa;
     font-style: normal;
     font-weight: normal;
     font-size: 15px;
     line-height: 110%;
     text-align: center;
     letter-spacing: -0.7px;
-    color: #636A77;
+    color: #636a77;
     width: 100%;
     min-width: 72px;
     text-overflow: ellipsis;
@@ -55,20 +54,29 @@
   flex-direction: column;
 }
 
+// .active {
+//   .app-user-menu-item__link {
+//     color: #347ce8;
+//   }
+// }
+
 .app-user-menu-item {
   display: flex;
   flex-direction: row;
   align-items: center;
   padding-bottom: 24px;
-  span {
-    padding-left: 10px;
-  }
   &__link {
-    color: #fff;
+    font-style: normal;
+    font-weight: 100;
+    font-size: 18px;
+    line-height: 110%;
+    letter-spacing: -0.7px;
+    color: #e7e7e8;
+    padding-left: 10px;
   }
 
   &__link2 {
-    color: #636A77;
+    color: #636a77;
     font-size: 13px;
   }
 }
@@ -161,15 +169,14 @@
   }
 
   button {
-    border-color: #636A77;
+    border-color: #636a77;
     border-radius: 30px;
     padding: 0 5px;
     max-width: 250px;
   }
 
   span {
-    color: #636A77;
+    color: #636a77;
     padding: 0 10px;
   }
 }
-
