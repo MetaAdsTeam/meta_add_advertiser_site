@@ -68,6 +68,11 @@ import 'zone.js';  // Included with Angular CLI.
 import * as buffer from 'buffer';
 (window as any).Buffer = buffer.Buffer;
 
-(window as any).process = { env: { NEAR_NO_LOGS: 'true' } };
-
-
+global.process = {
+  env: {
+    DEBUG: undefined,
+    NEAR_NO_LOGS: 'true'
+  },
+   version: '',
+   nextTick: require('next-tick')
+} as any;

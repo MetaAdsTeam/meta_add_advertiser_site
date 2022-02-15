@@ -1,5 +1,5 @@
 <div class="page-wrapper-2">
-  <div *ngIf="user"
+  <div *ngIf="logined"
        class="app-profile"
        [class.app-profile__minimize]="currentState !== 'full'"
        [class.app-profile__full]="currentState === 'full'">
@@ -100,8 +100,12 @@
       <img src="assets/images/logo-full.svg">
       <button mat-flat-button class="mat-primary" (click)="nearLogin()">Connect</button>
     </div>
+    <div *ngIf="!logined && user" class="app-toolbar">
+      <img src="assets/images/logo-full.svg">
+      <button mat-flat-button class="mat-primary" (click)="metaMaskLogin()">Login</button>
+    </div>
 
-    <mat-toolbar *ngIf="user" class="app-mat-toolbar">
+    <mat-toolbar *ngIf="logined" class="app-mat-toolbar">
       <button mat-stroked-button
          [matMenuTriggerFor]="userMenu">
         <img src="assets/images/profile.svg"/>
@@ -120,7 +124,7 @@
            Go to NEAR Wallet
         </a>
         <button mat-menu-item
-                (click)="nearLogout()">
+                (click)="logout()">
           <mat-icon svgIcon="logout"></mat-icon>
           <span>Logout</span>
         </button>
@@ -131,7 +135,7 @@
       <router-outlet></router-outlet>
     </div>
 
-    <div *ngIf="!user" class="app-footer app-social__full">
+    <div *ngIf="!logined" class="app-footer app-social__full">
       <img src="assets/images/telegram-blue.svg" alt="telegram-blue"/>
       <img src="assets/images/discord-blue.svg" alt="discord-blue"/>
       <img src="assets/images/twitter-blue.svg" alt="twitter-blue"/>
