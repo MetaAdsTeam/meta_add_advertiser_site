@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import {MaterialModule} from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {AdSpaceComponent} from './ad-space/ad-space.component';
-import {ConnectComponent} from './connect/connect.component';
+import {ConnectComponent} from './popup-components/connect.component';
 import {MainPageComponent} from './main-page/main-page.component';
 import {MatIconRegistry} from '@angular/material/icon';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
@@ -16,6 +16,14 @@ import {CustomHeader} from './ad-space/custom-header/calendar-custom-header';
 import {DateFormatPipe} from './pipes';
 import {AuthorizationInterceptor, NotAuthorizedInterceptor} from './interceptors';
 import {MAT_DATE_LOCALE} from '@angular/material/core';
+import {ProgressPopupComponent} from './popup-components/progress-popup.component';
+import {PlaceAdComponent} from './ad-space/place-ad/place-ad.component';
+import {RegisteredComponent} from './ad-space/registered/registered.component';
+import {UnregisteredComponent} from './ad-space/unregistered/unregistered.component';
+import {CreativesComponent} from './creatives/creatives.component';
+import {MessagePopupComponent} from './popup-components/message-popup.component';
+import {CreativeDetailsComponent} from './creative-details/creative-details.component';
+import {AuthService} from './services';
 
 @NgModule({
   declarations: [
@@ -26,7 +34,14 @@ import {MAT_DATE_LOCALE} from '@angular/material/core';
     DescriptionComponent,
     HistoryComponent,
     CustomHeader,
-    DateFormatPipe
+    DateFormatPipe,
+    ProgressPopupComponent,
+    PlaceAdComponent,
+    RegisteredComponent,
+    UnregisteredComponent,
+    CreativesComponent,
+    MessagePopupComponent,
+    CreativeDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +74,10 @@ import {MAT_DATE_LOCALE} from '@angular/material/core';
 })
 export class AppModule {
   constructor(private sanitizer: DomSanitizer,
-              private matIconRegistry: MatIconRegistry) {
+              private matIconRegistry: MatIconRegistry,
+              private authService: AuthService) {
+
+    this.authService.detectEthereumProvider();
 
     this.matIconRegistry.addSvgIcon(
       'close',
@@ -84,6 +102,18 @@ export class AppModule {
     this.matIconRegistry.addSvgIcon(
       'eye',
       this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/eye.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'upload',
+      this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/paper-plus.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'search',
+      this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/search.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'delete',
+      this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/delete.svg')
     );
   }
 }

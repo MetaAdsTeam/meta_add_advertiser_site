@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {Adspot} from '../model/adspot.model';
+import {Adspot} from '../model';
 import {Router} from '@angular/router';
-import {finalize, map} from 'rxjs/operators';
+import {finalize} from 'rxjs/operators';
 import {HttpErrorResponse} from '@angular/common/http';
 import {AppService, AuthService} from '../services';
 
@@ -20,24 +20,12 @@ export class MainPageComponent implements OnInit, OnDestroy {
   loading = false; // not used
 
   constructor(private appService: AppService,
-              private authService: AuthService,
               private router: Router) { }
 
   ngOnInit(): void {
+    this.loadAds();
     this.subscriptions.add(
       this.appService.signed$.subscribe(value => this.signed = value)
-    );
-    this.subscriptions.add(
-      this.authService.authorization$.subscribe(
-        value => {
-          if (value) {
-            this.loadAds()
-          }
-        },
-        (error: HttpErrorResponse) => {
-          console.log(error);
-        }
-      )
     );
   }
 
@@ -59,7 +47,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
           })
         )
         .subscribe(value => {
-          this.ads = value.map(v => {return {...v, preview_url: 'assets/images/test/add0.png'}});
+          this.ads = value;
           this.selectedAdFilter = filter;
         })
     );

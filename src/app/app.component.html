@@ -1,14 +1,50 @@
 <div class="page-wrapper-2">
-  <div *ngIf="user"
+  <div *ngIf="logined"
        class="app-profile"
        [class.app-profile__minimize]="currentState !== 'full'"
        [class.app-profile__full]="currentState === 'full'">
     <div>
-      <div class="app-user-info">
+      <!--div class="app-user-info">
         <img src="assets/images/profile.svg" alt="profile" height="56"/>
         <span class="app-user-info__uname" style="color: #636A77">{{user}}</span>
-      </div>
-      <div class="app-user-menu">
+      </div-->
+
+        <mat-nav-list class="app-user-menu">
+          <a mat-list-item
+             [routerLink]="'ad-space'"
+             routerLinkActive
+             #rla0="routerLinkActive"
+             [class.active]="rla0.isActive"
+             class="app-user-menu-item">
+            <img src="assets/images/home.svg" alt="home">
+            <span *ngIf="currentState === 'full'"
+                  class="app-user-menu-item__link">Home</span>
+          </a>
+          <a mat-list-item
+             [routerLink]="['creatives']"
+             routerLinkActive #rla1="routerLinkActive"
+             [class.active]="rla1.isActive"
+             class="app-user-menu-item">
+            <img src="assets/images/my-ad.svg" alt="my-ad">
+            <span *ngIf="currentState === 'full'"
+                  class="app-user-menu-item__link">My Ad Creatives</span>
+          </a>
+          <a mat-list-item *ngIf="currentState === 'full'"
+               class="app-user-menu-item"
+               (click)="resizeProfilePanel()"
+               style="cursor: pointer">
+            <img src="assets/images/arrow2-left-grey.svg" alt="minimize">
+            <span class="app-user-menu-item__link2">Minimize</span>
+          </a>
+          <a mat-list-item *ngIf="currentState !== 'full'"
+               class="app-user-menu-item"
+               (click)="resizeProfilePanel()"
+               style="cursor: pointer">
+            <img src="assets/images/arrow2-right-grey.svg" alt="minimize">
+          </a>
+        </mat-nav-list>
+
+      <!-- div class="app-user-menu">
         <div class="app-user-menu-item">
           <img src="assets/images/home.svg" alt="home">
           <span *ngIf="currentState === 'full'"
@@ -17,7 +53,7 @@
         <div class="app-user-menu-item">
           <img src="assets/images/my-ad.svg" alt="my-ad">
           <span *ngIf="currentState === 'full'"
-                class="app-user-menu-item__link">My Ad Creatives</span>
+                class="app-user-menu-item__link" routerLink="creatives" routerLinkActive>My Ad Creatives</span>
         </div>
         <div *ngIf="currentState === 'full'"
              class="app-user-menu-item"
@@ -32,13 +68,13 @@
              style="cursor: pointer">
           <img src="assets/images/arrow2-right-grey.svg" alt="minimize">
         </div>
-      </div>
+      </div-->
     </div>
     <div class="app-metaads-panel">
-      <div class="app-metaads-logout" (click)="nearLogout()">
+      <!--div class="app-metaads-logout" (click)="nearLogout()">
         <mat-icon svgIcon="logout"></mat-icon>
         <span *ngIf="currentState === 'full'">Logout</span>
-      </div>
+      </div-->
       <div [class.app-social__full]="currentState === 'full'"
            [class.app-social__minimize]="currentState !== 'full'">
         <img src="assets/images/telegram.svg" alt="telegram">
@@ -64,12 +100,42 @@
       <img src="assets/images/logo-full.svg">
       <button mat-flat-button class="mat-primary" (click)="nearLogin()">Connect</button>
     </div>
+    <div *ngIf="!logined && user" class="app-toolbar">
+      <img src="assets/images/logo-full.svg">
+      <button mat-flat-button class="mat-primary" (click)="metaMaskLogin()">Login</button>
+    </div>
+
+    <mat-toolbar *ngIf="logined" class="app-mat-toolbar">
+      <button mat-stroked-button
+         [matMenuTriggerFor]="userMenu">
+        <img src="assets/images/profile.svg"/>
+        <span [matTooltip]="user">{{ user }}</span>
+      </button>
+
+      <mat-menu #userMenu="matMenu"
+                xPosition="before"
+                class="user-menu">
+        <a mat-menu-item
+           [href]="explorerNearUrl" target="_blank">
+          Recent activity
+        </a>
+        <a mat-menu-item
+           href=" https://wallet.near.org" target="_blank">
+           Go to NEAR Wallet
+        </a>
+        <button mat-menu-item
+                (click)="logout()">
+          <mat-icon svgIcon="logout"></mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
 
     <div style="height: 100%">
       <router-outlet></router-outlet>
     </div>
 
-    <div *ngIf="!user" class="app-footer app-social__full">
+    <div *ngIf="!logined" class="app-footer app-social__full">
       <img src="assets/images/telegram-blue.svg" alt="telegram-blue"/>
       <img src="assets/images/discord-blue.svg" alt="discord-blue"/>
       <img src="assets/images/twitter-blue.svg" alt="twitter-blue"/>

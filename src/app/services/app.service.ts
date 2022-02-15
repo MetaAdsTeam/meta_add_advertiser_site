@@ -1,15 +1,22 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {Adspot, AdspotList} from '../model/adspot.model';
-import {ConnectComponent} from '../connect/connect.component';
-import {MatDialog} from '@angular/material/dialog';
-import {Timeslot, TimeslotBE, TimeslotList} from '../model/timeslot.model';
+import {
+  Adspot,
+  AdspotList,
+  Timeslot,
+  TimeslotList,
+  Creative,
+  CreativeBE,
+  PlaybackBody,
+  Playback
+} from '../model';
 import {NearService} from './near.service';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {map} from 'rxjs/operators';
 import {DateTime} from 'luxon';
 import {AuthService} from './auth.service';
+import {PopupService} from './popup.service';
 
 @Injectable({providedIn: 'root'})
 export class AppService {
@@ -20,30 +27,23 @@ export class AppService {
 
   api = environment.tornado_api;
 
-  constructor(private dialog: MatDialog,
-              private nearService: NearService,
+  constructor(private nearService: NearService,
               private httpClient: HttpClient,
-              private authService: AuthService) {}
+              private authService: AuthService,
+              private popupService: PopupService) {}
 
   nearLogin(): Observable<boolean> {
-    const dialogRef = this.dialog.open(ConnectComponent, {
-      width: '592px',
-      height: '418px',
-      maxHeight: '100%',
-      // disableClose: true,
-      // panelClass: 'connect-dialog-panel',
-      backdropClass: 'modal-backdrop'
-    });
-    return dialogRef.afterClosed()
+    return this.popupService.popupNearLogin();
   }
 
-  signIn(): Observable<boolean> {
+  signInNear(): Observable<boolean> {
     const accountId = this.nearService.getAccountId();
     let signed = false;
+    const token = this.authService.getToken();
     if (!accountId) {
       this.nearService.nearSignIn();
       // signed = false;
-    } else {
+    } else if (token) {
       signed = true
     }
 
@@ -53,16 +53,26 @@ export class AppService {
     return of(signed);
   }
 
+  refreshLogin(signed: boolean) {
+    this.signed.next(signed);
+  }
+
+  isSigned(): boolean {
+    return this.signed.value;
+  }
+
   setSignIn() {
     const accountId = this.nearService.getAccountId();
-    const signed = !(!accountId);
+    const token = this.authService.getToken();
+    const signed = !(!accountId) && !(!token);
     this.signed.next(signed);
     this.nearAccountId.next(accountId);
-    this.authService.clearTokenInStorage();
+    return signed;
   }
 
   signOut() {
     this.nearService.nearSignOut();
+    this.authService.logOut();
     this.signed.next(false);
     this.nearAccountId.next('');
   }
@@ -90,7 +100,33 @@ export class AppService {
           }
         })
       )
-
   }
 
+  getCreatives(): Observable<Creative[]> {
+    return this.httpClient.get<CreativeBE>(`${this.api}/creatives`)
+      .pipe(
+        map(c => { return c.data })
+      );
+  }
+
+  saveCreative(name: string, description: string, filename: string, file: File): Observable<any> {
+    const formData = {name, description, filename, file};
+    return this.httpClient.post<any>(`${this.api}/creative`, formData, {reportProgress: true, observe: 'events'});
+  }
+
+  markCreativeAsNft(creativeId: number, blockchainRef: string): Observable<any> {
+    return this.httpClient.put(`${this.api}/creative/id/${creativeId}`, {blockchain_ref: blockchainRef})
+  }
+
+  pay(playback: PlaybackBody): Observable<Playback> {
+    return this.httpClient.post<Playback>(`${this.api}/playback`, playback);
+  }
+
+  markPlaybackAsNft(playbackId: number, status: string, smartContract: number): Observable<any> {
+    return this.httpClient.put(`${this.api}/playback/id/${playbackId}`, {status: status, smart_contract: smartContract.toString()})
+  }
+
+  getCreative(id: number): Observable<Creative> {
+    return this.httpClient.get<Creative>(`${this.api}/creative/id/${id}`)
+  }
 }

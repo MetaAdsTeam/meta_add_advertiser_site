@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {AdSpaceComponent} from './ad-space/ad-space.component';
 import {MainPageComponent} from './main-page/main-page.component';
+import {CreativesComponent} from './creatives/creatives.component';
+import {CreativeDetailsComponent} from './creative-details/creative-details.component';
+import {AuthGuard} from './auth.guard';
 
 const routes: Routes = [
   {
@@ -16,6 +19,16 @@ const routes: Routes = [
   {
     path: 'ad/:id',
     component: AdSpaceComponent
+  },
+  {
+    path: 'creatives',
+    component: CreativesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'creative/:id',
+    component: CreativeDetailsComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

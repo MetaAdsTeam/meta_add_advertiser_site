@@ -1,25 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {AppService, AuthService, NearService} from '../services';
-import {Adspot} from '../model/adspot.model';
+import {AppService} from '../services';
+import {Adspot} from '../model';
 import {ActivatedRoute} from '@angular/router';
-import {CustomHeader} from './custom-header/calendar-custom-header';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {LuxonDateAdapter, MAT_LUXON_DATE_FORMATS} from '@angular/material-luxon-adapter';
-import {DateTime} from 'luxon';
 import {finalize} from 'rxjs/operators';
-import {Timeslot} from '../model/timeslot.model';
-
-type SelectedAddInfoType = 'desc' | 'history' | 'both';
 
 export interface ComponentType<T = any> {
   new (...args: any[]): T;
 }
 
-interface TimeslotsByType {
-  am: Timeslot[],
-  pm: Timeslot[]
-}
 
 @Component({
   selector: 'app-ad-space',
@@ -33,19 +24,10 @@ interface TimeslotsByType {
 export class AdSpaceComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
   signed = false;
-  ad: Adspot | undefined;
-  selectedAddInfoType: SelectedAddInfoType;
-  // showHistory = false;
-  selectedDate: DateTime = DateTime.now().setLocale('en');
-  isVisiblePlaceAd = false;
+  ad: Adspot;
+
   private id: number;
-  loading: boolean = false;
-
-  timeslots: TimeslotsByType = {am: [], pm: []};
-  selectedTimeslot: Timeslot;
-
-  /*****/
-  message: any;
+  loading: boolean = false; /* not used */
 
   constructor(private appService: AppService,
               private activatedRoute: ActivatedRoute) { }
@@ -54,7 +36,6 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.appService.signed$.subscribe(value => {
         this.signed = value;
-        this.selectedAddInfoType =  value ? 'desc' : 'both';
       })
     );
     this.loading = true;
@@ -64,9 +45,6 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
         this.loadAdspot();
       })
     );
-
-    /** not working */
-    // this.nearService.contract.getMessages({accountId: 'example-account.testnet'}).then(val => console.log(val))
   }
 
   loadAdspot() {
@@ -78,59 +56,9 @@ export class AdSpaceComponent implements OnInit, OnDestroy {
               () => this.loading = false
             )
           )
-          .subscribe(value => this.ad = {...value, preview_url: 'assets/images/test/add0.png'})
+          .subscribe(value => this.ad = value)
       );
     }
-  }
-
-  getCustomHeader(): ComponentType<any> {
-    return CustomHeader
-  }
-
-  selectDate(event: any) {
-    this.loadTimeslots();
-  }
-
-  loadTimeslots() {
-    const minAvailableTime = DateTime.now().plus({minutes: 3});
-    const maxAvailableTime = DateTime.now().plus({hours: 2});
-    if (this.selectedDate < minAvailableTime) {
-      this.timeslots.am = [];
-      this.timeslots.pm = [];
-    }
-    if (this.ad) {
-      this.subscriptions.add(
-        this.appService.getTimeslots(this.ad.id, this.selectedDate.toFormat('yyyy-MM-dd'))
-          .subscribe(value => {
-            this.timeslots.am = value.filter(v => v.from_time.hour < 12 && v.from_time > minAvailableTime && v.from_time < maxAvailableTime);
-            this.timeslots.pm = value.filter(v => v.from_time.hour >= 12 && v.from_time > minAvailableTime && v.from_time < maxAvailableTime);
-            // console.log('am', this.timeslots.am, 'pm', this.timeslots.pm);
-          })
-      );
-    }
-  }
-
-  signIn() {
-    if (!this.signed) {
-      this.subscriptions.add(
-        this.appService.nearLogin().subscribe(result => console.log('nearLogin', result))
-      );
-    }
-  }
-
-  selectAddInfoType() {
-    this.selectedAddInfoType = this.selectedAddInfoType === 'desc' ? 'history' : 'desc';
-  }
-
-  showPlaceAd() {
-    this.isVisiblePlaceAd = this.signed;
-    if (this.signed) {
-      this.loadTimeslots();
-    }
-  }
-
-  selectTimeslot(timeslot: Timeslot) {
-    this.selectedTimeslot = timeslot;
   }
 
   ngOnDestroy() {

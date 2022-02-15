@@ -1,0 +1,19 @@
+.page-link-title {
+  margin-top: 72px;
+  margin-bottom: 40px;
+
+  .ad-item-name {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 40px;
+    line-height: 110%;
+    text-align: center;
+    color: #ffffff;
+    margin-left: 0.6em;
+
+    @media (max-width: 990px) {
+      font-size: 28px;
+      margin-left: 0.85em;
+    }
+  }
+}

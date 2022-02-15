@@ -2,16 +2,37 @@ import {Injectable} from '@angular/core';
 import * as nearApi from 'near-api-js';
 import {ConnectedWalletAccount, WalletConnection} from 'near-api-js/lib/wallet-account';
 import {environment} from '../../environments/environment';
-import {AccountBalance} from 'near-api-js/lib/account';
 import {ConnectConfig} from 'near-api-js/lib/connect'
 import {Contract, utils} from 'near-api-js';
+import {DateTime} from 'luxon';
 
 const { connect, keyStores } = nearApi;
+const viewMethods = [
+  'fetch_creative_by_id',
+  'fetch_all_creatives',
+  'fetch_all_presentations',
+  'fetch_presentation_by_id',
+  'fetch_adspot_by_id',
+  'fetch_all_adspots'];
+
+const changeMethods = [
+  'make_creative',
+  'do_agreement',
+  'transfer_funds',
+  'make_adspot'
+];
 
 interface ContractWithMethods extends Contract{
-  nft_tokens_for_owner?: any,
-  nft_mint?: any,
-  nft_token?: any
+  make_creative?: any,
+  fetch_creative_by_id?: any,
+  fetch_all_creatives?: any,
+  fetch_all_presentations?: any,
+  fetch_presentation_by_id?: any,
+  fetch_adspot_by_id?: any,
+  fetch_all_adspots?: any,
+  do_agreement?: any,
+  transfer_funds?: any,
+  make_adspot?: any
 }
 
 @Injectable({providedIn: 'root'})
@@ -36,21 +57,19 @@ export class NearService {
     this.nearConnection = await connect(this.config);
     this.wallet = new WalletConnection(this.nearConnection, environment.near.app);
     this.account = this.wallet.account();
-    console.log('accObj', this.account);
+    // console.log('accObj', this.account);
 
 
     const methodOptions = {
-      viewMethods: ['nft_tokens_for_owner', 'nft_token'],
-      changeMethods: ['nft_mint']
+      viewMethods: viewMethods,
+      changeMethods: changeMethods
     };
     this.contract = new Contract(this.account, environment.near.contractId, methodOptions);
-    console.log('contract', this.contract);
-
   }
 
   nearSignIn() {
     return this.wallet.requestSignIn(
-      {contractId: environment.near.contractId, methodNames: ['addMessage']},
+      {contractId: environment.near.contractId, methodNames: viewMethods},
       environment.near.app,
       window.location.href);
   }
@@ -64,7 +83,7 @@ export class NearService {
 
   nearSignOut() {
     if (this.wallet.isSignedIn()) {
-      console.log('sign out');
+      // console.log('sign out');
       this.wallet.signOut();
     }
   }
@@ -73,42 +92,50 @@ export class NearService {
     return this.wallet.getAccountId()
   }
 
-  getBalance(): Promise<AccountBalance> {
-    return this.account.getAccountBalance()
-  }
-
-  getAccountDetails(): Promise<any> {
-    return this.account.getAccountDetails()
-  }
-
-  getAccountState() {
-    return this.account.state();
-  }
-
-  async nearSubmit() {
-    const tokenId = 'token_' + Math.random().toString(36).substr(2, 9);
-    await this.contract.nft_mint({
-      meta: 'Sign contract',
-      callbackUrl: document.location.href,
+  async make_creative(creativeName: string, url: string, nftCid: string, creativeId: number) {
+    await this.contract.make_creative({
       args: {
-        token_id: tokenId,
-        metadata: {
-          title: `NFT Token: ${tokenId}`,
-          description: 'NFT Token with WebData',
-          media: 'https://bafybeiftczwrtyr3k7a2k4vutd3amkwsmaqyhrdzlhvpt33dyjivufqusq.ipfs.dweb.link/goteam-gif.gif'
-        },
-        receiver_id: environment.near.accountId,
-        webdata: {
-          uri: 'https://bafybeiftczwrtyr3k7a2k4vutd3amkwsmaqyhrdzlhvpt33dyjivufqusq.ipfs.dweb.link/goteam-gif.gif'
-        }
-      },
-      amount: utils.format.parseNearAmount('0.1')
+        name: creativeName,
+        content: url,
+        nft_cid: nftCid,
+        creative_id: creativeId
+      }
     });
   }
 
-  /** not working: process is not defined **/
-  getNftTokens(): Promise<any> {
-    return this.contract.nft_tokens_for_owner({account_id: environment.near.contractId, limit: 10})
+  /** working */
+  fetchCreativeById(id: number): Promise<any> {
+    return this.getViewFunction('fetch_creative_by_id', {id: id});
   }
 
+  fetchAllCreatives(): Promise<any> {
+    return this.getViewFunction('fetch_all_creatives');
+  }
+
+  fetchPresentationsById(id: number): Promise<any> {
+    return this.getViewFunction('fetch_presentation_by_id', {id: id});
+  }
+
+  fetchAllPresentations(): Promise<any> {
+    return this.getViewFunction('fetch_all_presentations');
+  }
+
+  getViewFunction(methodName: string, args?: any): Promise<any> {
+    return this.account.viewFunction(environment.near.contractId, methodName, args)
+  }
+  /** record_id equal playbackid **/
+  async do_agreement(playback_id: number, adId: number, creative_id: number, from_time: DateTime, to_time: DateTime, price: number): Promise<any> {
+    const args = {
+      playback_id: playback_id,
+      adspot_id: adId,
+      creative_id: creative_id,
+      start_time: +from_time,
+      end_time: +to_time
+    };
+    await this.contract.do_agreement({
+      args: args,
+      accountId: this.getAccountId(),
+      amount: utils.format.parseNearAmount(price.toString())
+    });
+  }
 }
