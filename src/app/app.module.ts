@@ -24,6 +24,14 @@ import {CreativesComponent} from './creatives/creatives.component';
 import {MessagePopupComponent} from './popup-components/message-popup.component';
 import {CreativeDetailsComponent} from './creative-details/creative-details.component';
 import {AuthService} from './services';
+import {ProgressPopupComponent} from './popup-components/progress-popup.component';
+import {PlaceAdComponent} from './ad-space/place-ad/place-ad.component';
+import {RegisteredComponent} from './ad-space/registered/registered.component';
+import {UnregisteredComponent} from './ad-space/unregistered/unregistered.component';
+import {CreativesComponent} from './creatives/creatives.component';
+import {MessagePopupComponent} from './popup-components/message-popup.component';
+import {CreativeDetailsComponent} from './creative-details/creative-details.component';
+import {AuthService} from './services';
 import {AuthGuard} from './auth.guard';
 
 @NgModule({

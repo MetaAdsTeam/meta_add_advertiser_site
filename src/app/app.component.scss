@@ -81,6 +81,13 @@
   }
 }
 
+a.active {
+  span {
+    color: #3888ff;
+    font-weight: bold;
+  }
+}
+
 .app-footer {
   height: 32px;
   display: flex;

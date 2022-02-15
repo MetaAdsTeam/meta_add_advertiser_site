@@ -53,7 +53,6 @@ export class AuthService {
         msg => web3.eth.personal.sign(msg, address, ''),
         { expires_in: '1d', statement: login }
       );
-      console.log(token);
       this.setToken(token);
       return address;
     } else {
