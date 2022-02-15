@@ -66,7 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
       })
       .catch((e) => {
         console.log(e);
-        if (e.code = -32002) this.popupService.popupMessage('Please, login to Metamask', 'Ok');
+        if (e.code = -32002) this.popupService.popupMessage('Please, sign in Metamask', 'Ok');
         this.metaMaskSigned = false;
       });
   }
