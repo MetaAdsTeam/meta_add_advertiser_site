@@ -23,6 +23,7 @@ import {UnregisteredComponent} from './ad-space/unregistered/unregistered.compon
 import {CreativesComponent} from './creatives/creatives.component';
 import {MessagePopupComponent} from './popup-components/message-popup.component';
 import {CreativeDetailsComponent} from './creative-details/creative-details.component';
+import {AuthService} from './services';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,10 @@ import {CreativeDetailsComponent} from './creative-details/creative-details.comp
 })
 export class AppModule {
   constructor(private sanitizer: DomSanitizer,
-              private matIconRegistry: MatIconRegistry) {
+              private matIconRegistry: MatIconRegistry,
+              private authService: AuthService) {
+
+    this.authService.detectEthereumProvider();
 
     this.matIconRegistry.addSvgIcon(
       'close',
