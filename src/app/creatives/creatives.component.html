@@ -23,7 +23,6 @@
       </mat-select>
     </mat-form-field>
   </div>
-<<<<<<< HEAD
   <div class="ad-grid">
     <div class="ad-grid__item" *ngFor="let cr of creatives">
     <ng-container >
@@ -33,16 +32,6 @@
       <div class="ad-grid__description">
         <span class="ad-grid__status success"><!--status color: success, orange, grey--></span>
         <span>{{cr.name}} - {{cr.description}}</span>
-=======
-  <div>
-    <ng-container *ngFor="let cr of filteredCreatives">
-      <video controls>
-        <source [src]="cr.url" type="video/webm">
-      </video>
-      <div>
-        <span>s</span>
-        <span (click)="goToDetails(cr.id)">{{cr.name}}</span>
->>>>>>> d491fbcb498225e46befbda6accd179c5956a621
         <button mat-icon-button (click)="deleteCreatives(cr)">
           <mat-icon svgIcon="delete"></mat-icon>
         </button>
