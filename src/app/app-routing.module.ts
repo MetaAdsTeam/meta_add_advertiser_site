@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {AdSpaceComponent} from './ad-space/ad-space.component';
 import {MainPageComponent} from './main-page/main-page.component';
 import {CreativesComponent} from './creatives/creatives.component';
+import {CreativeDetailsComponent} from './creative-details/creative-details.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'creatives',
     component: CreativesComponent
+  },
+  {
+    path: 'creative/:id',
+    component: CreativeDetailsComponent
   }
 ];
 

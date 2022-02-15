@@ -29,7 +29,7 @@
       </video>
       <div>
         <span>s</span>
-        <span>{{cr.name}} - {{cr.description}}</span>
+        <span (click)="goToDetails(cr.id)">{{cr.name}}</span>
         <button mat-icon-button (click)="deleteCreatives(cr)">
           <mat-icon svgIcon="delete"></mat-icon>
         </button>

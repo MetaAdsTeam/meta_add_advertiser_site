@@ -114,4 +114,8 @@ export class AppService {
   markPlaybackAsNft(playbackId: number, status: string, smartContract: number): Observable<any> {
     return this.httpClient.put(`${this.api}/playback/id/${playbackId}`, {status: status, smart_contract: smartContract.toString()})
   }
+
+  getCreative(id: number): Observable<Creative> {
+    return this.httpClient.get<Creative>(`${this.api}/creative/id/${id}`)
+  }
 }
