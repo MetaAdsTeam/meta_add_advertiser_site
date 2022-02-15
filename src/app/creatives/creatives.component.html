@@ -7,6 +7,7 @@
              placeholder="Search..."
              [formControl]="search"
              autocomplete="off"
+             (keyup)="parseSearch(search.value)"
              (keyup.enter)="parseSearch(search.value)">
       <button mat-icon-button
               matSuffix
