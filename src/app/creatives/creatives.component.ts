@@ -3,7 +3,7 @@ import {FormControl} from '@angular/forms';
 import {AppService, AuthService} from '../services';
 import {Subscription} from 'rxjs';
 import {Creative} from '../model';
-import {finalize} from 'rxjs/operators';
+import {finalize, map} from 'rxjs/operators';
 import {Router} from '@angular/router';
 
 @Component({
@@ -25,16 +25,6 @@ export class CreativesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadCreatives();
-    /*
-    this.subscriptions.add(
-      this.authService.authorization$.subscribe(token => {
-        console.log('token', token, this.authService.getToken());
-        if (token) {
-          this.loadCreatives();
-        }
-      })
-    );
-    */
   }
 
   loadCreatives() {
@@ -44,8 +34,11 @@ export class CreativesComponent implements OnInit, OnDestroy {
         finalize(() => this.loading = false)
       )
       .subscribe(value => {
-        this.creatives = value;
-        this.filteredCreatives = value;
+        this.creatives = value.map(cr => {
+          return {...cr, type: cr.url.substring(cr.url.lastIndexOf('.') + 1)}
+        });
+        this.filteredCreatives = this.creatives;
+        console.log(this.creatives);
       })
   }
 
@@ -75,7 +68,9 @@ export class CreativesComponent implements OnInit, OnDestroy {
 
   // todo: create modal
   newCreative() {
-    alert('show modal')
+    // alert('show modal')
+    const url: string = this.creatives[0].url;
+    console.log(url, url.lastIndexOf('.'), url.substring(url.lastIndexOf('.') + 1));
   }
 
   ngOnDestroy() {

@@ -5,9 +5,14 @@
   </div>
   <div class="grid-wrapper">
     <div class="grid-wrapper__item">
-      <video controls>
-        <source [src]="creative.url" type="video/webm">
-      </video>
+      <ng-container *ngIf="creative.type === 'webm'; else image">
+        <video controls>
+          <source [src]="creative.url" type="video/webm">
+        </video>
+      </ng-container>
+      <ng-template #image>
+        <img [src]="creative.url">
+      </ng-template>
     </div>
     <div class="grid-wrapper__item">
       <div class="block-content">
