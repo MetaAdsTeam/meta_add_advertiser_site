@@ -29,7 +29,11 @@ const routes: Routes = [
     path: 'creative/:id',
     component: CreativeDetailsComponent,
     canActivate: [AuthGuard]
-  }
+  },
+  {
+    path: '**',
+    redirectTo: 'ad-space'
+  },
 ];
 
 @NgModule({

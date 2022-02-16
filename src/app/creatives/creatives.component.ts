@@ -66,11 +66,16 @@ export class CreativesComponent implements OnInit, OnDestroy {
   }
 
   deleteCreatives(cr: Creative) {
-
+    alert('not ready')
   }
 
   goToDetails(id: number) {
     this.router.navigate([`/creative/${id}`])
+  }
+
+  // todo: create modal
+  newCreative() {
+    alert('show modal')
   }
 
   ngOnDestroy() {

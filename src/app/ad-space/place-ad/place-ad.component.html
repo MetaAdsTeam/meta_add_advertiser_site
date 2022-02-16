@@ -101,7 +101,7 @@
             class="mat-primary btn-save"
             style="width: 115px"
             (click)="uploadFile()"
-            [disabled]="!filename || isSaving">Save</button>
+            [disabled]="!creativeName || !filename || isSaving">Save</button>
   </ng-container>
 
   <ng-container *ngIf="selectedCreativeId">
