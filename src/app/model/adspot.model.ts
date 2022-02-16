@@ -14,7 +14,8 @@ export interface Adspot {
   spot_metadata?: string // unknown destination
   views_amount?: number,
   average_time?: number,
-  max_traffic?: number
+  max_traffic?: number,
+  active: boolean
 }
 
 export interface AdspotList {

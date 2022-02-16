@@ -100,7 +100,7 @@ a.active {
 
 .app-social {
   &__full {
-    img {
+    img, a  {
       &:nth-child(even) {
         padding-right: 8px;
       }
@@ -115,7 +115,7 @@ a.active {
 
   &__minimize {
     display: grid;
-    img {
+    img, a {
       &:nth-child(even) {
         padding-bottom: 8px;
       }
@@ -163,6 +163,7 @@ a.active {
   margin-top: 48px;
 
   &__minimize {
+    cursor: pointer;
     padding-top: 96px;
   }
 }

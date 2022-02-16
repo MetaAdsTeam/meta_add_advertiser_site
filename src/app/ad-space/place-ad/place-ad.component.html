@@ -20,7 +20,10 @@
               <div *ngFor="let ts of timeslots.am"
                    class="timeslot"
                    [class.active]="selectedTimeslot === ts"
-                   [class.timeslot__locked]="ts.locked"
+                   [class.timeslot.locked]="ts.locked"
+                   matTooltip="Timeslot unavailable"
+                   [matTooltipDisabled]="!ts.locked"
+                   matTooltipPosition="above"
                    (click)="selectTimeslot(ts)">
                 <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
               </div>
@@ -32,9 +35,14 @@
               <ng-container *ngFor="let ts of timeslots.pm">
                 <div class="timeslot"
                      [class.active]="selectedTimeslot === ts"
-                     [class.timeslot__locked]="ts.locked"
+                     [class.locked]="ts.locked"
+                     matTooltip="Timeslot unavailable"
+                     [matTooltipDisabled]="!ts.locked"
+                     matTooltipPosition="above"
                      (click)="selectTimeslot(ts)">
-                  <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
+                  <span>
+                    {{ts.from_time | formatDate : 'HH12MM'}}
+                  </span>
                 </div>
               </ng-container>
             </div>
@@ -93,7 +101,7 @@
             class="mat-primary btn-save"
             style="width: 115px"
             (click)="uploadFile()"
-            [disabled]="!filename || isSaving">Save</button>
+            [disabled]="!creativeName || !filename || isSaving">Save</button>
   </ng-container>
 
   <ng-container *ngIf="selectedCreativeId">

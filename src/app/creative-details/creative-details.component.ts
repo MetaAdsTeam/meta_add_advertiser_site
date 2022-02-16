@@ -26,13 +26,7 @@ export class CreativeDetailsComponent implements OnInit, OnDestroy {
         this.id = params['id'];
       })
     );
-    this.subscriptions.add(
-      this.authService.authorization$.subscribe(token => {
-        if (token) {
-          this.loadCreative();
-        }
-      })
-    );
+    this.loadCreative();
   }
 
   loadCreative() {
@@ -41,7 +35,8 @@ export class CreativeDetailsComponent implements OnInit, OnDestroy {
       this.appService.getCreative(this.id)
         .pipe(
           finalize(() => this.loading = false)
-        ).subscribe(value => this.creative = value)
+        )
+        .subscribe(value => this.creative = {...value, type: value.url.substring(value.url.lastIndexOf('.') + 1)})
     );
   }
 

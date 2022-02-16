@@ -1,7 +1,7 @@
 <div class="page-wrapper">
   <h2 class="page-title">Creatives</h2>
   <div class="form-wrapper">
-    <button class="button-search">New</button>
+    <button class="button-search" (click)="newCreative()">New</button>
     <mat-form-field matTooltip="Search creatives" class="custom-form-field" appearance="outline">
       <input matInput type="text"
              placeholder="Search..."
@@ -25,18 +25,27 @@
   </div>
   <div class="me-grid">
     <div class="me-grid__item" *ngFor="let cr of filteredCreatives">
-    <ng-container >
-      <video controls>
-        <source [src]="cr.url" type="video/webm">
-      </video>
+      <ng-container *ngIf="cr.type === 'webm'; else image">
+        <img src="assets/images/temp-video.svg"
+             style="cursor: pointer"
+             (click)="goToDetails(cr.id)">
+        <!-- video controls>
+          <source [src]="cr.url" type="video/webm">
+        </video -->
+      </ng-container>
+      <ng-template #image>
+        <img [src]="cr.url"
+             style="cursor: pointer"
+             (click)="goToDetails(cr.id)">
+      </ng-template>
       <div class="me-grid__description">
         <span class="me-grid__status" [class.success]="cr.blockchain_ref" [class.grey]="!cr.blockchain_ref"></span>
-        <span style="cursor: pointer" (click)="goToDetails(cr.id)">{{cr.name}}</span>
-        <button mat-icon-button (click)="deleteCreatives(cr)">
+        <span>{{cr.name}}</span>
+        <button mat-icon-button matTooltip="Delete" (click)="deleteCreatives(cr)">
           <mat-icon svgIcon="delete"></mat-icon>
         </button>
       </div>
-    </ng-container>
+
     </div>
   </div>
 </div>

@@ -13,7 +13,7 @@ import {
 } from '../../model';
 import {HttpErrorResponse, HttpEventType} from '@angular/common/http';
 import {finalize, map} from 'rxjs/operators';
-import {AppService, NearService, StorageService, ProgressService, PopupService} from '../../services';
+import {AppService, NearService, StorageService, ProgressService, PopupService, AuthService} from '../../services';
 import {Subscription, Observable, of} from 'rxjs';
 
 
@@ -56,7 +56,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
               private nearService: NearService,
               private progressService: ProgressService,
               private storageService: StorageService,
-              private popupService: PopupService) { }
+              private popupService: PopupService, private authService: AuthService) { }
 
   ngOnInit() {
     this.subscriptions.add(
@@ -175,7 +175,9 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   }
 
   selectTimeslot(timeslot: Timeslot) {
-    this.selectedTimeslot = timeslot;
+    if (!timeslot.locked) {
+      this.selectedTimeslot = timeslot;
+    }
   }
 
   loadCreatives(): Observable<Creative[]> {
@@ -357,8 +359,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
 
   /** test **/
   test() {
-    // this.nearService.fetchAllCreatives().then(res => console.log(res))
-    this.nearService.fetchAllPresentations().then(res => console.log(res))
+
   }
 
   mark() {

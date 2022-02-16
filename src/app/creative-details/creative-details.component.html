@@ -1,22 +1,36 @@
-<div *ngIf="creative">
+<div class="page-wrapper" *ngIf="creative">
   <div class="page-link-title">
     <img src="assets/images/arrow-left.svg" alt="arrow-left" (click)="returnBack()">
-    <span class="me-item-name">{{creative.name}}</span>
+    <span class="me-item-name">{{creative.name}} </span>
   </div>
-  <video controls>
-    <source [src]="creative.url" type="video/webm">
-  </video>
-  <div>
-    <span>Status</span>
-    <span>s Active</span>
+  <div class="grid-wrapper">
+    <div class="grid-wrapper__item">
+      <ng-container *ngIf="creative.type === 'webm'; else image">
+        <video controls>
+          <source [src]="creative.url" type="video/webm">
+        </video>
+      </ng-container>
+      <ng-template #image>
+        <img [src]="creative.url">
+      </ng-template>
+    </div>
+    <div class="grid-wrapper__item">
+      <div class="block-content">
+        <h5 class="title">Status</h5>
+        <p class="status success"><!-- success, orange, grey --> Active</p>
+      </div>
+      <div class="block-content">
+        <h5 class="title">Name</h5>
+        <p>{{creative.name}}</p>
+      </div>
+      <div class="block-content">
+        <h5 class="title">Description</h5>
+        <p>{{creative.description}}</p>
+      </div>
+      <a class="link">Link to creative</a>
+    </div>
+    <div class="grid-wrapper__item">
+      <button class="btn-del" type="submit">Delete</button>
+    </div>
   </div>
-  <div>
-    <span>Name</span>
-    <span>{{creative.name}}</span>
-  </div>
-  <div>
-    <span>Description</span>
-    <span>{{creative.description}}</span>
-  </div>
-  <span>Link to creative</span>
 </div>

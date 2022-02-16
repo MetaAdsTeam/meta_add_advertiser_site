@@ -74,6 +74,7 @@ export class AppComponent implements OnInit, OnDestroy {
       });
   }
 
+  // todo: remove function
   get logined(): boolean {
     return this.metaMaskSigned && !!this.user
   }
