@@ -1,5 +1,5 @@
 .wrapper-data {
-  .ad-place {
+  .me-place {
     display: grid;
     grid-template-columns: repeat(2, 356px);
     gap: 20px;
@@ -32,7 +32,7 @@
     //   grid-column: span 12;
     // }
   }
-  .ad-place-datetimes {
+  .me-place-datetimes {
     box-sizing: border-box;
     // min-height: 359px;
     // margin-bottom: 50px;
