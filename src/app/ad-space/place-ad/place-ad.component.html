@@ -20,7 +20,10 @@
               <div *ngFor="let ts of timeslots.am"
                    class="timeslot"
                    [class.active]="selectedTimeslot === ts"
-                   [class.timeslot__locked]="ts.locked"
+                   [class.timeslot.locked]="ts.locked"
+                   matTooltip="Timeslot unavailable"
+                   [matTooltipDisabled]="!ts.locked"
+                   matTooltipPosition="above"
                    (click)="selectTimeslot(ts)">
                 <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
               </div>
@@ -33,8 +36,13 @@
                 <div class="timeslot"
                      [class.active]="selectedTimeslot === ts"
                      [class.locked]="ts.locked"
+                     matTooltip="Timeslot unavailable"
+                     [matTooltipDisabled]="!ts.locked"
+                     matTooltipPosition="above"
                      (click)="selectTimeslot(ts)">
-                  <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
+                  <span>
+                    {{ts.from_time | formatDate : 'HH12MM'}}
+                  </span>
                 </div>
               </ng-container>
             </div>
