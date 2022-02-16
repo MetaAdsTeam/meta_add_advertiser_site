@@ -1,6 +1,14 @@
+.page-wrapper {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+}
 .page-link-title {
   margin-top: 72px;
   margin-bottom: 40px;
+
+  display: flex;
+  align-items: center;
 
   .me-item-name {
     font-style: normal;
@@ -11,9 +19,130 @@
     color: #ffffff;
     margin-left: 0.6em;
 
+    max-width: 388px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+
     @media (max-width: 990px) {
       font-size: 28px;
       margin-left: 0.85em;
+    }
+  }
+}
+
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+
+  &__item {
+    grid-column: span 4;
+    @media (max-width: 1200px) {
+      grid-column: span 6;
+    }
+    @media (max-width: 990px) {
+      grid-column: span 12;
+    }
+
+    video {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      max-height: 404px;
+    }
+  }
+}
+.block-content {
+  margin-bottom: 32px;
+  .title {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 30px;
+    color: #636a77;
+    margin: 0;
+  }
+  p {
+    margin: 0;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 22px;
+    color: #ffffff;
+  }
+}
+
+.link {
+  font-style: normal;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 110%;
+  letter-spacing: -0.7px;
+  text-decoration-line: underline;
+  color: #3888ff;
+  cursor: pointer;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.btn-del {
+  background: #ffffff;
+  border-radius: 8px;
+  font-style: 400;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 110%;
+  text-align: center;
+  // letter-spacing: -0.7px;
+  color: #3888ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 16px 40px;
+  margin-left: auto;
+}
+
+.status {
+  $size: 8px;
+  display: flex;
+  align-items: center;
+
+  &.success {
+    &::before {
+      content: "";
+      margin-right: 8px;
+      border-radius: 100%;
+      width: $size;
+      height: $size;
+      display: block;
+      background-color: #35c528;
+    }
+  }
+  &.orange {
+    &::before {
+      content: "";
+      margin-right: 8px;
+      border-radius: 100%;
+      width: $size;
+      height: $size;
+      display: block;
+      background-color: #e1e425;
+    }
+  }
+  &.grey {
+    &::before {
+      content: "";
+      margin-right: 8px;
+      border-radius: 100%;
+      width: $size;
+      height: $size;
+      display: block;
+      background-color: #727378;
     }
   }
 }
