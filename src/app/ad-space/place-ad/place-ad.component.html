@@ -32,7 +32,7 @@
               <ng-container *ngFor="let ts of timeslots.pm">
                 <div class="timeslot"
                      [class.active]="selectedTimeslot === ts"
-                     [class.timeslot__locked]="ts.locked"
+                     [class.locked]="ts.locked"
                      (click)="selectTimeslot(ts)">
                   <span>{{ts.from_time | formatDate : 'HH12MM'}}</span>
                 </div>

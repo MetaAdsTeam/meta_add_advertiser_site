@@ -18,7 +18,7 @@ export class RegisteredComponent implements OnInit {
   savedPayData: PayDataStorageModel | null;
 
   constructor(private storageService: StorageService) { }
-
+// todo: check ad.active
   ngOnInit() {
     this.savedPlaceAd = this.storageService.getPlaceAdFromStorage();
     if (this.savedPlaceAd) {

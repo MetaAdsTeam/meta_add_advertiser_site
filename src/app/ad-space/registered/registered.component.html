@@ -10,7 +10,7 @@
     <div class="ad-item-content">
       <div class="left-item">
 
-        <img [src]="ad?.preview_url" alt="{{ad?.name}}">
+        <img [src]="ad?.preview_thumb_url" alt="{{ad?.name}}">
         <ul class="ad-item-properties">
           <li>
             <div class="ad-item-properties__title">Current Price:</div>
@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <button class="btn-pa mat-primary" (click)="showPlaceAd()">
+    <button class="btn-pa mat-primary" [class.btn-pa__unsigned]="!ad.active" [disabled]="!ad.active" (click)="showPlaceAd()">
       Place Ad
     </button>
     <!-- End Top Block -->
