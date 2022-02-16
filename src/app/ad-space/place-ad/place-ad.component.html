@@ -50,7 +50,7 @@
   <h5 class="creative__title">Ad creative</h5>
   <mat-form-field class="custom-form-field" appearance="outline">
     <mat-select placeholder="Select" [(value)]="selectedCreativeId" (valueChange)="showCreatingPanel()">
-      <mat-option *ngFor="let c of creatives" [value]="c.id">{{c.name}}</mat-option>
+      <mat-option *ngFor="let c of creativesInBlockchain" [value]="c.id">{{c.name}}</mat-option>
     </mat-select>
   </mat-form-field>
   <span class="mat-button create_btn create_btn__blue"
@@ -80,7 +80,10 @@
       </button>
       <input type="file" (change)="fileChangeEvent($event)"
              #fileInput id="fileUpload"
-             name="fileUpload" accept="video/webm" style="display: none" />
+             name="fileUpload" accept="video/webm, image/*" style="display: none" />
+      <div *ngIf="fileError">
+        <span style="color: red">{{fileError}}</span>
+      </div>
       <div *ngIf="filename" style="display: flex;">
         <span class="filename-wrapper">{{filename}}</span>
         <mat-icon svgIcon="close" (click)="clearFile()"></mat-icon>

@@ -24,13 +24,17 @@ export class CreativesComponent implements OnInit, OnDestroy {
               private router: Router) { }
 
   ngOnInit() {
+    this.loadCreatives();
+    /*
     this.subscriptions.add(
       this.authService.authorization$.subscribe(token => {
+        console.log('token', token, this.authService.getToken());
         if (token) {
           this.loadCreatives();
         }
       })
     );
+    */
   }
 
   loadCreatives() {

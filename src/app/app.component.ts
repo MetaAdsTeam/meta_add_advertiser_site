@@ -19,6 +19,8 @@ export class AppComponent implements OnInit, OnDestroy {
   currentState: CurrentState = 'full';
   signed: boolean = false;
   explorerNearUrl = `${environment.near.explorerUrl}/accounts`;
+  walletNearUrl = `${environment.near.walletUrl}`;
+
   private subscriptions = new Subscription();
 
   constructor(private appService: AppService,
@@ -47,6 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.appService.signed$.subscribe(value => this.signed = value)
     );
     this.metaMaskSigned = this.authService.metaMaskSigned;
+    console.log('singed', this.metaMaskSigned);
   }
 
   nearLogin() {
