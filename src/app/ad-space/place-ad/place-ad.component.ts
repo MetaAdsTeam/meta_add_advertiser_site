@@ -45,11 +45,12 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   creating = false;
   creativeName = '';
   creativeDescription = '';
-
+  creativesInBlockchain: Creative[];
   /* upload creative file */
   isSaving: boolean;
   file: any;
   filename: string;
+  fileError: string;
 
   constructor(private appService: AppService,
               private nearService: NearService,
@@ -60,18 +61,19 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.add(
       this.loadCreatives()
-        .pipe(
-          finalize(() => {
-            /** remove creative not in blockchain **/
-            this.creatives = this.creatives.filter(c => c.blockchain_ref)
-          })
-        )
         .subscribe(creatives => {
           this.creatives = creatives;
+          this.creativesInBlockchain = creatives.filter(c => c.blockchain_ref);
           if (this.savedPlaceAd) {
             this.initSavedPlaceAd();
           } else if (this.savedPayData) {
             this.initSavedPayData();
+          } else {
+            this.subscriptions.add(
+              this.loadTimeslots().subscribe(
+                value => this.timeslots = value
+              )
+            );
           }
         })
     );
@@ -159,7 +161,6 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
       } else {
         maxAvailableTime = this.selectedDate.plus({hours: 2});
       }
-
       return this.appService.getTimeslots(this.ad.id, this.selectedDate.toFormat('yyyy-MM-dd'))
           .pipe(
             map((value: Timeslot[]) => {
@@ -192,6 +193,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
 
   uploadFile() {
     this.isSaving = true;
+    this.fileError = '';
     this.progressService.showProgressPopup();
     this.appService.saveCreative(this.creativeName, this.creativeDescription, this.filename, this.file)
       .pipe(
@@ -224,7 +226,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
       }, (error: HttpErrorResponse) => {
         if (error.status === 415) {
           /* Unsupported media file */
-          alert('Unsupported media file');
+          this.fileError = 'Unsupported media file';
         } else {
           console.log(error);
         }
@@ -234,11 +236,12 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   }
 
   fileChangeEvent(event: any) {
+    this.fileError = '';
     let file = event.dataTransfer ? event.dataTransfer.files[0] : event.target.files[0];
-    const pattern = /webm-*/;
+    const pattern = /webm-*|image/;
     const reader = new FileReader();
     if (!file.type.match(pattern)) {
-      alert('invalid format');
+      this.fileError = 'Invalid format';
       return;
     }
     reader.onload = this._handleReaderLoaded.bind(this);
@@ -282,7 +285,15 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
 
   sendCreativeBlockchainRefToServer(creativeId: number, blockchainRef: string) {
     this.appService.markCreativeAsNft(creativeId, blockchainRef)
-      .subscribe(value => console.log(value));
+      .subscribe(() => {
+        this.subscriptions.add(
+          this.loadCreatives()
+            .subscribe(creatives => {
+              this.creatives = creatives;
+              this.creativesInBlockchain = creatives.filter(c => c.blockchain_ref)
+            })
+        );
+      });
   }
 
   sendPlaybackBlockchainInfoToServer(playbackId: number, status: string, smartContract: number): Observable<any> {

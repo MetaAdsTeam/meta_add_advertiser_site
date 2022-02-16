@@ -9,9 +9,9 @@ export const environment = {
     walletUrl: "https://wallet.testnet.near.org",
     helperUrl: "https://helper.testnet.near.org",
     explorerUrl: "https://explorer.testnet.near.org",
-    contractId: 'contract.nft_evgeniy_test.testnet',
+    contractId: 'contract.metaads.testnet',
     app: 'MetaAds',
-    accountId: 'nft_evgeniy_test.testnet'
+    accountId: 'metaads.testnet'
   },
   devmode: true
 };

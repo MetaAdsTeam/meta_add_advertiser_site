@@ -9,7 +9,7 @@ const lsKeyMetaMask = 'web3token';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-  authorization = new BehaviorSubject<string>('');
+  private authorization = new BehaviorSubject<string>('');
   authorization$ = this.authorization.asObservable();
   private ethereum: any;
 
@@ -23,7 +23,12 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem(lsKeyMetaMask);
+    let token = this.authorization.value;
+    if (!token) {
+      token = localStorage.getItem(lsKeyMetaMask) || '';
+      this.authorization.next(token);
+    }
+    return token;
   }
 
   logOut() {
