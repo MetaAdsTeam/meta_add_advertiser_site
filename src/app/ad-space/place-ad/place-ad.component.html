@@ -1,8 +1,8 @@
 <div class="wrapper-data">
-  <div class="ad-place">
+  <div class="me-place">
     <div id="calendar" class="cal">
-      <h4 class="ad-place__title">Date</h4>
-      <div class="ad-place-datetimes">
+      <h4 class="me-place__title">Date</h4>
+      <div class="me-place-datetimes">
         <mat-calendar #calendar [(selected)]="selectedDate"
                       [headerComponent]="getCustomHeader()"
                       (selectedChange)="selectDate($event)">
@@ -10,8 +10,8 @@
       </div>
     </div>
     <div id="timeslots" class="time">
-      <h4 class="ad-place__title">Available slots</h4>
-      <div class="ad-place-datetimes">
+      <h4 class="me-place__title">Available slots</h4>
+      <div class="me-place-datetimes">
         <h5 class="box-title-time">{{selectedDate | formatDate}}</h5>
         <div class="scroll-container">
           <div id="am" class="am-grid">

@@ -1,43 +1,43 @@
 <div class="page-wrapper-1" style="p0">
-  <div *ngIf="ad" class="ad-item-info">
+  <div *ngIf="ad" class="me-item-info">
     <div class="page-link-title">
       <a routerLink="/">
         <img src="assets/images/arrow-left.svg" alt="arrow-left">
       </a>
-      <span class="ad-item-name">{{ad?.spot_type}}: {{ad?.name}}</span>
+      <span class="me-item-name">{{ad?.spot_type}}: {{ad?.name}}</span>
     </div>
 
-    <div class="ad-item-content">
+    <div class="me-item-content">
       <div class="left-item">
 
         <img [src]="ad?.preview_url" alt="{{ad?.name}}">
-        <ul class="ad-item-properties">
+        <ul class="me-item-properties">
           <li>
-            <div class="ad-item-properties__title">Current Price:</div>
-            <div class="ad-item-properties__value-wrapp">
-              <span class="ad-item-properties__value">{{ad?.price}}</span>
-              <span class="ad-item-properties__btn-budge"
-                    [class.ad-item-properties__btn-budge__selected]="selectedAddInfoType === 'history'"
+            <div class="me-item-properties__title">Current Price:</div>
+            <div class="me-item-properties__value-wrapp">
+              <span class="me-item-properties__value">{{ad?.price}}</span>
+              <span class="me-item-properties__btn-budge"
+                    [class.me-item-properties__btn-budge__selected]="selectedAddInfoType === 'history'"
                     (click)="selectAddInfoType()">history
                 <mat-icon svgIcon="eye" style="width: 16px; height: 16px"></mat-icon>
               </span>
             </div>
           </li>
           <li>
-            <div class="ad-item-properties__title">Likes:</div>
-            <div class="ad-item-properties__value">{{ad?.likes}}</div>
+            <div class="me-item-properties__title">Likes:</div>
+            <div class="me-item-properties__value">{{ad?.likes}}</div>
           </li>
           <li>
-            <div class="mat-body-1 ad-item-properties__title">Users per week:</div>
-            <div class="mat-body-2 ad-item-properties__value">{{ad?.usersPerWeek}}</div>
+            <div class="mat-body-1 me-item-properties__title">Users per week:</div>
+            <div class="mat-body-2 me-item-properties__value">{{ad?.usersPerWeek}}</div>
           </li>
           <li>
-            <div class="mat-body-1 ad-item-properties__title">Total users:</div>
-            <div class="mat-body-2 ad-item-properties__value">{{ad?.totalUsers}}</div>
+            <div class="mat-body-1 me-item-properties__title">Total users:</div>
+            <div class="mat-body-2 me-item-properties__value">{{ad?.totalUsers}}</div>
           </li>
           <li>
-            <div class="mat-body-1 ad-item-properties__title">Owned by:</div>
-            <div class="mat-body-2 ad-item-properties__value">{{ad?.publisher_name}}</div>
+            <div class="mat-body-1 me-item-properties__title">Owned by:</div>
+            <div class="mat-body-2 me-item-properties__value">{{ad?.publisher_name}}</div>
           </li>
         </ul>
 

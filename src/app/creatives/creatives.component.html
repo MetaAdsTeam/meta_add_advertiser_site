@@ -23,14 +23,14 @@
       </mat-select>
     </mat-form-field>
   </div>
-  <div class="ad-grid">
-    <div class="ad-grid__item" *ngFor="let cr of filteredCreatives">
+  <div class="me-grid">
+    <div class="me-grid__item" *ngFor="let cr of filteredCreatives">
     <ng-container >
       <video controls>
         <source [src]="cr.url" type="video/webm">
       </video>
-      <div class="ad-grid__description">
-        <span class="ad-grid__status" [class.success]="cr.blockchain_ref" [class.grey]="!cr.blockchain_ref"></span>
+      <div class="me-grid__description">
+        <span class="me-grid__status" [class.success]="cr.blockchain_ref" [class.grey]="!cr.blockchain_ref"></span>
         <span style="cursor: pointer" (click)="goToDetails(cr.id)">{{cr.name}}</span>
         <button mat-icon-button (click)="deleteCreatives(cr)">
           <mat-icon svgIcon="delete"></mat-icon>
