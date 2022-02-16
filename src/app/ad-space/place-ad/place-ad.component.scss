@@ -89,6 +89,11 @@
         &.active {
           background-color: #3888ff;
         }
+
+        &.locked {
+          background: rgba(99, 106, 119, 0.31);
+          color: #636A77;
+        }
       }
     }
   }

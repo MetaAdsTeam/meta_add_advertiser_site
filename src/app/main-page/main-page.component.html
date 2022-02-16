@@ -8,15 +8,33 @@
   </div>
   <div class="space-ad-container">
     <div *ngFor="let ad of ads" class="space-ad-content">
-      <img *ngIf="selectedAd !== ad"
+      <img *ngIf="!ad.active || (ad.active && selectedAd !== ad)"
            [src]="ad.preview_url"
            alt="unavailable"
+           [class.unavailable]="!ad.active"
            (click)="selectAd(ad)">
-      <div *ngIf="selectedAd === ad" class="space-ad-content-selected-logout">
-        <span class="mat-caption" style="padding: 0 24px 25px 24px">The key feature of this site is that users can buy NFTs using fiat currency.</span>
-        <button mat-flat-button
-                (click)="showMore(ad)">Place Ad</button>
+      <div *ngIf="!ad.active && selectedAd !== ad"
+           class="space-ad-content-selected-unavailable"
+           (click)="selectAd(ad)">
+        <div style="padding:25px; display: grid">
+          <span class="mat-subheading-1">Coming soon</span>
+          <span>interested this place?</span>
+        </div>
       </div>
+      <ng-container *ngIf="selectedAd === ad">
+        <ng-container *ngIf="ad.active; else unavailable">
+          <div class="space-ad-content-selected-logout">
+            <span class="mat-caption" style="padding: 0 24px 25px 24px">The key feature of this site is that users can buy NFTs using fiat currency.</span>
+            <button mat-flat-button
+                    (click)="showMore(ad)">Place Ad</button>
+          </div>
+        </ng-container>
+        <ng-template #unavailable>
+          <div class="space-ad-content-selected-unavailable">
+            <button mat-flat-button>Notify me</button>
+          </div>
+        </ng-template>
+      </ng-container>
       <span class="mat-body-2"
             [class.space-ad-content-selected-logout-color]="selectedAd === ad"
             style="padding-top: 23px; padding-bottom: 8px"

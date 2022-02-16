@@ -175,7 +175,9 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   }
 
   selectTimeslot(timeslot: Timeslot) {
-    this.selectedTimeslot = timeslot;
+    if (!timeslot.locked) {
+      this.selectedTimeslot = timeslot;
+    }
   }
 
   loadCreatives(): Observable<Creative[]> {
@@ -358,7 +360,9 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   /** test **/
   test() {
     // this.nearService.fetchAllCreatives().then(res => console.log(res))
-    this.nearService.fetchAllPresentations().then(res => console.log(res))
+    // this.nearService.fetchAllPresentations().then(res => console.log(res))
+    console.log('iso', this.selectedTimeslot.from_time.toISO(), 'utc in iso', this.selectedTimeslot.from_time.toUTC().toISO(),
+      'w/o offset', this.selectedTimeslot.from_time.toISO({ includeOffset: false }) )
   }
 
   mark() {

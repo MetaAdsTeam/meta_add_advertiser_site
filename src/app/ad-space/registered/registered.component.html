@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <button class="btn-pa mat-primary" (click)="showPlaceAd()">
+    <button class="btn-pa mat-primary" [class.btn-pa__unsigned]="!ad.active" [disabled]="!ad.active" (click)="showPlaceAd()">
       Place Ad
     </button>
     <!-- End Top Block -->

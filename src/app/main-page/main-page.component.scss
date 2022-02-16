@@ -44,6 +44,7 @@
   text-align: center;
   cursor: pointer;
   width: 100%;
+  align-items: center;
 
   img {
     height: 323px;
@@ -51,6 +52,10 @@
     object-fit: cover;
     border-radius: 8px;
     object-position: center;
+
+    &.unavailable {
+      filter: blur(5px);
+    }
   }
 }
 
@@ -60,7 +65,7 @@
 
 .space-ad-content-selected-logout {
   max-width: 100%;
-    height: 323px;
+  height: 323px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -68,6 +73,23 @@
   border-radius: 6px;
   align-items: center;
 
+  button {
+    width: 122px;
+    // height: 43px;
+    color: #3888ff;
+  }
+}
+
+.space-ad-content-selected-unavailable {
+  max-width: 100%;
+  height: 323px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: none;
+  border-radius: 6px;
+  align-items: center;
+  position: absolute;
   button {
     width: 122px;
     // height: 43px;

@@ -77,9 +77,15 @@
       </div-->
       <div [class.app-social__full]="currentState === 'full'"
            [class.app-social__minimize]="currentState !== 'full'">
-        <img src="assets/images/telegram.svg" alt="telegram">
-        <img src="assets/images/discord.svg" alt="discord">
-        <img src="assets/images/twitter.svg" alt="twitter">
+        <a href="https://t.me/+rPEWHyKEYVZjMTI6" target="_blank">
+          <img src="assets/images/telegram.svg" alt="telegram">
+        </a>
+        <a href="https://discord.gg/fxy3kvU9" target="_blank">
+          <img src="assets/images/discord.svg" alt="discord">
+        </a>
+        <a href="https://twitter.com/ads_meta" target="_blank">
+          <img src="assets/images/twitter.svg" alt="twitter">
+        </a>
         <img src="assets/images/facebook.svg" alt="facebook">
       </div>
       <img *ngIf="currentState === 'full'"
@@ -136,10 +142,16 @@
     </div>
 
     <div *ngIf="!logined" class="app-footer app-social__full">
-      <img src="assets/images/telegram-blue.svg" alt="telegram-blue"/>
-      <img src="assets/images/discord-blue.svg" alt="discord-blue"/>
-      <img src="assets/images/twitter-blue.svg" alt="twitter-blue"/>
-      <img src="assets/images/facebook-blue.svg" alt="facebook-blue"/>
+      <a href="https://t.me/+rPEWHyKEYVZjMTI6" target="_blank">
+        <img src="assets/images/telegram-blue.svg" alt="telegram">
+      </a>
+      <a href="https://discord.gg/fxy3kvU9" target="_blank">
+        <img src="assets/images/discord-blue.svg" alt="discord">
+      </a>
+      <a href="https://twitter.com/ads_meta" target="_blank">
+        <img src="assets/images/twitter-blue.svg" alt="twitter">
+      </a>
+      <img src="assets/images/facebook-blue.svg" alt="facebook">
     </div>
   </div>
 </div>
