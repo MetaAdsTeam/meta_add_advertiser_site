@@ -31,7 +31,7 @@
       </video>
       <div class="ad-grid__description">
         <span class="ad-grid__status" [class.success]="cr.blockchain_ref" [class.grey]="!cr.blockchain_ref"></span>
-        <span (click)="goToDetails(cr.id)">{{cr.name}}</span>
+        <span style="cursor: pointer" (click)="goToDetails(cr.id)">{{cr.name}}</span>
         <button mat-icon-button (click)="deleteCreatives(cr)">
           <mat-icon svgIcon="delete"></mat-icon>
         </button>
