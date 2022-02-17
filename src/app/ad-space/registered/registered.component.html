@@ -44,7 +44,7 @@
       </div>
       <div class="right-item">
         <app-description *ngIf="selectedAddInfoType === 'desc'"
-                         [header]="'Description'" body="{{ ad?.description }}">
+                         [header]="'Description'" body="{{ ad?.description }}" link="{{ ad?.jump_link }}">
         </app-description>
         <app-history *ngIf="selectedAddInfoType === 'history'"></app-history>
       </div>

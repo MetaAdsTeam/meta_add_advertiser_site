@@ -15,7 +15,8 @@ export interface Adspot {
   views_amount?: number,
   average_time?: number,
   max_traffic?: number,
-  active: boolean
+  active: boolean,
+  jump_link?: string
 }
 
 export interface AdspotList {

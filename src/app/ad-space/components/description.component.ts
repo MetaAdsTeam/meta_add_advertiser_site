@@ -6,7 +6,9 @@ import { Component, Input } from '@angular/core';
     <div class="desc">
       <h4 class="desc__title">{{header}}</h4>
       <div class="desc__body">{{body}}</div>
-      <button class="desc__button" (click)="more()">More</button>
+      <!-- a [href]="link" target="_blank" class="desc__link">View jump link</a -->
+      <a *ngIf="link" [href]="link" target="_blank" class="desc__link">View jump link</a>
+      <!-- button class="desc__button" (click)="more()">More</button -->
     </div>
   `,
   styles: [`
@@ -48,12 +50,19 @@ import { Component, Input } from '@angular/core';
         text-decoration: none;
       }
     }
+    &__link {
+      font-size: 20px;
+      font-weight: 800;
+      text-decoration: none;
+      color: #3888FF;
+    }
   }
   `]
 })
 export class DescriptionComponent {
   @Input() header: string = '';
   @Input() body: string = '';
+  @Input() link: string = '';
 
   more() {
     console.log('unknown action');
