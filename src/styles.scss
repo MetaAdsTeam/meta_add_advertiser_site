@@ -188,13 +188,16 @@ body {
 
 .user-menu {
   &.mat-menu-panel {
-    background: #636A77;
+    background: #12111a;
+    border: 1px solid #636a77;
+    box-sizing: border-box;
+    margin-top: 6px;
   }
 
   .mat-menu-item {
     line-height: 32px;
     height: 32px;
-    color: white;
+    color: #636A77;
     font-size: 16px;
     display: flex;
     align-items: center;
@@ -207,4 +210,13 @@ body {
 
 .mat-list-item-content {
   padding: 0 !important;
+}
+
+.mat-select-panel {
+  background-color: #12111A;
+  border: 1px solid #3888FF;
+
+  .mat-option-text {
+    color: #FFFFFF;
+  }
 }
