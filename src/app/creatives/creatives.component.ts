@@ -63,7 +63,7 @@ export class CreativesComponent implements OnInit, OnDestroy {
   }
 
   goToDetails(id: number) {
-    this.router.navigate([`/creative/${id}`])
+    this.router.navigate([`/creatives/${id}`])
   }
 
   // todo: create modal

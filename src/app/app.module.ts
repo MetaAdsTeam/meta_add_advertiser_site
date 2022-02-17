@@ -25,6 +25,7 @@ import {CreativeDetailsComponent} from './creative-details/creative-details.comp
 import {PlaceAdComponent} from './ad-space/place-ad/place-ad.component';
 import {UnregisteredComponent} from './ad-space/unregistered/unregistered.component';
 import {AuthService} from './services';
+import {MyCreativesComponent} from './creatives/my-creatives.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import {AuthService} from './services';
     UnregisteredComponent,
     CreativesComponent,
     MessagePopupComponent,
-    CreativeDetailsComponent
+    CreativeDetailsComponent,
+    MyCreativesComponent
   ],
   imports: [
     BrowserModule,
