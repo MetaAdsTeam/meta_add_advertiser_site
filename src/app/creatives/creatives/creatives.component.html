@@ -2,7 +2,7 @@
   <h2 class="page-title">Creatives</h2>
   <div class="form-wrapper">
     <button class="button-search" (click)="newCreative()">New</button>
-    <mat-form-field matTooltip="Search creatives" class="custom-form-field" appearance="outline">
+    <mat-form-field matTooltip="Search creatives" class="custom-form-field search-in" appearance="outline">
       <input matInput type="text"
              placeholder="Search..."
              [formControl]="search"
@@ -16,8 +16,8 @@
         <mat-icon svgIcon="search"></mat-icon>
       </button>
     </mat-form-field>
-    <mat-form-field class="custom-form-field" appearance="outline">
-      <mat-select placeholder="Sort" [(value)]="sortType" (valueChange)="sorting()">
+    <mat-form-field class="custom-form-field dr-in" appearance="outline">
+      <mat-select class="select-wrap" placeholder="Sort" [(value)]="sortType" (valueChange)="sorting()">
         <mat-option value="status">Status</mat-option>
         <mat-option value="id">Newest</mat-option>
       </mat-select>
@@ -37,8 +37,8 @@
       </ng-template>
       <div class="me-grid__description">
         <span class="me-grid__status" [class.success]="cr.blockchain_ref" [class.grey]="!cr.blockchain_ref"></span>
-        <span>{{cr.name}}</span>
-        <button mat-icon-button matTooltip="Delete" (click)="deleteCreatives(cr)">
+        <p class="me-grid__name">{{cr.name}}</p>
+        <button class="me-grid__del-btn" mat-icon-button matTooltip="Delete" (click)="deleteCreatives(cr)">
           <mat-icon svgIcon="delete"></mat-icon>
         </button>
       </div>
