@@ -1,9 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AppService, AuthService} from '../../services/index';
+import {AppService, AuthService, NearService} from '../../services/index';
 import {Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Creative} from '../../model/index';
 import {finalize} from 'rxjs/operators';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-creative-details',
@@ -15,12 +16,16 @@ export class CreativeDetailsComponent implements OnInit, OnDestroy {
   loading = false; /* no used */
   creative: Creative;
   private id: number;
+  explorerNearUrl = `${environment.near.explorerUrl}/accounts`;
+
   constructor(private appService: AppService,
               private activatedRoute: ActivatedRoute,
               private authService: AuthService,
-              private router: Router) {}
+              private router: Router,
+              private nearService: NearService) {}
 
   ngOnInit() {
+    this.explorerNearUrl = `${this.explorerNearUrl}/${this.nearService.getAccountId()}`;
     this.subscriptions.add(
       this.activatedRoute.params.subscribe(params => {
         this.id = params['id'];

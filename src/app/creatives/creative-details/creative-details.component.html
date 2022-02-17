@@ -17,7 +17,15 @@
     <div class="grid-wrapper__item">
       <div class="block-content">
         <h5 class="title">Status</h5>
-        <p class="status success"><!-- success, orange, grey --> Active</p>
+        <ng-container *ngIf="creative.blockchain_ref; else inactive">
+          <p class="status success">
+            <span style="padding-right: 20px">Active</span><a class="link" [href]="explorerNearUrl" target="_blank">Near explorer</a>
+          </p>
+        </ng-container>
+        <ng-template #inactive>
+          <p class="status grey">Inactive</p>
+        </ng-template>
+
       </div>
       <div class="block-content">
         <h5 class="title">Name</h5>
@@ -27,7 +35,7 @@
         <h5 class="title">Description</h5>
         <p>{{creative.description}}</p>
       </div>
-      <a class="link">Link to creative</a>
+      <a class="link" href="{{'https://ipfs.io/ipfs/'+creative.nft_ref}}" target="_blank">NFT.Storage link</a>
     </div>
     <div class="grid-wrapper__item">
       <button class="btn-del" type="submit">Delete</button>
