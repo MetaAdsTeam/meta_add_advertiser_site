@@ -32,9 +32,10 @@
   .left-item {
     grid-column: span 6;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(12, 1fr);
     gap: 27px;
-    height: 408px;
+    align-content: flex-start;
+    // height: 408px;
 
     @media (max-width: 990px) {
       grid-column: span 12;
@@ -43,19 +44,21 @@
 
     img {
       width: 100%;
-      min-width: 300px;
-      height: 100%;
-      max-height: 404px;
+      // min-width: 300px;
+      // height: 100%;
+      // max-height: 404px;
+      height: 404px;
       display: block;
-      grid-column: span 4;
+      grid-column: span 9;
       object-fit: cover;
       object-position: center;
+
       @media (max-width: 1300px) {
-        grid-column: span 6;
+        grid-column: span 12;
       }
     }
     .me-item-properties {
-      grid-column: span 2;
+      grid-column: span 3;
       padding: 0;
       margin: 0;
       list-style: none;
@@ -63,15 +66,19 @@
 
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      // justify-content: space-between;
 
       @media (max-width: 1300px) {
         grid-column: span 12;
         flex-direction: row;
         flex-wrap: wrap;
         gap: 16px;
-        // justify-content: space-between;
+        justify-content: space-between;
         max-width: 100%;
+      }
+
+      li {
+        margin-bottom: 32px;
       }
 
       &__title {
@@ -115,12 +122,16 @@
     }
   }
 
+        .me-item-properties__btn-budge__selected {
+        background-color: rgba(#3888FF, 0.5) !important;
+      }
+
   .right-item {
     grid-column: span 6;
     background: #2a2931;
     border-radius: 8px;
     padding: 48px 56px;
-    height: 408px;
+    min-height: 408px;
     box-sizing: border-box;
 
     @media (max-width: 990px) {

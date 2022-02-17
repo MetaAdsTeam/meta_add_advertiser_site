@@ -21,6 +21,7 @@ import {EChartsOption} from 'echarts';
   styles: [`
     .history {
       padding: 0;
+      height: 290px;
 
       &__titles {
         display: flex;
