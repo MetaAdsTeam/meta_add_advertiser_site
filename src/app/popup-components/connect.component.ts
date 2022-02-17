@@ -9,7 +9,7 @@ import {AppService} from '../services';
   selector: 'app-connect',
   template: `
     <div class="connect-container">
-      <span class="mat-caption" style="margin-bottom: 32px; text-align: center">The key feature of this site is that users can buy NFTs using fiat currency.</span>
+      <span class="mat-caption" style="margin-bottom: 32px; text-align: center">Connect your wallet to dive into MetaAds</span>
       <div class="connect-container__img">
         <img src="assets/images/near.svg"/>
       </div>
