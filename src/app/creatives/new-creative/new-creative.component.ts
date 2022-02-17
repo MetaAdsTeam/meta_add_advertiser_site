@@ -16,14 +16,9 @@ export class NewCreativeComponent {
   fileError: string;
   isSaving: boolean;
   private file: any;
-  // @Output() creatives: Creative[];
   private creatives: Creative[];
-  /*****/
   private selectedCreativeId: number | undefined;
-  // creating: boolean;
 
-
-  // todo: choose file twice not working
   constructor(private progressService: ProgressService,
               private appService: AppService,
               private storageService: StorageService,

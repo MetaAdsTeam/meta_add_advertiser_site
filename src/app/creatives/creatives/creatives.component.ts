@@ -93,7 +93,6 @@ export class CreativesComponent implements OnInit, OnDestroy {
     this.router.navigate([`/creatives/${id}`])
   }
 
-  // todo: create modal
   newCreative() {
     this.popupService.popupNewCreative();
   }
