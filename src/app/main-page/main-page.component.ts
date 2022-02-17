@@ -33,7 +33,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   showMore(ad: Adspot) {
-    this.router.navigate([`/adspot/${ad.id}`],)
+    this.router.navigate([`/ad-space/adspot/${ad.id}`],)
   }
 
   loadAds(filter: string = 'all') {
