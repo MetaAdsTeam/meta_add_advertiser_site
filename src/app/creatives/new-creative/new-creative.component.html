@@ -23,7 +23,7 @@
       <span style="padding: 0 7px">Upload file</span>
     </button>
     <input type="file" (change)="fileChangeEvent($event)"
-           #fileInput id="fileUpload"
+           #fileInput id="fileUpload" [value]=""
            name="fileUpload" accept="video/webm, image/*" style="display: none" />
     <div *ngIf="fileError">
       <span style="color: red">{{fileError}}</span>

@@ -22,19 +22,20 @@
 
 .button-search {
 /* Auto layout */
-display: flex;
-justify-content: center;
-align-items: center;
-padding: 16px 48px;
-background: #3888FF;
-border-radius: 8px;
-font-style: normal;
-font-weight: 800;
-font-size: 18px;
-line-height: 110%;
-letter-spacing: -0.7px;
-color: #FFFFFF;
-border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 48px;
+  background: #3888FF;
+  border-radius: 8px;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 110%;
+  letter-spacing: -0.7px;
+  color: #FFFFFF;
+  border: none;
+  cursor: pointer;
 }
 
 .me-grid {

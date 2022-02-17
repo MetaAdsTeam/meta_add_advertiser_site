@@ -62,11 +62,6 @@ export class NewCreativeComponent {
           this.progressService.setProgressData('Receiving response from server...');
           if (event2.body?.data) {
             this.creatives = event2.body?.data;
-            // this.creating = false;
-            this.showCreatingPanel(false);
-            this.creativeName = '';
-            this.creativeDescription = '';
-            this.clearFile();
             /** id is increment number, for uuid response body must be changed **/
             this.selectedCreativeId = Math.max.apply(Math, this.creatives.map(function(o) { return o.id }));
             this.makeCreative();
@@ -86,6 +81,7 @@ export class NewCreativeComponent {
   }
 
   fileChangeEvent(event: any) {
+    console.log('file change', event);
     this.fileError = '';
     let file = event.dataTransfer ? event.dataTransfer.files[0] : event.target.files[0];
     const pattern = /webm-*|image/;
@@ -106,7 +102,7 @@ export class NewCreativeComponent {
       .replace(/^.+,/, "");
     console.log('file', this.file, 'name', this.filename)
   }
-
+  // todo: not enough for the same file
   clearFile() {
     this.filename = '';
     this.file = null;

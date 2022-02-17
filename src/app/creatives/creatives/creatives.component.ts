@@ -1,10 +1,18 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {AppService, AuthService, PopupService} from '../../services/index';
+import {
+  AppService,
+  AuthService,
+  NearService,
+  PopupService,
+  ProgressService,
+  StorageService
+} from '../../services/index';
 import {Subscription} from 'rxjs';
 import {Creative} from '../../model/index';
 import {finalize, map} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import {NftCreative} from '../../model';
 
 @Component({
   selector: 'app-creatives',
@@ -18,14 +26,33 @@ export class CreativesComponent implements OnInit, OnDestroy {
   creatives: Creative[];
   loading: boolean; /* not used */
   filteredCreatives: Creative[];
+  newCreativeId: number | null;
 
   constructor(private appService: AppService,
               private authService: AuthService,
               private router: Router,
-              private popupService: PopupService) { }
+              private popupService: PopupService,
+              private storageService: StorageService,
+              private progressService: ProgressService,
+              private nearService: NearService) { }
 
   ngOnInit() {
-    this.loadCreatives();
+    const saved = this.storageService.getNewCreativeFromStorage();
+    if (saved) {
+      this.newCreativeId = +saved;
+      this.progressService.showProgressPopup();
+      this.progressService.setProgressData('Processing blockchain data...');
+      if (this.newCreativeId) {
+        this.markCreativeAsNft(this.newCreativeId).then((res: NftCreative) => {
+          if (res) {
+            this.storageService.clearNewCreativeInStorage();
+            this.sendCreativeBlockchainRefToServer(this.newCreativeId!!, res.creative_id.toString());
+          }
+        });
+      }
+    } else {
+      this.loadCreatives();
+    }
   }
 
   loadCreatives() {
@@ -39,7 +66,6 @@ export class CreativesComponent implements OnInit, OnDestroy {
           return {...cr, type: cr.url.substring(cr.url.lastIndexOf('.') + 1)}
         });
         this.filteredCreatives = this.creatives;
-        console.log(this.creatives);
       })
   }
 
@@ -70,6 +96,18 @@ export class CreativesComponent implements OnInit, OnDestroy {
   // todo: create modal
   newCreative() {
     this.popupService.popupNewCreative();
+  }
+
+  markCreativeAsNft(creativeId: number): Promise<any> {
+    return this.nearService.fetchCreativeById(creativeId);
+  }
+
+  sendCreativeBlockchainRefToServer(creativeId: number, blockchainRef: string) {
+    this.appService.markCreativeAsNft(creativeId, blockchainRef)
+      .subscribe(() => {
+        this.progressService.closeProgressPopup();
+        this.router.navigate([`/creatives/${this.newCreativeId}`])
+      });
   }
 
   ngOnDestroy() {

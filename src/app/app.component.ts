@@ -49,7 +49,6 @@ export class AppComponent implements OnInit, OnDestroy {
       this.appService.signed$.subscribe(value => this.signed = value)
     );
     this.metaMaskSigned = this.authService.metaMaskSigned;
-    console.log('singed', this.metaMaskSigned);
   }
 
   nearLogin() {
