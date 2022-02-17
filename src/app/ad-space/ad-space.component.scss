@@ -52,6 +52,7 @@
       grid-column: span 9;
       object-fit: cover;
       object-position: center;
+      border-radius: 8px;
 
       @media (max-width: 1300px) {
         grid-column: span 12;
@@ -68,6 +69,10 @@
       flex-direction: column;
       // justify-content: space-between;
 
+      li {
+        margin-bottom: 32px;
+      }
+
       @media (max-width: 1300px) {
         grid-column: span 12;
         flex-direction: row;
@@ -75,10 +80,10 @@
         gap: 16px;
         justify-content: space-between;
         max-width: 100%;
-      }
 
-      li {
-        margin-bottom: 32px;
+        li {
+          margin-bottom: 0;
+        }
       }
 
       &__title {
