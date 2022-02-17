@@ -130,7 +130,7 @@ export class NearService {
       adspot_id: adId,
       creative_id: creative_id,
       start_time: from_time.toSeconds(),
-      end_time: +to_time.toSeconds()
+      end_time: to_time.toSeconds()
     };
     await this.contract.do_agreement({
       args: args,

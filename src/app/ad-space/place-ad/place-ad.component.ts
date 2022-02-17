@@ -161,12 +161,16 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
       } else {
         maxAvailableTime = this.selectedDate.plus({hours: 2});
       }
-      return this.appService.getTimeslots(this.ad.id, this.selectedDate.toFormat('yyyy-MM-dd'))
+
+      return this.appService.getTimeslots(this.ad.id, this.selectedDate.toISO())
           .pipe(
             map((value: Timeslot[]) => {
               const timeslots: TimeslotsByType = {am: [], pm: []};
               timeslots.am = value.filter(v => v.from_time.hour < 12 && +v.from_time > +minAvailableTime && +v.from_time < +maxAvailableTime);
               timeslots.pm = value.filter(v => v.from_time.hour >= 12 && +v.from_time > +minAvailableTime && +v.from_time < +maxAvailableTime);
+
+              // timeslots.am = value.filter(v => v.from_time.hour < 12);
+              // timeslots.pm = value.filter(v => v.from_time.hour >= 12);
               return timeslots;
             })
           )
@@ -175,6 +179,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   }
 
   selectTimeslot(timeslot: Timeslot) {
+    console.log('timeslot', timeslot);
     if (!timeslot.locked) {
       this.selectedTimeslot = timeslot;
     }
@@ -316,8 +321,8 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
       this.appService.pay({
         adspot_id: this.ad.id,
         creative_id: this.selectedCreativeId!,
-        from_time: this.selectedTimeslot.from_time.toISO(),
-        to_time: this.selectedTimeslot.to_time.toISO(),
+        from_time: this.selectedTimeslot.from_time.toUTC().toISO({includeOffset: false}),
+        to_time: this.selectedTimeslot.to_time.toUTC().toISO({includeOffset: false}),
         play_price: this.ad.price
         })
         .subscribe(value => {
@@ -336,8 +341,10 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
             value.id,
             this.ad.id,
             +blockchainRef,
-            this.selectedTimeslot.from_time,
-            this.selectedTimeslot.to_time,
+            DateTime.fromISO(this.selectedTimeslot.from_time.toUTC().toISO({includeOffset: false})),
+            // this.selectedTimeslot.from_time,
+            DateTime.fromISO(this.selectedTimeslot.to_time.toUTC().toISO({includeOffset: false})),
+            // this.selectedTimeslot.to_time,
             this.ad.price
           ).then(
             res => console.log(res),

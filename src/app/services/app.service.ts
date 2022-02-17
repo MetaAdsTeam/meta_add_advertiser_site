@@ -88,13 +88,12 @@ export class AppService {
   }
 
   getTimeslots(adId: number, date: string): Observable<Timeslot[]> {
-    return this.httpClient.get<TimeslotList>(`${this.api}/timeslots_by_adspot/id/${adId}/date/${date}`)
+    return this.httpClient.post<TimeslotList>(`${this.api}/timeslots_by_adspot/id/${adId}`, {client_time: date})
       .pipe(
         map(l => {
           if (l) {
-            console.log('timeslots', l.data);
             return l.data.map(a => {
-              return {...a, from_time: DateTime.fromISO(a.from_time), to_time: DateTime.fromISO(a.to_time)}
+              return {...a, from_time: DateTime.fromISO(a.from_time+'Z'), to_time: DateTime.fromISO(a.to_time+'Z')}
             });
           } else {
             return []
