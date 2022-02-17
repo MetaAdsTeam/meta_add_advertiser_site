@@ -3,8 +3,7 @@ import {Subscription} from 'rxjs';
 import {Adspot} from '../model';
 import {Router} from '@angular/router';
 import {finalize} from 'rxjs/operators';
-import {HttpErrorResponse} from '@angular/common/http';
-import {AppService, AuthService} from '../services';
+import {AppService} from '../services';
 
 @Component({
   selector: 'app-main-page',
@@ -34,7 +33,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   showMore(ad: Adspot) {
-    this.router.navigate([`/ad/${ad.id}`],)
+    this.router.navigate([`/adspot/${ad.id}`],)
   }
 
   loadAds(filter: string = 'all') {

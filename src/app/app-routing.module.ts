@@ -6,6 +6,7 @@ import {CreativesComponent} from './creatives/creatives/creatives.component';
 import {CreativeDetailsComponent} from './creatives/creative-details/creative-details.component';
 import {AuthGuard} from './auth.guard';
 import {MyCreativesComponent} from './creatives/my-creatives.component';
+import {HomeComponent} from './main-page/home.component';
 
 const routes: Routes = [
   {
@@ -15,11 +16,17 @@ const routes: Routes = [
   },
   {
     path: 'ad-space',
-    component: MainPageComponent
-  },
-  {
-    path: 'ad/:id',
-    component: AdSpaceComponent
+    component: HomeComponent,
+    children: [
+      {
+        path: '',
+        component: MainPageComponent
+      },
+      {
+        path: 'adspot/:id',
+        component: AdSpaceComponent
+      }
+    ]
   },
   {
     path: 'creatives',
