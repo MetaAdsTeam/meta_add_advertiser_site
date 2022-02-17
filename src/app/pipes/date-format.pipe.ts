@@ -8,7 +8,7 @@ export class DateFormatPipe implements PipeTransform {
       if (type === 'DDMMMM') {
         return date.toLocaleString({day: 'numeric', month: 'long'});
       } else if (type === 'HH12MM') {
-        return date.toFormat('hh:mm')
+        return date.toFormat('hh:mm').replace(':', '.')
       } else {
         return ''
       }
