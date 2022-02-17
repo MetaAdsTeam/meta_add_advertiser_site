@@ -36,7 +36,7 @@
              (click)="goToDetails(cr.id)">
       </ng-template>
       <div class="me-grid__description">
-        <span class="me-grid__status" [class.success]="cr.blockchain_ref" [class.grey]="!cr.blockchain_ref"></span>
+        <div class="me-grid__status" [class.success]="cr.blockchain_ref" [class.grey]="!cr.blockchain_ref"></div>
         <p class="me-grid__name">{{cr.name}}</p>
         <button class="me-grid__del-btn" mat-icon-button matTooltip="Delete" (click)="deleteCreatives(cr)">
           <mat-icon svgIcon="delete"></mat-icon>
