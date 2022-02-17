@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {AppService, AuthService} from '../services';
+import {AppService, AuthService, PopupService} from '../../services/index';
 import {Subscription} from 'rxjs';
-import {Creative} from '../model';
+import {Creative} from '../../model/index';
 import {finalize, map} from 'rxjs/operators';
 import {Router} from '@angular/router';
 
@@ -21,7 +21,8 @@ export class CreativesComponent implements OnInit, OnDestroy {
 
   constructor(private appService: AppService,
               private authService: AuthService,
-              private router: Router) { }
+              private router: Router,
+              private popupService: PopupService) { }
 
   ngOnInit() {
     this.loadCreatives();
@@ -68,9 +69,7 @@ export class CreativesComponent implements OnInit, OnDestroy {
 
   // todo: create modal
   newCreative() {
-    // alert('show modal')
-    const url: string = this.creatives[0].url;
-    console.log(url, url.lastIndexOf('.'), url.substring(url.lastIndexOf('.') + 1));
+    this.popupService.popupNewCreative();
   }
 
   ngOnDestroy() {

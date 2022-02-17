@@ -19,13 +19,14 @@ import {MAT_DATE_LOCALE} from '@angular/material/core';
 import {AuthGuard} from './auth.guard';
 import {ProgressPopupComponent} from './popup-components/progress-popup.component';
 import {RegisteredComponent} from './ad-space/registered/registered.component';
-import {CreativesComponent} from './creatives/creatives.component';
+import {CreativesComponent} from './creatives/creatives/creatives.component';
 import {MessagePopupComponent} from './popup-components/message-popup.component';
-import {CreativeDetailsComponent} from './creative-details/creative-details.component';
+import {CreativeDetailsComponent} from './creatives/creative-details/creative-details.component';
 import {PlaceAdComponent} from './ad-space/place-ad/place-ad.component';
 import {UnregisteredComponent} from './ad-space/unregistered/unregistered.component';
 import {AuthService} from './services';
 import {MyCreativesComponent} from './creatives/my-creatives.component';
+import {NewCreativeComponent} from './creatives/new-creative/new-creative.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import {MyCreativesComponent} from './creatives/my-creatives.component';
     CreativesComponent,
     MessagePopupComponent,
     CreativeDetailsComponent,
-    MyCreativesComponent
+    MyCreativesComponent,
+    NewCreativeComponent
   ],
   imports: [
     BrowserModule,

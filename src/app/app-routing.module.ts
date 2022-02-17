@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {AdSpaceComponent} from './ad-space/ad-space.component';
 import {MainPageComponent} from './main-page/main-page.component';
-import {CreativesComponent} from './creatives/creatives.component';
-import {CreativeDetailsComponent} from './creative-details/creative-details.component';
+import {CreativesComponent} from './creatives/creatives/creatives.component';
+import {CreativeDetailsComponent} from './creatives/creative-details/creative-details.component';
 import {AuthGuard} from './auth.guard';
 import {MyCreativesComponent} from './creatives/my-creatives.component';
 

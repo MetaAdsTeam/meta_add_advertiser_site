@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {ProgressPopupComponent} from '../popup-components/progress-popup.component';
 import {MessagePopupComponent} from '../popup-components/message-popup.component';
+import {NewCreativeComponent} from '../creatives/new-creative/new-creative.component';
 
 @Injectable({providedIn: 'root'})
 export class PopupService {
@@ -39,4 +40,12 @@ export class PopupService {
     });
   }
 
+  popupNewCreative() {
+    this.dialog.open(NewCreativeComponent, {
+      width: '592px',
+      height: '475px',
+      maxHeight: '100%',
+      backdropClass: 'modal-backdrop'
+    });
+  }
 }

@@ -1,0 +1,41 @@
+<div style="display: grid; grid-gap: 16px; padding: 20px 40px; background: #2A2931; justify-content: center; color: white">
+  <span style="font-size: 40px; font-weight: 700; font-family: 'Nexa', sans-serif;">Create new creative</span>
+  <mat-form-field class="custom-form-field" appearance="outline">
+    <input matInput
+           type="text"
+           autocomplete="off"
+           placeholder="Name" [(ngModel)]="creativeName">
+  </mat-form-field>
+  <mat-form-field class="custom-form-field" appearance="outline">
+          <textarea matInput
+                    maxlength="255"
+                    autocomplete="off"
+                    [(ngModel)]="creativeDescription"
+                    placeholder="Description"
+                    [matTextareaAutosize]="true"
+                    [matAutosizeMinRows]="7"></textarea>
+  </mat-form-field>
+  <div style="display: flex; flex-direction: row;flex-wrap: wrap; justify-content: space-between">
+    <button mat-button
+            class="create_btn"
+            (click)="fileInput.click()">
+      <mat-icon svgIcon="upload"></mat-icon>
+      <span style="padding: 0 7px">Upload file</span>
+    </button>
+    <input type="file" (change)="fileChangeEvent($event)"
+           #fileInput id="fileUpload"
+           name="fileUpload" accept="video/webm, image/*" style="display: none" />
+    <div *ngIf="fileError">
+      <span style="color: red">{{fileError}}</span>
+    </div>
+    <div *ngIf="filename" style="display: flex;">
+      <span class="filename-wrapper">{{filename}}</span>
+      <mat-icon svgIcon="close" (click)="clearFile()"></mat-icon>
+    </div>
+  </div>
+  <button mat-flat-button
+          class="mat-primary btn-save"
+          style="width: 115px"
+          (click)="uploadFile()"
+          [disabled]="!creativeName || !filename || isSaving">Save</button>
+</div>

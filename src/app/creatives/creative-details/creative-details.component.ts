@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AppService, AuthService} from '../services';
+import {AppService, AuthService} from '../../services/index';
 import {Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Creative} from '../model';
+import {Creative} from '../../model/index';
 import {finalize} from 'rxjs/operators';
 
 @Component({

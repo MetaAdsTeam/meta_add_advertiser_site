@@ -3,7 +3,8 @@ import {PlaceAdStorageModel} from '../model';
 import {PayDataStorageModel} from '../model/pay-data.storage.model';
 
 const placeAdStorageKey = 'MetaAds-PlaceAd';
-const payDataStorageKey = 'MetaAds-payData';
+const payDataStorageKey = 'MetaAds-PayData';
+const newCreativeStorageKey = 'MetaAds-NewCreative';
 
 @Injectable({providedIn: 'root'})
 export class StorageService {
@@ -40,5 +41,17 @@ export class StorageService {
 
   clearPayDataInStorage() {
     localStorage.removeItem(payDataStorageKey);
+  }
+
+  getNewCreativeFromStorage(): string | null {
+    return localStorage.getItem(newCreativeStorageKey)
+  }
+
+  saveNewCreativeToStorage(newCreative: number) {
+    localStorage.setItem(newCreativeStorageKey, newCreative.toString());
+  }
+
+  clearNewCreativeInStorage() {
+    localStorage.removeItem(newCreativeStorageKey);
   }
 }

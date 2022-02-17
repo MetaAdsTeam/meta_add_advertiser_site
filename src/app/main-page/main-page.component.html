@@ -9,7 +9,7 @@
   <div class="space-ad-container">
     <div *ngFor="let ad of ads" class="space-ad-content">
       <img *ngIf="!ad.active || (ad.active && selectedAd !== ad)"
-           [src]="ad.preview_url"
+           [src]="ad.preview_thumb_url"
            alt="unavailable"
            [class.unavailable]="!ad.active"
            (click)="selectAd(ad)">
