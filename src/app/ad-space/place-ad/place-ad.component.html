@@ -20,7 +20,7 @@
               <div *ngFor="let ts of timeslots.am"
                    class="timeslot"
                    [class.active]="selectedTimeslot === ts"
-                   [class.timeslot.locked]="ts.locked"
+                   [class.locked]="ts.locked"
                    matTooltip="Timeslot unavailable"
                    [matTooltipDisabled]="!ts.locked"
                    matTooltipPosition="above"
