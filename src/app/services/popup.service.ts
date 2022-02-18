@@ -30,14 +30,14 @@ export class PopupService {
     });
   }
 
-  popupMessage(message: string, button: string) {
-    this.dialog.open(MessagePopupComponent, {
+  popupMessage(message: string, button: string): Observable<any> {
+    return this.dialog.open(MessagePopupComponent, {
       width: '592px',
       height: '418px',
       maxHeight: '100%',
       backdropClass: 'modal-backdrop',
       data: {message, button}
-    });
+    }).afterClosed();
   }
 
   popupNewCreative() {

@@ -8,13 +8,17 @@ import {
 } from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {AuthService} from '../services';
+import {AuthService, NearService, PopupService} from '../services';
 import {Injectable} from '@angular/core';
 
 @Injectable({providedIn: 'root'})
 export class NotAuthorizedInterceptor implements HttpInterceptor {
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private nearService: NearService,
+    private popupService: PopupService
+  ) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -29,11 +33,13 @@ export class NotAuthorizedInterceptor implements HttpInterceptor {
           (err: any) => {
             if (err instanceof HttpErrorResponse) {
               if (err.status === 401) {
-                console.log('err', err);
-                // redirect to the login route
-                // or show a modal
-                // todo: call login form
-                alert('Not Logged!')
+                this.popupService
+                  .popupMessage('Your login session has expired', 'OK')
+                  .subscribe(() => {
+                    this.nearService.nearSignOut();
+                    this.authService.logOut();
+                    window.location.reload();
+                  });
               }
             }
           }
