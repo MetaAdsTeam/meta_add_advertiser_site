@@ -2,9 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/internal/Subscription';
 import {Playback} from '../model';
 import {AppService} from '../services';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {finalize} from 'rxjs/operators';
-import {DateTime} from 'luxon';
 
 @Component({
   templateUrl: './playback.component.html',
@@ -17,7 +16,8 @@ export class PlaybackComponent implements OnInit, OnDestroy {
   loading = false;
 
   constructor(private appService: AppService,
-              private activatedRoute: ActivatedRoute) { }
+              private activatedRoute: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit() {
     this.subscriptions.add(
@@ -41,8 +41,8 @@ export class PlaybackComponent implements OnInit, OnDestroy {
     );
   }
 
-  showPlaceAd() {
-
+  showPlaceAd(id: number) {
+    this.router.navigate([`/ad-space/ad/${id}`])
   }
 
   ngOnDestroy() {

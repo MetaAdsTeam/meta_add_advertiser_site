@@ -30,7 +30,8 @@ export interface Playback {
   processed_at: string,
   preview_thumb_url: string,
   adspot_likes?: number,
-  jump_url?: string
+  jump_url?: string,
+  adspot_id: number
 }
 
 export interface PlaybackBE {
@@ -53,7 +54,8 @@ export interface PlaybackBE {
   processed_at: string,
   preview_thumb_url: string,
   adspot_likes?: number,
-  jump_url?: string
+  jump_url?: string,
+  adspot_id: number
 }
 
 export interface PlaybackList {
