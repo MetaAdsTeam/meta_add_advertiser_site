@@ -8,7 +8,7 @@ import {
   Creative,
   CreativeBE,
   PlaybackBody,
-  Playback
+  Playback, PlaybackList
 } from '../model';
 import {NearService} from './near.service';
 import {HttpClient} from '@angular/common/http';
@@ -77,8 +77,7 @@ export class AppService {
     this.nearAccountId.next('');
   }
 
-  getAds(filter: string = 'all'): Observable<Adspot[]> {
-    // return of(this.ads)
+  getAds(): Observable<Adspot[]> {
     return this.httpClient.get<AdspotList>(`${this.api}/adspots`)
       .pipe(map(l => {return l?.data}))
   }
@@ -128,5 +127,10 @@ export class AppService {
 
   getCreative(id: number): Observable<Creative> {
     return this.httpClient.get<Creative>(`${this.api}/creative/id/${id}`)
+  }
+
+  getPlaybacks(): Observable<Playback[]> {
+    return this.httpClient.get<PlaybackList>(`${this.api}/playbacks`)
+      .pipe(map(p => {return p.data}));
   }
 }

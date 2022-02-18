@@ -26,7 +26,12 @@ export interface Playback {
   locked: boolean,
   adspot_type_name: string,
   publish_url: string,
-  processed_at: string
+  processed_at: string,
+  preview_thumb_url: string
+}
+
+export interface PlaybackList {
+  data: Playback[]
 }
 
 export interface NftPlaybackList {
