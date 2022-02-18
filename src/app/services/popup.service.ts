@@ -44,7 +44,7 @@ export class PopupService {
   popupNewCreative() {
     this.dialog.open(NewCreativeComponent, {
       width: '592px',
-      height: '418px',
+      height: '468px',
       maxHeight: '100%',
       backdropClass: 'modal-backdrop'
     });

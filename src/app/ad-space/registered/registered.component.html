@@ -46,7 +46,7 @@
         <app-description *ngIf="selectedAddInfoType === 'desc'"
                          [header]="'Description'" body="{{ ad?.description }}" link="{{ ad?.jump_url }}">
         </app-description>
-        <app-history *ngIf="selectedAddInfoType === 'history'"></app-history>
+        <app-history *ngIf="selectedAddInfoType === 'history'" [header]="'Total price'"></app-history>
       </div>
     </div>
 
