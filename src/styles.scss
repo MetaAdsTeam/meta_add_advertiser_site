@@ -1,10 +1,13 @@
 @import "custom-theme";
 
 html {
-  overflow-y: scroll;
-  overflow-x: auto;
-  height: 100%;
-  -webkit-overflow-scrolling: auto;
+  // overflow-y: scroll;
+  // overflow-x: auto;
+  // height: 100%;
+  // -webkit-overflow-scrolling: auto;
+
+  overflow: hidden;
+  height: 100vh;
 }
 
 body {
