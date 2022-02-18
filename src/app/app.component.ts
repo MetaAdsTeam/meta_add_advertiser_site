@@ -3,6 +3,7 @@ import {appVersion} from '../environments/app-version';
 import {Subscription} from 'rxjs';
 import {AppService, AuthService, NearService, PopupService} from './services';
 import {environment} from '../environments/environment';
+import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
 
 type CurrentState = 'full' | 'minimized';
 
@@ -26,7 +27,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private appService: AppService,
               private authService: AuthService,
               private nearService: NearService,
-              private popupService: PopupService) {
+              private popupService: PopupService,
+              private breakpointObserver: BreakpointObserver) {
     if (!this.authService.isEthereumProviderAvailable()) {
       this.popupService.popupMessage('Metamask extension is unavailable', 'Ok');
     }
@@ -49,6 +51,15 @@ export class AppComponent implements OnInit, OnDestroy {
       this.appService.signed$.subscribe(value => this.signed = value)
     );
     this.metaMaskSigned = this.authService.metaMaskSigned;
+
+    this.subscriptions.add(this.breakpointObserver
+      .observe(['(max-width: 700px)'])
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+          this.currentState = 'minimized';
+        }
+      })
+    );
   }
 
   nearLogin() {
