@@ -5,6 +5,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ProgressPopupComponent} from '../popup-components/progress-popup.component';
 import {MessagePopupComponent} from '../popup-components/message-popup.component';
 import {NewCreativeComponent} from '../creatives/new-creative/new-creative.component';
+import {InputPopupComponent} from '../popup-components/input-popup.component';
 
 @Injectable({providedIn: 'root'})
 export class PopupService {
@@ -47,5 +48,15 @@ export class PopupService {
       maxHeight: '100%',
       backdropClass: 'modal-backdrop'
     });
+  }
+
+  popupInput(message: string, button: string): Observable<any> {
+    return this.dialog.open(InputPopupComponent, {
+      width: '592px',
+      height: '418px',
+      maxHeight: '100%',
+      backdropClass: 'modal-backdrop',
+      data: {message, button}
+    }).afterClosed();
   }
 }

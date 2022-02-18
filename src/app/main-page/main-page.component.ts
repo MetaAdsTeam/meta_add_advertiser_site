@@ -3,7 +3,7 @@ import {Subscription} from 'rxjs';
 import {Adspot, PlaybackBE} from '../model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {finalize} from 'rxjs/operators';
-import {AppService} from '../services';
+import {AppService, PopupService} from '../services';
 
 interface AdspotPreview {
   id: number,
@@ -29,7 +29,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
   constructor(private appService: AppService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private popupService: PopupService) { }
 
   ngOnInit(): void {
     const filter = this.route.snapshot.paramMap.get('filter');
@@ -98,6 +99,11 @@ export class MainPageComponent implements OnInit, OnDestroy {
     } else {
       this.loading = false;
     }
+  }
+
+  notifyMe() {
+    this.popupService.popupInput('You\'ll be the first to know', 'ok')
+      .subscribe(value => console.log('input value', value))
   }
 
   ngOnDestroy() {
