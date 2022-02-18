@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {Adspot, Playback} from '../model';
+import {Adspot, Playback, PlaybackBE} from '../model';
 import {Router} from '@angular/router';
 import {finalize} from 'rxjs/operators';
 import {AppService} from '../services';
@@ -48,7 +48,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
     if (ad.source === 'adspots') {
       this.router.navigate([`/ad-space/adspot/${ad.id}`])
     } else {
-
+      this.router.navigate([`/ad-space/playback/${ad.id}`])
     }
   }
 
@@ -83,7 +83,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
           .pipe(
             finalize(() => this.loading = false)
           )
-          .subscribe((value: Playback[]) => {
+          .subscribe((value: PlaybackBE[]) => {
             this.ads = value.map(a => {
               return {
                 id: a.id,

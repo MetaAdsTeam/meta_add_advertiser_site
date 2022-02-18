@@ -8,7 +8,7 @@ import {
   Creative,
   CreativeBE,
   PlaybackBody,
-  Playback, PlaybackList
+  Playback, PlaybackList, PlaybackBE
 } from '../model';
 import {NearService} from './near.service';
 import {HttpClient} from '@angular/common/http';
@@ -129,8 +129,17 @@ export class AppService {
     return this.httpClient.get<Creative>(`${this.api}/creative/id/${id}`)
   }
 
-  getPlaybacks(): Observable<Playback[]> {
+  getPlaybacks(): Observable<PlaybackBE[]> {
     return this.httpClient.get<PlaybackList>(`${this.api}/playbacks`)
       .pipe(map(p => {return p.data}));
+  }
+
+  getPlaybackById(id: number): Observable<Playback> {
+    return this.httpClient.get<PlaybackBE>(`${this.api}/playback/id/${id}`)
+      .pipe(
+        map(p => {
+          return {...p, from_time: DateTime.fromISO(p.from_time+'Z'), to_time: DateTime.fromISO(p.to_time+'Z')}
+        })
+      );
   }
 }

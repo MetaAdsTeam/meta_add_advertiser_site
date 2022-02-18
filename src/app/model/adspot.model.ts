@@ -1,13 +1,10 @@
 export interface Adspot {
   id: number,
-  url?: string,
   name: string,
   spot_type: string,
   description: string,
   price: number,
   likes?: number,
-  usersPerWeek?: number,
-  totalUsers?: number,
   publisher_name?: string, // owner
   preview_url: string,
   preview_thumb_url: string,
@@ -16,7 +13,7 @@ export interface Adspot {
   average_time?: number,
   max_traffic?: number,
   active: boolean,
-  jump_link?: string
+  jump_url?: string
 }
 
 export interface AdspotList {

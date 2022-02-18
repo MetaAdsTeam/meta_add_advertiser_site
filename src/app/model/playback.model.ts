@@ -1,3 +1,5 @@
+import {DateTime} from 'luxon';
+
 export interface PlaybackBody {
   from_time: string,
   to_time: string,
@@ -12,6 +14,29 @@ export interface Playback {
   id: number,
   example: number,
   adspot_name: string,
+  from_time: DateTime,
+  to_time: DateTime,
+  advert_id: number,
+  creative_name: string,
+  creative_description: string,
+  creative_url: string,
+  creative_path: string,
+  status: string,
+  smart_contract: string,
+  spot_price: number,
+  locked: boolean,
+  adspot_type_name: string,
+  publish_url: string,
+  processed_at: string,
+  preview_thumb_url: string,
+  adspot_likes?: number,
+  jump_url?: string
+}
+
+export interface PlaybackBE {
+  id: number,
+  example: number,
+  adspot_name: string,
   from_time: string,
   to_time: string,
   advert_id: number,
@@ -19,19 +44,20 @@ export interface Playback {
   creative_description: string,
   creative_url: string,
   creative_path: string,
-  status_name: string,
+  status: string,
   smart_contract: string,
   spot_price: number,
-  play_price: number,
   locked: boolean,
   adspot_type_name: string,
   publish_url: string,
   processed_at: string,
-  preview_thumb_url: string
+  preview_thumb_url: string,
+  adspot_likes?: number,
+  jump_url?: string
 }
 
 export interface PlaybackList {
-  data: Playback[]
+  data: PlaybackBE[]
 }
 
 export interface NftPlaybackList {
