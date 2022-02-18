@@ -335,15 +335,14 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
             creativeId: this.selectedCreativeId!,
             playbackId: value.id
           });
-
           /** create mint **/
           this.nearService.do_agreement(
             value.id,
             this.ad.id,
             +blockchainRef,
-            DateTime.fromISO(this.selectedTimeslot.from_time.toUTC().toISO({includeOffset: false})),
+            DateTime.fromISO(this.selectedTimeslot.from_time.toUTC().toISO({includeOffset: false}), {zone: 'utc'}),
             // this.selectedTimeslot.from_time,
-            DateTime.fromISO(this.selectedTimeslot.to_time.toUTC().toISO({includeOffset: false})),
+            DateTime.fromISO(this.selectedTimeslot.to_time.toUTC().toISO({includeOffset: false}), {zone: 'utc'}),
             // this.selectedTimeslot.to_time,
             this.ad.price
           ).then(
