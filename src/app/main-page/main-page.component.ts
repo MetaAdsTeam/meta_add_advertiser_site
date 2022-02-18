@@ -1,10 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {Adspot, Playback, PlaybackBE} from '../model';
-import {Router} from '@angular/router';
+import {Adspot, PlaybackBE} from '../model';
+import {ActivatedRoute, Router} from '@angular/router';
 import {finalize} from 'rxjs/operators';
 import {AppService} from '../services';
-import {DateTime} from 'luxon';
 
 interface AdspotPreview {
   id: number,
@@ -22,19 +21,19 @@ interface AdspotPreview {
 })
 export class MainPageComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
-  // ads: Adspot[] = [];
   ads: AdspotPreview[] = [];
-  // selectedAd: Adspot | null = null;
   selectedAd: AdspotPreview | null = null;
   signed: boolean = false;
   selectedAdFilter = 'all';
   loading = false; // not used
 
   constructor(private appService: AppService,
-              private router: Router) { }
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.loadAds();
+    const filter = this.route.snapshot.paramMap.get('filter');
+    this.loadAds(filter ? filter : 'all');
     this.subscriptions.add(
       this.appService.signed$.subscribe(value => this.signed = value)
     );

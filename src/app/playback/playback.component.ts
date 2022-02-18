@@ -42,7 +42,11 @@ export class PlaybackComponent implements OnInit, OnDestroy {
   }
 
   showPlaceAd(id: number) {
-    this.router.navigate([`/ad-space/ad/${id}`])
+    this.router.navigate([`/ad-space/adspot/${id}`, {showPlaceAd: true}]);
+  }
+
+  goToList() {
+    this.router.navigate([`/ad-space`, {filter: 'my'}]);
   }
 
   ngOnDestroy() {

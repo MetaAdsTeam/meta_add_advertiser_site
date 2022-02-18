@@ -1,7 +1,7 @@
 <div *ngIf="playback">
   <div>
-    <a routerLink="/">
-      <img src="assets/images/arrow-left.svg" alt="arrow-left">
+    <a>
+      <img src="assets/images/arrow-left.svg" alt="arrow-left" (click)="goToList()">
     </a>
     <span>{{playback.adspot_type_name}}: {{playback.adspot_name}}</span>
   </div>
