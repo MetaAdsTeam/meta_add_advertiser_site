@@ -24,11 +24,11 @@
           </li>
           <li>
             <div class="mat-body-1 me-item-properties__title">Users per week:</div>
-            <div class="mat-body-2 me-item-properties__value">{{ad?.usersPerWeek}}</div>
+            <div class="mat-body-2 me-item-properties__value">{{ad?.max_traffic}}</div>
           </li>
           <li>
             <div class="mat-body-1 me-item-properties__title">Total users:</div>
-            <div class="mat-body-2 me-item-properties__value">{{ad?.totalUsers}}</div>
+            <div class="mat-body-2 me-item-properties__value">{{ad?.views_amount}}</div>
           </li>
           <li>
             <div class="mat-body-1 me-item-properties__title">Owned by:</div>
@@ -43,7 +43,7 @@
         <app-history></app-history>
       </div>
       <div class="grid-item right-itm">
-        <app-description [header]="'Description'" body="{{ ad?.description }}" link="{{ ad?.jump_link }}">
+        <app-description [header]="'Description'" body="{{ ad?.description }}" link="{{ ad?.jump_url }}">
         </app-description>
       </div>
     </div>

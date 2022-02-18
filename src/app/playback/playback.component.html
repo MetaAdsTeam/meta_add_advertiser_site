@@ -1,0 +1,33 @@
+<div *ngIf="playback">
+  <div>
+    <a>
+      <img src="assets/images/arrow-left.svg" alt="arrow-left" (click)="goToList()">
+    </a>
+    <span>{{playback.adspot_type_name}}: {{playback.adspot_name}}</span>
+  </div>
+  <div>
+    <div>
+      <div>
+        <span>About</span>
+        <a *ngIf="playback.jump_url" [href]="playback.jump_url" target="_blank">Go to Ad Space</a>
+        <span>Current price:</span>
+        <span>{{playback.spot_price}}</span>
+        <span>Likes:</span>
+        <span>{{playback.adspot_likes}}</span>
+      </div>
+      <div>
+        <span>Your NFT</span>
+        <span>Status</span>
+        <span>{{playback.status}}</span>
+        <span>Time slot</span>
+        <span>{{playback.from_time | formatDate : 'SIMPLE'}}</span>
+        <span>Name</span>
+        <span>{{playback.creative_name}}</span>
+      </div>
+    </div>
+    <app-history></app-history>
+  </div>
+  <button class="mat-primary" (click)="showPlaceAd(playback.adspot_id)">
+    Place Ad
+  </button>
+</div>

@@ -28,6 +28,7 @@ import {AuthService} from './services';
 import {MyCreativesComponent} from './creatives/my-creatives.component';
 import {NewCreativeComponent} from './creatives/new-creative/new-creative.component';
 import {HomeComponent} from './main-page/home.component';
+import {PlaybackComponent} from './playback/playback.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import {HomeComponent} from './main-page/home.component';
     CreativeDetailsComponent,
     MyCreativesComponent,
     NewCreativeComponent,
-    HomeComponent
+    HomeComponent,
+    PlaybackComponent
   ],
   imports: [
     BrowserModule,

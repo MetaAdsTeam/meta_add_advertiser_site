@@ -7,6 +7,7 @@ import {CreativeDetailsComponent} from './creatives/creative-details/creative-de
 import {AuthGuard} from './auth.guard';
 import {MyCreativesComponent} from './creatives/my-creatives.component';
 import {HomeComponent} from './main-page/home.component';
+import {PlaybackComponent} from './playback/playback.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
       {
         path: 'adspot/:id',
         component: AdSpaceComponent
+      },
+      {
+        path: 'playback/:id',
+        component: PlaybackComponent
       }
     ]
   },
