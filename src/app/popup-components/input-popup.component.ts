@@ -5,35 +5,40 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
   template: `
     <div class="message">
       <span>{{message}}</span>
-      <mat-form-field class="custom-form-field" appearance="outline">
+      <mat-form-field class="custom2-form-field" style="background: white; border-radius: 5px;" appearance="outline">
         <input matInput
                type="text"
                autocomplete="off"
                placeholder="Email" [(ngModel)]="inputValue">
+        <button mat-flat-button tabindex="-1" matSuffix
+                [mat-dialog-close]="inputValue">
+          <mat-icon svgIcon="send"></mat-icon>
+        </button>
       </mat-form-field>
-      <button mat-raised-button [mat-dialog-close]="inputValue">{{ button }}</button>
     </div>
   `,
-  styles: [`
+  styles: [`    
     .message {
-      background: linear-gradient(90deg, #347CE8 -51.35%, #9409FB 141.72%);;
+      background: #2A2931;
       height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-    span {
-      color: white;
-      font-size: 30px;
-      font-weight: 800;
-      font-family: 'Nexa', sans-serif;
-      margin-bottom: 32px;
-    }
-    button {
-      width: 177px;
-      height: 56px;
-      color: #347CE8;
-    }
+      
+      span {
+        color: white;
+        font-size: 30px;
+        font-weight: 800;
+        font-family: 'Nexa', sans-serif;
+        margin-bottom: 32px;
+      }
+      button {
+        height: 54px;
+        background: #3888FF;
+        border-radius: 0 4px 4px 0;
+        padding: 0 20px;
+      }
     }
   `]
 })

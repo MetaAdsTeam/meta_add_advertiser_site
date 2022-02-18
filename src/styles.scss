@@ -183,6 +183,56 @@ body {
   }
 }
 
+.custom2-form-field {
+  input::placeholder {
+    color: #636A77;
+  }
+
+  textarea::placeholder {
+    color: #636A77;
+  }
+
+  &.mat-form-field-appearance-outline {
+
+    .mat-form-field-outline {
+      color: #636A77;
+    }
+
+    .mat-form-field-outline-thick {
+      color: #3888ff;
+    }
+
+    .mat-form-field-wrapper {
+      padding: 0;
+      margin: 0;
+    }
+
+    .mat-select-arrow {
+      color: #636A77;
+    }
+
+    .mat-select-arrow-wrapper {
+      transform: none;
+    }
+
+    .mat-select-value {
+      color: #636A77;
+    }
+
+    .mat-select-placeholder {
+      color: #636A77;
+    }
+
+    .mat-form-field-infix {
+      border: none;
+    }
+
+    .mat-form-field-flex {
+      padding: 0 0 0 0.75em;
+    }
+  }
+}
+
 .mat-flat-button.mat-primary.mat-button-disabled {
   background: #636A77;
   color: white;

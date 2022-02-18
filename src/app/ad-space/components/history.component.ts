@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {EChartsOption} from 'echarts';
 
 @Component({
@@ -6,7 +6,7 @@ import {EChartsOption} from 'echarts';
   template: `
     <div class="history">
       <div class="history__titles">
-        <h5 class="">Total price</h5>
+        <h5 class="">{{ header }}</h5>
         <div class="history__type">
           <span>All time</span>
           <span>Month</span>
@@ -94,4 +94,6 @@ export class HistoryComponent {
     animationEasing: 'elasticOut',
     animationDelayUpdate: (idx) => idx * 5
   };
+
+  @Input() header: string;
 }
