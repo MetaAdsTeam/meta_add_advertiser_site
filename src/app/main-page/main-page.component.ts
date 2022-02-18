@@ -29,8 +29,8 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
   constructor(private appService: AppService,
               private router: Router,
-              private route: ActivatedRoute,
-              private popupService: PopupService) { }
+              private popupService: PopupService,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     const filter = this.route.snapshot.paramMap.get('filter');
