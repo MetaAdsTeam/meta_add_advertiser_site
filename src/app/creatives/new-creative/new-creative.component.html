@@ -1,4 +1,4 @@
-<div style="display: grid; grid-gap: 16px; padding: 20px 40px; background: #2A2931; justify-content: center; color: white">
+<div style="display: grid; grid-gap: 16px; padding: 36px 40px; background: #2A2931; justify-content: center; color: white">
   <span style="font-size: 40px; font-weight: 700; font-family: 'Nexa', sans-serif;">Create new creative</span>
   <mat-form-field class="custom-form-field" appearance="outline">
     <input matInput
@@ -35,7 +35,7 @@
   </div>
   <button mat-flat-button
           class="mat-primary btn-save"
-          style="width: 115px"
+          style="width: 115px; margin: 0 auto;"
           (click)="uploadFile()"
           [disabled]="!creativeName || !filename || isSaving">Save</button>
 </div>
