@@ -127,5 +127,9 @@ export class AppModule {
       'delete',
       this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/delete.svg')
     );
+    this.matIconRegistry.addSvgIcon(
+      'send',
+      this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/send.svg')
+    );
   }
 }
