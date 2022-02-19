@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Adspot, PlaceAdStorageModel, PayDataStorageModel} from '../../model';
 import {StorageService} from '../../services';
+import {ActivatedRoute} from '@angular/router';
 
 type SelectedAddInfoType = 'desc' | 'history';
 
@@ -17,9 +18,14 @@ export class RegisteredComponent implements OnInit {
   savedPlaceAd: PlaceAdStorageModel | null;
   savedPayData: PayDataStorageModel | null;
 
-  constructor(private storageService: StorageService) { }
+  constructor(private storageService: StorageService,  private route: ActivatedRoute) { }
 
   ngOnInit() {
+    const showPlaceAd = this.route.snapshot.paramMap.get('showPlaceAd');
+    if (showPlaceAd) {
+      this.showPlaceAd();
+    }
+
     this.savedPlaceAd = this.storageService.getPlaceAdFromStorage();
     if (this.savedPlaceAd) {
       this.showPlaceAd();

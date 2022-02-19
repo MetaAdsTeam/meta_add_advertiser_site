@@ -29,6 +29,7 @@ import {MyCreativesComponent} from './creatives/my-creatives.component';
 import {NewCreativeComponent} from './creatives/new-creative/new-creative.component';
 import {HomeComponent} from './main-page/home.component';
 import {PlaybackComponent} from './playback/playback.component';
+import {InputPopupComponent} from './popup-components/input-popup.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import {PlaybackComponent} from './playback/playback.component';
     MyCreativesComponent,
     NewCreativeComponent,
     HomeComponent,
-    PlaybackComponent
+    PlaybackComponent,
+    InputPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -124,6 +126,10 @@ export class AppModule {
     this.matIconRegistry.addSvgIcon(
       'delete',
       this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/delete.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'send',
+      this.sanitizer.bypassSecurityTrustResourceUrl('./assets/images/send.svg')
     );
   }
 }

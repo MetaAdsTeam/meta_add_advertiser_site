@@ -1,4 +1,4 @@
-const apiUrl = 'https://metaads.team/tornado_dev';
+const apiUrl = 'https://metaads.team/tornado';
 
 export const environment = {
   production: false,

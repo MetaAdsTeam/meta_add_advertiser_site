@@ -1,6 +1,6 @@
 .main-title {
   padding: 72px 0;
-  margin: 94px 0 0;
+  // margin: 94px 0 0;
 
   font-family: Nexa;
   font-style: normal;
@@ -45,6 +45,7 @@
   cursor: pointer;
   width: 100%;
   align-items: center;
+  position: relative;
 
   img {
     height: 323px;
