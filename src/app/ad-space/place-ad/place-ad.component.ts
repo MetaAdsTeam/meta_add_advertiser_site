@@ -15,6 +15,7 @@ import {HttpErrorResponse, HttpEventType} from '@angular/common/http';
 import {finalize, map} from 'rxjs/operators';
 import {AppService, NearService, StorageService, ProgressService, PopupService, AuthService} from '../../services';
 import {Subscription, Observable, of} from 'rxjs';
+import {Router} from '@angular/router';
 
 
 interface TimeslotsByType {
@@ -58,7 +59,8 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
               private nearService: NearService,
               private progressService: ProgressService,
               private storageService: StorageService,
-              private popupService: PopupService, private authService: AuthService) { }
+              private popupService: PopupService,
+              private router: Router) { }
 
   ngOnInit() {
     this.subscriptions.add(
@@ -108,7 +110,8 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
               this.sendPlaybackBlockchainInfoToServer(this.savedPayData!!.playbackId, res.status, res.playback_id)
                 .subscribe(
                   () => {
-                    this.popupService.popupMessage('Transaction successful', 'Got it!')
+                    this.popupService.popupMessage('Transaction successful', 'Got it!');
+                    this.router.navigate(['/ad-space']);
                   },
                   (error: HttpErrorResponse) => {
                     alert(`Error: ${error.statusText}`);
