@@ -1,47 +1,55 @@
-<div *ngIf="playback" class="page-wrapper-1">
+<div class="page-wrapper" *ngIf="playback">
   <div class="page-link-title">
-    <img src="assets/images/arrow-left.svg" alt="arrow-left" (click)="goToList()" style="cursor: pointer">
-    <span class="me-item-name">{{playback.adspot_type_name}}: {{playback.adspot_name}}</span>
+    <a routerLink="/">
+      <img src="assets/images/arrow-left.svg" alt="arrow-left">
+    </a>
+    <span>{{playback.adspot_type_name}}: {{playback.adspot_name}}</span>
   </div>
-  <div class="me-item-content">
-    <div style="display: grid; grid-gap: 20px">
-      <div class="pb-block">
-        <div style="display: flex; justify-content: space-between; align-items: center">
-          <span class="pb-block-header">About</span>
+  <div class="grid-container">
+    <div class="grid-container__item">
+      <div class="yabout">
+        <div class="yabout__item">
+          <h4>About</h4>
           <a *ngIf="playback.jump_url" [href]="playback.jump_url" target="_blank">Go to Ad Space</a>
         </div>
-        <ul class="pb-block-items">
-          <li>
-            <div class="pb-block-items__title">Current price:</div>
-            <div class="pb-block-items__value">{{playback.spot_price}}</div>
-          </li>
-          <li>
-            <div class="pb-block-items__title">Likes:</div>
-            <div class="pb-block-items__value">{{playback.adspot_likes}}</div>
-          </li>
-        </ul>
+        <div>
+          <ul class="list">
+            <li>
+              <div class="list__title">Current price:</div>
+              <p class="list__content">{{playback.spot_price}}</p>
+            </li>
+            <li>
+              <div class="list__title">Likes:</div>
+              <p class="list__content">{{playback.adspot_likes}}</p>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="pb-block">
-        <span class="pb-block-header">Your NFT</span>
-        <ul class="pb-block-items">
+      <div class="yabout">
+        <div class="yabout__item">
+          <h4>Your NFT</h4>
+        </div>
+        <ul class="list">
           <li>
-            <div class="pb-block-items__title">Status:</div>
-            <div class="pb-block-items__value">{{playback.status}}</div>
+            <div class="list__title">Status</div>
+            <p class="list__content">{{playback.status}}</p>
           </li>
           <li>
-            <div class="pb-block-items__title">Time slot:</div>
-            <div class="pb-block-items__value">{{playback.from_time | formatDate : 'SIMPLE'}}</div>
+            <div class="list__title">Time slot</div>
+            <p class="list__content">{{playback.from_time | formatDate : 'SIMPLE'}}</p>
           </li>
           <li>
-            <div class="pb-block-items__title">Name:</div>
-            <div class="pb-block-items__value">{{playback.creative_name}}</div>
+            <div class="list__title">Name</div>
+            <p class="list__content">{{playback.creative_name}}</p>
           </li>
         </ul>
       </div>
     </div>
-    <app-history style="width: 100%;background: #333539; border-radius: 8px" [header]="'View history'"></app-history>
+    <div class="grid-container__item background-history">
+      <app-history [header]="'View history'"></app-history>
+    </div>
   </div>
-  <button mat-flat-button class="btn-pa mat-primary" (click)="showPlaceAd(playback.adspot_id)">
+  <button class="btn-pa" (click)="showPlaceAd(playback.adspot_id)">
     Place Ad
   </button>
 </div>
