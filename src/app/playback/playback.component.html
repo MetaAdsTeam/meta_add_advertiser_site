@@ -1,33 +1,55 @@
-<div *ngIf="playback">
-  <div>
+<div class="page-wrapper" *ngIf="playback">
+  <div class="page-link-title">
     <a routerLink="/">
       <img src="assets/images/arrow-left.svg" alt="arrow-left">
     </a>
     <span>{{playback.adspot_type_name}}: {{playback.adspot_name}}</span>
   </div>
-  <div>
-    <div>
-      <div>
-        <span>About</span>
-        <a *ngIf="playback.jump_url" [href]="playback.jump_url" target="_blank">Go to Ad Space</a>
-        <span>Current price:</span>
-        <span>{{playback.spot_price}}</span>
-        <span>Likes:</span>
-        <span>{{playback.adspot_likes}}</span>
+  <div class="grid-container">
+    <div class="grid-container__item">
+      <div class="yabout">
+        <div class="yabout__item">
+          <h4>About</h4>
+          <a *ngIf="playback.jump_url" [href]="playback.jump_url" target="_blank">Go to Ad Space</a>
+        </div>
+        <div>
+          <ul class="list">
+            <li>
+              <div class="list__title">Current price:</div>
+              <p class="list__content">{{playback.spot_price}}</p>
+            </li>
+            <li>
+              <div class="list__title">Likes:</div>
+              <p class="list__content">{{playback.adspot_likes}}</p>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <span>Your NFT</span>
-        <span>Status</span>
-        <span>{{playback.status}}</span>
-        <span>Time slot</span>
-        <span>{{playback.from_time | formatDate : 'SIMPLE'}}</span>
-        <span>Name</span>
-        <span>{{playback.creative_name}}</span>
+      <div class="yabout">
+        <div class="yabout__item">
+          <h4>Your NFT</h4>
+        </div>
+        <ul class="list">
+          <li>
+            <div class="list__title">Status</div>
+            <p class="list__content">{{playback.status}}</p>
+          </li>
+          <li>
+            <div class="list__title">Time slot</div>
+            <p class="list__content">{{playback.from_time | formatDate : 'SIMPLE'}}</p>
+          </li>
+          <li>
+            <div class="list__title">Name</div>
+            <p class="list__content">{{playback.creative_name}}</p>
+          </li>
+        </ul>
       </div>
     </div>
-    <app-history></app-history>
+    <div class="grid-container__item background-history">
+      <app-history></app-history>
+    </div>
   </div>
-  <button class="mat-primary" (click)="showPlaceAd(playback.adspot_id)">
+  <button class="btn-pa" (click)="showPlaceAd(playback.adspot_id)">
     Place Ad
   </button>
 </div>
