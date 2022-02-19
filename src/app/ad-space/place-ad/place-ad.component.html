@@ -3,7 +3,7 @@
     <div id="calendar" class="cal">
       <h4 class="me-place__title">Date</h4>
       <div class="me-place-datetimes">
-        <mat-calendar #calendar [(selected)]="selectedDate"
+        <mat-calendar #calendar [(selected)]="selectedDate" [minDate]="today"
                       [headerComponent]="getCustomHeader()"
                       (selectedChange)="selectDate($event)">
         </mat-calendar>

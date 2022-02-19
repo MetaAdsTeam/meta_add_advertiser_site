@@ -33,7 +33,9 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   @Input() savedPayData: PayDataStorageModel | null;
 
   private subscriptions = new Subscription();
-  selectedDate: DateTime = DateTime.now().set({hour: 0, minute: 0, second: 0, millisecond: 0}).setLocale('en');
+  // selectedDate: DateTime = DateTime.now().set({hour: 0, minute: 0, second: 0, millisecond: 0}).setLocale('en');
+  today: DateTime = DateTime.now().set({hour: 0, minute: 0, second: 0, millisecond: 0});
+  selectedDate: DateTime = this.today.setLocale('en');
 
   /* timeslot */
   timeslots: TimeslotsByType = {am: [], pm: []};
@@ -154,9 +156,8 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   loadTimeslots(): Observable<TimeslotsByType> {
     if (this.ad) {
       const minAvailableTime = DateTime.now().plus({minutes: 3});
-      const today = DateTime.now().set({hour: 0, minute: 0, second: 0, millisecond: 0});
       let maxAvailableTime: DateTime;
-      if (+today === +this.selectedDate) {
+      if (+this.today === +this.selectedDate) {
         maxAvailableTime = DateTime.now().plus({hours: 2});
       } else {
         maxAvailableTime = this.selectedDate.plus({hours: 2});
@@ -168,9 +169,6 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
               const timeslots: TimeslotsByType = {am: [], pm: []};
               timeslots.am = value.filter(v => v.from_time.hour < 12 && +v.from_time > +minAvailableTime && +v.from_time < +maxAvailableTime);
               timeslots.pm = value.filter(v => v.from_time.hour >= 12 && +v.from_time > +minAvailableTime && +v.from_time < +maxAvailableTime);
-
-              // timeslots.am = value.filter(v => v.from_time.hour < 12);
-              // timeslots.pm = value.filter(v => v.from_time.hour >= 12);
               return timeslots;
             })
           )
@@ -179,7 +177,6 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   }
 
   selectTimeslot(timeslot: Timeslot) {
-    console.log('timeslot', timeslot);
     if (!timeslot.locked) {
       this.selectedTimeslot = timeslot;
     }
