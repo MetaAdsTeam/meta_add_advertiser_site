@@ -30,6 +30,8 @@ import {NewCreativeComponent} from './creatives/new-creative/new-creative.compon
 import {HomeComponent} from './main-page/home.component';
 import {PlaybackComponent} from './playback/playback.component';
 import {InputPopupComponent} from './popup-components/input-popup.component';
+import {PublisherComponent} from './publisher/publisher.component';
+import {BackofficeComponent} from './publisher/backoffice/backoffice.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import {InputPopupComponent} from './popup-components/input-popup.component';
     NewCreativeComponent,
     HomeComponent,
     PlaybackComponent,
-    InputPopupComponent
+    InputPopupComponent,
+    PublisherComponent,
+    BackofficeComponent
   ],
   imports: [
     BrowserModule,

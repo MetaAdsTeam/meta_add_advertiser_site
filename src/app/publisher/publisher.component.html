@@ -1,0 +1,9 @@
+<ng-container *ngIf="unsigned; else signed">
+  <div class="pub">
+    <span style="color: #3888FF">$23 millions</span>
+    <span>deals concluded last week</span>
+  </div>
+</ng-container>
+<ng-template #signed>
+  <app-publisher-backoffice></app-publisher-backoffice>
+</ng-template>

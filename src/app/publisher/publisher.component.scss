@@ -1,0 +1,15 @@
+.pub {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+
+  span {
+    font-family: Nexa;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 64px;
+    line-height: 110%;
+  }
+}

@@ -1,0 +1,31 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  td {
+    padding: 15px 10px;
+    border-bottom: 8px solid #12111A;
+    border-top: 8px solid #12111A;
+  }
+}
+
+.colored {
+  background: #333539;
+}
+
+.selected {
+  background: #347CE8;
+  box-shadow: 0px 24px 38px rgba(0, 0, 0, 0.14), 0px 9px 46px rgba(0, 0, 0, 0.12), 0px 11px 15px rgba(0, 0, 0, 0.2), 0px 24px 38px rgba(0, 0, 0, 0.14), 0px 9px 46px rgba(0, 0, 0, 0.12), 0px 11px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn {
+  padding: 16px 48px;
+  background: #3888FF;
+  border-radius: 8px;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 110%;
+  letter-spacing: -0.7px;
+  color: #FFFFFF;
+  margin: 30px 0;
+}

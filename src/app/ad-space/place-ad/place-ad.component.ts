@@ -13,9 +13,10 @@ import {
 } from '../../model';
 import {HttpErrorResponse, HttpEventType} from '@angular/common/http';
 import {finalize, map} from 'rxjs/operators';
-import {AppService, NearService, StorageService, ProgressService, PopupService, AuthService} from '../../services';
+import {AppService, NearService, StorageService, ProgressService, PopupService} from '../../services';
 import {Subscription, Observable, of} from 'rxjs';
 import {Router} from '@angular/router';
+import {environment} from '../../../environments/environment';
 
 
 interface TimeslotsByType {
@@ -55,6 +56,8 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
   filename: string;
   fileError: string;
 
+  explorerUrl = `${environment.near.explorerUrl}/accounts`;
+
   constructor(private appService: AppService,
               private nearService: NearService,
               private progressService: ProgressService,
@@ -63,6 +66,8 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
               private router: Router) { }
 
   ngOnInit() {
+    this.explorerUrl = `${this.explorerUrl}/${this.nearService.getAccountId()}`;
+
     this.subscriptions.add(
       this.loadCreatives()
         .subscribe(creatives => {
@@ -111,7 +116,7 @@ export class PlaceAdComponent implements OnInit, OnDestroy {
                 .subscribe(
                   () => {
                     this.popupService.popupMessage('Transaction successful', 'Got it!');
-                    this.router.navigate(['/ad-space']);
+                    this.router.navigate([`/ad-space/playback/${this.savedPayData!!.playbackId}`]);
                   },
                   (error: HttpErrorResponse) => {
                     alert(`Error: ${error.statusText}`);

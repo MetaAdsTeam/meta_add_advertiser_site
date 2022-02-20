@@ -106,7 +106,8 @@
 
   <ng-container *ngIf="selectedCreativeId">
     <span style="margin-top: 32px; font-size: 18px; font-weight: 800;">Link to smart contract</span>
-    <span style="margin-bottom: 32px; font-size: 15px; font-weight: 800; color: #3888ff">Check your link here</span>
+    <a [href]="explorerUrl" target="_blank"
+       style="margin-bottom: 32px; font-size: 15px; font-weight: 800; color: #3888ff; text-decoration: none">Check your link here</a>
     <button mat-flat-button class="mat-primary" style="height: 68px" (click)="pay()">Pay</button>
   </ng-container>
 

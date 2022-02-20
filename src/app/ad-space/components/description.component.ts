@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
       <h4 class="desc__title">{{header}}</h4>
       <div class="desc__body">{{body}}</div>
       <!-- a [href]="link" target="_blank" class="desc__link">View jump link</a -->
-      <a *ngIf="link" [href]="link" target="_blank" class="desc__link">View jump link</a>
+      <a *ngIf="link" [href]="link" target="_blank" class="desc__link">More</a>
       <!-- button class="desc__button" (click)="more()">More</button -->
     </div>
   `,

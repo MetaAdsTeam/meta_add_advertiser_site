@@ -4,6 +4,7 @@ import {Subscription} from 'rxjs';
 import {AppService, AuthService, NearService, PopupService} from './services';
 import {environment} from '../environments/environment';
 import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
+import {Router} from '@angular/router';
 
 type CurrentState = 'full' | 'minimized';
 
@@ -28,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private authService: AuthService,
               private nearService: NearService,
               private popupService: PopupService,
-              private breakpointObserver: BreakpointObserver) {
+              private breakpointObserver: BreakpointObserver, private router: Router) {
     if (!this.authService.isEthereumProviderAvailable()) {
       this.popupService.popupMessage('Metamask extension is unavailable', 'Ok');
     }
@@ -76,10 +77,11 @@ export class AppComponent implements OnInit, OnDestroy {
         this.metaMaskSigned = !!address;
         this.appService.refreshLogin(this.logined);
         if (!address) this.popupService.popupMessage('Metamask extension is unavailable', 'Ok');
+        location.reload();
       })
       .catch((e) => {
         console.log(e);
-        if (e.code = -32002) this.popupService.popupMessage('Please, sign in Metamask', 'Ok');
+        if (e.code = -32002) this.popupService.popupMessage('Please, unblock Metamask', 'Ok');
         this.metaMaskSigned = false;
       });
   }

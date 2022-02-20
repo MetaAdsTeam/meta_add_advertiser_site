@@ -8,6 +8,7 @@ import {AuthGuard} from './auth.guard';
 import {MyCreativesComponent} from './creatives/my-creatives.component';
 import {HomeComponent} from './main-page/home.component';
 import {PlaybackComponent} from './playback/playback.component';
+import {PublisherComponent} from './publisher/publisher.component';
 
 const routes: Routes = [
   {
@@ -49,6 +50,10 @@ const routes: Routes = [
         canActivate: [AuthGuard]
       },
     ]
+  },
+  {
+    path: 'publisher',
+    component: PublisherComponent
   },
   {
     path: '**',

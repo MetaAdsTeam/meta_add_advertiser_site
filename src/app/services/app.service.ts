@@ -75,6 +75,7 @@ export class AppService {
     this.authService.logOut();
     this.signed.next(false);
     this.nearAccountId.next('');
+    location.reload();
   }
 
   getAds(): Observable<Adspot[]> {

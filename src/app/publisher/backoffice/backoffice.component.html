@@ -1,0 +1,31 @@
+<div style="padding-bottom: 40px">
+  <table>
+    <tr>
+      <td>Name</td>
+      <td>Status</td>
+      <td>Price</td>
+      <td>Weekly users</td>
+      <td>Weekly sessions</td>
+      <td>Med. srssion time</td>
+      <td>Peak users</td>
+      <td></td>
+    </tr>
+    <tr *ngFor="let ad of adspots" class="colored" (click)="selectAd(ad)" [class.selected]="ad===selectedAd">
+      <td>{{ad.name}}</td>
+      <td>{{ad.active ? 'active' : 'inactive'}}</td>
+      <td>{{ad.price}}</td>
+      <td>{{ad.views_amount}}</td>
+      <td>{{ad.views_amount}}</td>
+      <td>{{ad.average_time}}</td>
+      <td>{{ad.max_traffic}}</td>
+      <td>
+        <div style="display: flex">
+          <img src="assets/images/edit.svg" style="padding: 0 3px; cursor: pointer" [hidden]="selectedAd !== ad"/>
+          <img src="assets/images/delete2.svg" style="padding: 0 3px; cursor: pointer" [hidden]="selectedAd !== ad"/>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <button mat-flat-button class="btn" (click)="newAd()">New place</button>
+  <div *ngIf="showNewAdPanel">panel</div>
+</div>
