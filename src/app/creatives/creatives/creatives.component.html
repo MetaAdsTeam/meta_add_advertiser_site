@@ -26,12 +26,12 @@
   <div class="me-grid">
     <div class="me-grid__item" *ngFor="let cr of filteredCreatives">
       <ng-container *ngIf="cr.type === 'webm'; else image">
-        <img src="assets/images/temp-video.svg"
+        <img [src]="cr.thumbnail || 'assets/images/temp-video.svg'"
              style="cursor: pointer"
              (click)="goToDetails(cr.id)">
       </ng-container>
       <ng-template #image>
-        <img [src]="cr.url"
+        <img [src]="cr.thumbnail || cr.url"
              style="cursor: pointer"
              (click)="goToDetails(cr.id)">
       </ng-template>

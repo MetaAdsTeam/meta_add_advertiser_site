@@ -2,6 +2,7 @@ export interface Creative {
   id:	number,
   nft_ref: string,
   url: string,
+  thumbnail?: string,
   name: string,
   description: string,
   blockchain_ref?: number,
